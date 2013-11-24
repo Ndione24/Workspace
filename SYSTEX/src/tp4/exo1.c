@@ -2,7 +2,6 @@
 #include <stdio.h>      // printf()
 #include <stdlib.h>     // atoi()
 //#include <sys/types.h>  // kill()
-hello
 
 int main(int argc, char const *argv[])
 {
