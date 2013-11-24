@@ -1,0 +1,1 @@
+// Tous les signaux ne sont pas reçu, ce n'est pas sigaction qui a résolu le problème.

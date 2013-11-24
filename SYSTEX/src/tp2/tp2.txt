@@ -1,0 +1,4 @@
+Exercice 1
+c) On observe que le fils est parfois executé avant le père et inversement. On en déduit que l'on ne sait pas qui va être élu après le fork.
+d) On observe que le fils devient orphelin (init) lorsque le père se termine.
+e) Le processus fils devient zombie
