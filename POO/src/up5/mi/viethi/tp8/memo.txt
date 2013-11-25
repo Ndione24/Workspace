@@ -1,0 +1,3 @@
+psql -h opale BDif00538
+\d list tables
+SELECT * FROM question;

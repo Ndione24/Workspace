@@ -11,16 +11,22 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class JDBC {
-	
-	static Connection connection;
 
 	public static Connection getConnection() throws SQLException, IOException {
-		String nomBase = "melkir";
-		String hostname = "localhost";
-		String urlBd = "jdbc:mysql://" + hostname + "/" + nomBase;
-		String user = "root", password = getStringFromFile(new File("pass.txt"));
-		return DriverManager.getConnection(urlBd, user, password);
+		String nomBase="BDif00538";
+		String hostname="opale.ens.math-info.univ-paris5.fr";
+		String urlBd = "jdbc:postgresql://"+hostname+"/"+nomBase;
+		String user="if00538", password=getStringFromFile(new File("pass.txt"));
+		return DriverManager.getConnection(urlBd,user,password );
 	}
+	
+//	public static Connection getConnection() throws SQLException, IOException {
+//		String nomBase = "melkir";
+//		String hostname = "localhost";
+//		String urlBd = "jdbc:mysql://" + hostname + "/" + nomBase;
+//		String user = "root", password = getStringFromFile(new File("pass.txt"));
+//		return DriverManager.getConnection(urlBd, user, password);
+//	}
 
 	public static String getStringFromFile(File file) throws IOException {
 		BufferedReader br = new BufferedReader(new FileReader(file));
@@ -50,13 +56,12 @@ public class JDBC {
 	}
 
 	public static void ajouterQuestion(Connection connection) throws SQLException {
-		//createIfNotExistsTableQuestion(connection);
 		// tout d'abord, récupération d'un Statement à partir de la connexion
 		Statement stmt = connection.createStatement();
 		// puis exécution de la requête
-		int count = stmt
-				.executeUpdate("INSERT INTO question(intitule,reponse,auteur,niveau)"
-						+ "VALUES (\"Les classes sont-elles toujours abstraites\",\"non\",\"pary\",1)");
+		int count = stmt.executeUpdate(
+				"INSERT INTO question(intitule,reponse,auteur,niveau)" +
+				"VALUES (\'Les classes sont-elles toujours abstraites\',\'non\',\'pary\',1)");
 		System.out.println("Add query : " + count);
 	}
 
@@ -64,6 +69,7 @@ public class JDBC {
 		Statement stmt = connection.createStatement();
 		ResultSet rs = stmt
 				.executeQuery("SELECT intitule,reponse FROM question");
+		System.out.println("Contenu de la table : ");
 		while (rs.next()) {
 			Object obj1 = rs.getObject(1);// l'intitulé
 			Object obj2 = rs.getObject(2);// la réponse
@@ -76,6 +82,8 @@ public class JDBC {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection connection = getConnection();
 			System.out.println("Connexion réalisée !");
+			//createIfNotExistsTableQuestion(connection);
+			ajouterQuestion(connection);
 			listerQuestion(connection);
 			connection.close();
 		} catch (SQLException e) {
