@@ -79,14 +79,16 @@ public class Sync {
 			int cpt=10;
 			// La boucle while est parcouru 10 fois
 			while (cpt!=0){
-				// Génére un nombre un aléatoire entre 0 et la taille de la liste
-				int index=gen.nextInt(list.size());
-				// On récupére la valeur de l'index
-				Integer value = list.get(index);
-				// On supprime cette valeur
-				list.remove(index);
-				// On ajoute au début de la liste, la valeur trouvé précedement
-				list.add(0,value);
+			    synchronized(list) {
+				    // Génére un nombre un aléatoire entre 0 et la taille de la liste
+				    int index=gen.nextInt(list.size());
+				    // On récupére la valeur de l'index
+				    Integer value = list.get(index);
+				    // On supprime cette valeur
+				    list.remove(index);
+				    // On ajoute au début de la liste, la valeur trouvé précedement
+				    list.add(0,value);
+				}
 				cpt--;
 			}
 		}
