@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+version="2.5">
+<servlet>
+<servlet-name>hello</servlet-name>
+<servlet-class>up5.mi.viethi.tp9.HelloWorld</servlet-class>
+</servlet>
+
+<servlet>
+<servlet-name>helloname</servlet-name>
+<servlet-class>up5.mi.viethi.tp9.HelloWorldName</servlet-class>
+</servlet>
+
+<servlet>
+<servlet-name>tri</servlet-name>
+<servlet-class>up5.mi.viethi.tp9.TriServlets</servlet-class>
+</servlet>
+
+<!-- pour indiquer que /hi désigne l'appel à la servlet HelloWorld-->
+<servlet-mapping>
+<servlet-name>hello</servlet-name>
+<url-pattern>/hi</url-pattern>
+</servlet-mapping>
+
+<servlet-mapping>
+<servlet-name>helloname</servlet-name>
+<url-pattern>/helloname/*</url-pattern>
+</servlet-mapping>
+
+<servlet-mapping>
+<servlet-name>tri</servlet-name>
+<url-pattern>/triservlets</url-pattern>
+</servlet-mapping>
+
+</web-app>
+
