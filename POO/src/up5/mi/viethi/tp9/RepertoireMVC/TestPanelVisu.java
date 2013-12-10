@@ -1,9 +1,9 @@
 package up5.mi.viethi.tp9.RepertoireMVC;
 
 public class TestPanelVisu {
-	// création d'un chat
+	// création d'un répertoire
 	Repertoire repertoire = new Repertoire();
-	// une fenetre de visualisation du chat
+	// une fenetre de visualisation du répertoire
 	final PanelVisuRepertoire panel = new PanelVisuRepertoire(repertoire);
 	
 	RepertoireListener repertoireListener = new RepertoireListener() {

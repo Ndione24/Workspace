@@ -4,17 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Repertoire {
-
+public class Repertoire implements IRepertoire {
+	
 	private HashMap<String, String> elements;
-
-	/** la liste des écouteurs */
-	private List<RepertoireListener> listeners = new ArrayList<RepertoireListener>();
-
-	/** ajout d'un écouteur */
-	public void addRepertoireListener(RepertoireListener listener) {
-		this.listeners.add(listener);
-	}
 
 	/** creation d'un repertoire vide */
 	public Repertoire() {
@@ -26,12 +18,7 @@ public class Repertoire {
 		this.elements.put(nom, tel);
 		fireEntreeAjoutee(nom, tel);
 	}
-
-	private void fireEntreeAjoutee(String nom, String tel) {
-		for (RepertoireListener listener : this.listeners)
-			listener.entreeAjoute(this, nom, tel);
-	}
-
+	
 	/**
 	 * rend le numero de telephone asocie 'nom' dans ce repertoire rend null si
 	 * ce n'est pas un nom de ce repertoire
@@ -45,6 +32,19 @@ public class Repertoire {
 		for (String key : this.elements.keySet())
 			sb.append(key + " : " + this.elements.get(key) + '\n');
 		return sb.toString();
+	}
+	
+	/** la liste des écouteurs */
+	private List<RepertoireListener> listeners = new ArrayList<RepertoireListener>();
+
+	/** ajout d'un écouteur */
+	public void addRepertoireListener(RepertoireListener listener) {
+		this.listeners.add(listener);
+	}
+	
+	private void fireEntreeAjoutee(String nom, String tel) {
+		for (RepertoireListener listener : this.listeners)
+			listener.entreeAjoute(this, nom, tel);
 	}
 
 }

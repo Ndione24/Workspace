@@ -4,6 +4,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class FrameUtil {
+	
 	public static JFrame createFrame(JPanel panel) {
 		JFrame frame = new JFrame();
 		frame.setContentPane(panel);
@@ -12,4 +13,5 @@ public class FrameUtil {
 		frame.setVisible(true);
 		return frame;
 	}
+	
 }
