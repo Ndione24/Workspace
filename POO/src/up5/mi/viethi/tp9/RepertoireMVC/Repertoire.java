@@ -7,12 +7,12 @@ import java.util.List;
 public class Repertoire {
 
 	private HashMap<String, String> elements;
-	
+
 	/** la liste des écouteurs */
-	private List<RepertoireListener> listeners=new ArrayList<RepertoireListener>();
-	
+	private List<RepertoireListener> listeners = new ArrayList<RepertoireListener>();
+
 	/** ajout d'un écouteur */
-	public void addRepertoireListener(RepertoireListener listener){
+	public void addRepertoireListener(RepertoireListener listener) {
 		this.listeners.add(listener);
 	}
 
@@ -28,7 +28,7 @@ public class Repertoire {
 	}
 
 	private void fireEntreeAjoutee(String nom, String tel) {
-		for(RepertoireListener listener : this.listeners)
+		for (RepertoireListener listener : this.listeners)
 			listener.entreeAjoute(this, nom, tel);
 	}
 
