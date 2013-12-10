@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Repertoire implements IRepertoire {
-	
+
 	private HashMap<String, String> elements;
 
 	/** creation d'un repertoire vide */
@@ -18,7 +18,7 @@ public class Repertoire implements IRepertoire {
 		this.elements.put(nom, tel);
 		fireEntreeAjoutee(nom, tel);
 	}
-	
+
 	/**
 	 * rend le numero de telephone asocie 'nom' dans ce repertoire rend null si
 	 * ce n'est pas un nom de ce repertoire
@@ -33,7 +33,7 @@ public class Repertoire implements IRepertoire {
 			sb.append(key + " : " + this.elements.get(key) + '\n');
 		return sb.toString();
 	}
-	
+
 	/** la liste des écouteurs */
 	private List<RepertoireListener> listeners = new ArrayList<RepertoireListener>();
 
@@ -41,7 +41,7 @@ public class Repertoire implements IRepertoire {
 	public void addRepertoireListener(RepertoireListener listener) {
 		this.listeners.add(listener);
 	}
-	
+
 	private void fireEntreeAjoutee(String nom, String tel) {
 		for (RepertoireListener listener : this.listeners)
 			listener.entreeAjoute(this, nom, tel);

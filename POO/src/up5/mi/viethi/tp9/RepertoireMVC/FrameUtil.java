@@ -13,5 +13,5 @@ public class FrameUtil {
 		frame.setVisible(true);
 		return frame;
 	}
-	
+
 }

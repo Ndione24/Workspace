@@ -11,7 +11,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class PanelRepertoire extends PanelVisuRepertoire {
-	// Corriger le fait qu'un message ne nécessite qu'un champ a envoyer et un contact deux
+	// Corriger le fait qu'un message ne nécessite qu'un champ a envoyer et un
+	// contact deux
 	private JTextField contactAEnvoyer = new JTextField(20);
 	private JTextField nomAEnvoyer = new JTextField(20);
 	private JTextField telAEnvoyer = new JTextField(20);
@@ -41,7 +42,8 @@ public class PanelRepertoire extends PanelVisuRepertoire {
 
 	private void fireRepertoireAEnvoyer() {
 		for (PanelRepertoireListener listener : this.panelListeners)
-			listener.contactAEnvoyer(this.nomAEnvoyer.getText(),this.telAEnvoyer.getText());
+			listener.contactAEnvoyer(this.nomAEnvoyer.getText(),
+					this.telAEnvoyer.getText());
 		this.nomAEnvoyer.setText("");
 		this.telAEnvoyer.setText("");
 	}
