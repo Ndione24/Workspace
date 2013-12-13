@@ -1,47 +1,20 @@
-#include <unistd.h> // pipe()
-#include <fcntl.h> // dup2()
-#include <sys/types.h> // wait()
-#include <sys/wait.h> // wait()
+# include <sys/types.h>
+# include <unistd.h>
 
-#define STDIN   0
-#define STDOUT  1
+int main () {
+    const int Nbuff = 1000;
+    char buff [Nbuff];
+    int pF, dFic [2];
 
-int main(int argc, char const *argv[])
-{
-
-    int fp[2];
-    pipe(fp);
-
-    if (0 == fork()) { // On est dans le père
-
-        // Le père est l'écrivain
-        if ( -1 == close(STDIN) ) {
-            perror("pb close STD_IN\n");
-            exit(1);
-        }
-        write(fp[STDOUT], argv[1], strlen(argv[1]));
-        close(fp[STDOUT]);
-
-        exit(1);
-
-    } else { // On est dans le fils
-
-        if (-1 == close(STDOUT) ) { // Le fils est le lecteur
-            perror("pb close STD_OUT\n");
-            exit(1);
-        }
-        lu = read(fp[STDIN], buff, MAX);
-        if (lu < 0) {
-            perror();
-            exit(EXIT_FAILURE);
-        }
-        printf("fils : ");
-        close(fp[STDIN]);
-
-        exit(1);
-
+    pipe (dFic);
+    if (( pF = fork ()) > 0) { // pere
+        close ( dFic[0]);
+        write (dFic[1],"Salut",5);
+    } else if (pF == 0) { // fils
+        close (dFic[1]);
+        int n = read (dFic[0], buff ,Nbuff-1);
+        buff[n] = '\0';
+        printf("%s\n", buff);
     }
-
-    close(fp[0]); close(fp[1]);
     return 0;
 }
