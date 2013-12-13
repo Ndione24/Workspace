@@ -9,7 +9,7 @@ public class TestPanelVisu {
 		final PanelVisuRepertoire panel = new PanelVisuRepertoire(repertoire);
 		repertoire.addRepertoireListener(new RepertoireListener() {
 			public void entreeAjoute(Repertoire repertoire, String nom, String tel) {
-				panel.entreeAjoute(nom, tel);
+				panel.entreeAjoute();
 			}
 		});
 		FrameUtil.createFrame("PanelVisu", panel);

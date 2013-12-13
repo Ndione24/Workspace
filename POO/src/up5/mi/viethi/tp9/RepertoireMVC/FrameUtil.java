@@ -8,7 +8,7 @@ public class FrameUtil {
 	public static JFrame createFrame(String title, JPanel panel) {
 		JFrame frame = new JFrame(title);
 		frame.setContentPane(panel);
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
 		frame.setVisible(true);
 		return frame;

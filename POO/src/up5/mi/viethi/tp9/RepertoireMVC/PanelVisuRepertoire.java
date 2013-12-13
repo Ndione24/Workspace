@@ -22,7 +22,7 @@ public class PanelVisuRepertoire extends JPanel {
 		this.zoneDesContacts.setText(repertoire.toString());
 	}
 
-	public void entreeAjoute(String nom, String tel) {
+	public void entreeAjoute() {
 		repertoireModifie();
 	}
 
