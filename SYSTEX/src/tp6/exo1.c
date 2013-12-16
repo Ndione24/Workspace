@@ -8,7 +8,7 @@ int main () {
 
     pipe (dFic);
     if (( pF = fork ()) > 0) { // pere
-        close ( dFic[0]);
+        close (dFic[0]);
         write (dFic[1],"Salut",5);
     } else if (pF == 0) { // fils
         close (dFic[1]);

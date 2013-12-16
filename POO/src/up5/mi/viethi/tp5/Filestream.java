@@ -9,6 +9,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import org.xml.sax.HandlerBase;
+
 public class Filestream {
 
 	private static void writeTwoBytes(File file, int i, int j) throws IOException {
@@ -30,7 +32,6 @@ public class Filestream {
 	
 	private static String getStringFromFile(File file) throws IOException {
 		BufferedReader br = new BufferedReader(new FileReader(file));
-
 		int value = 0; 
 		String res = "";
 		while ( (value = br.read() ) != -1) 
