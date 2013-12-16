@@ -9,8 +9,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import org.xml.sax.HandlerBase;
-
 public class Filestream {
 
 	private static void writeTwoBytes(File file, int i, int j) throws IOException {
