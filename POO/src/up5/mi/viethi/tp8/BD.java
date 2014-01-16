@@ -17,8 +17,8 @@ class BD {
 			e.printStackTrace();
 		}
 	}
-	
-	/** rend une connection à la base de données 
+
+	/** rend une connection à la base de données
 	 * @throws IOException */
 	public static Connection getConnection() throws SQLException {
 		String nomBase="BDif00538";
@@ -39,4 +39,5 @@ class BD {
 		if (connection != null)
 			connection.close();
 	}
+
 }

@@ -4,7 +4,7 @@ public class NbPremier {
 	/**
 	 * @param args
 	 */
-	
+
 	public static boolean isPremierA1(int n) {
 		// n = 5
 		if (n == 0 || n == 1)

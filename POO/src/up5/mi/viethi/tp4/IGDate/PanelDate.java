@@ -2,7 +2,11 @@ package up5.mi.viethi.tp4.IGDate;
 
 import java.awt.BorderLayout;
 import java.awt.Label;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Date;
 
 import javax.swing.JButton;
@@ -27,6 +31,5 @@ public class PanelDate extends JPanel {
 		// 'ecouteur' devient un écouteur d'événements pour
 		// les clicks sur le bouton bOK
 		bUpdate.addActionListener(ecouteur);
-		
 	}
 }

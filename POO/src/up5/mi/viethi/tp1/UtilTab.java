@@ -12,27 +12,27 @@ public class UtilTab {
 			return false;
 		}
 	}
-	
+
 	public static int nbPairTab(int tabInt[]) {
 		int res = 0;
 		for (int val : tabInt) {
-			if (isPair(val)==true){ 
-				res += 1; 
+			if (isPair(val)==true){
+				res += 1;
 			}
 		}
-		
+
 		return res;
 	}
-	
+
 	public static int[] somTab(int tabInt1[], int tabInt2[]) {
-		
+
 		for (int i = 0; i < tabInt1.length; i++) {
 			tabInt1[i] += tabInt2[i];
 		}
-		
+
 		return tabInt1;
 	}
-	
+
 	public static boolean isTabElemSupNb(int tabInt[], int a) {
 		int som = 0;
 		for (int i : tabInt) {
