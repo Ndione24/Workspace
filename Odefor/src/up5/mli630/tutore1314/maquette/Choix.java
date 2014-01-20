@@ -7,59 +7,63 @@ import java.util.Map;
 
 import up5.mli630.tutore1314.Element;
 
-public class Choix <E extends Element> extends Element{
+public class Choix<E extends Element> extends Element {
 
-private List<E> elements = new ArrayList<E>();
-private Map<E,Float> importances=new HashMap<E,Float>();
+	private List<E> elements = new ArrayList<E>();
+	private Map<E, Float> importances = new HashMap<E, Float>();
 
-private int nbChoix;
+	private int nbChoix;
 
-public Choix(String id,String sn,String ln,int nbChoix){
-	super(id,sn,ln);
-	this.nbChoix=nbChoix;
-}
+	public Choix(String id, String sn, String ln, int nbChoix) {
+		super(id, sn, ln);
+		this.nbChoix = nbChoix;
+	}
 
-/**
- * 
- * @param element le choix ˆ ajouter
- * @param importance un nombre indiquant l'importance relative du choix en terme d'effectif Žtudiant concernŽ
- */
-public void ajouterChoix(E element,float importance){
-	elements.add(element);
-	importances.put(element,new Float(importance));
-}
+	/**
+	 * 
+	 * @param element
+	 *            le choix ï¿½ ajouter
+	 * @param importance
+	 *            un nombre indiquant l'importance relative du choix en terme
+	 *            d'effectif ï¿½tudiant concernï¿½
+	 */
+	public void ajouterChoix(E element, float importance) {
+		elements.add(element);
+		importances.put(element, new Float(importance));
+	}
 
-private float getImportanceRelative(E element){
-	return importances.get(element);
-}
+	private float getImportanceRelative(E element) {
+		return importances.get(element);
+	}
 
-public float getSommeImportances(){
-	float res=0;
-	for (E element: elements) 
-		res+=getImportanceRelative(element);
-	return res;
-}
+	public float getSommeImportances() {
+		float res = 0;
+		for (E element : elements)
+			res += getImportanceRelative(element);
+		return res;
+	}
 
+	/**
+	 * rend le nombre d'heures que les ï¿½tudiants doivent suivre pour cette
+	 * formation
+	 */
+	public float getNbHeuresEtudiants() {
+		float res = 0;
+		for (E element : elements)
+			res += element.getNbHeuresEtudiants()
+					* getImportanceRelative(element);
+		return res * nbChoix / getSommeImportances();
+	}
 
-/**
- * rend le nombre d'heures que les Žtudiants doivent suivre pour cette formation 
- */
-public float getNbHeuresEtudiants() {
-	float res=0;
-	for (E element: elements)  res+=element.getNbHeuresEtudiants()*getImportanceRelative(element);
-	return res*nbChoix/getSommeImportances();	
-}
+	@Override
+	public float getCoeff() {
+		throw new RuntimeException("Non impl\u00E9ment\u00E9");
 
-@Override
-public float getCoeff() {
-    throw new RuntimeException("Non impl\u00E9ment\u00E9");
+	}
 
-}
-
-@Override
-public float getEcts() {
-    throw new RuntimeException("Non impl\u00E9ment\u00E9");
-}
-
+	@Override
+	public float getEcts() {
+		throw new RuntimeException("Non impl\u00E9ment\u00E9");
+	}
 
 }

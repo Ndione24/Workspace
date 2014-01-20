@@ -3,22 +3,23 @@ package up5.mli630.tutore1314.maquette;
 import up5.mli630.tutore1314.Element;
 import up5.mli630.tutore1314.Enseignement;
 
- public  class ECUE extends Element {
+public class ECUE extends Element {
 
-    private Enseignement enseignement;
-    
-    private float ects;
-    private float coeff;
+	private Enseignement enseignement;
 
-    public ECUE(Enseignement enseignement,float ects,float coeff){
-    	super(enseignement.getId(),enseignement.getShortName(),enseignement.getLongName());
-    	this.enseignement=enseignement;
-    	this.ects=ects;
-    	this.coeff=coeff;
-    }
-    
+	private float ects;
+	private float coeff;
+
+	public ECUE(Enseignement enseignement, float ects, float coeff) {
+		super(enseignement.getId(), enseignement.getShortName(), enseignement
+				.getLongName());
+		this.enseignement = enseignement;
+		this.ects = ects;
+		this.coeff = coeff;
+	}
+
 	public float getNbHeuresAPayer(float effectif) {
-		throw new RuntimeException("Non implŽmentŽ");
+		throw new RuntimeException("Non implï¿½mentï¿½");
 	}
 
 	@Override
@@ -38,6 +39,4 @@ import up5.mli630.tutore1314.Enseignement;
 		return coeff;
 	}
 
-	
-	
 }

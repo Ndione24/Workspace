@@ -1,30 +1,23 @@
 package up5.mli630.tutore1314.maquette;
 
-
 /* structuration de haut niveau : 
  * les parcours (eventuellement unique)
- * les semestres (eventuellement un seul si annualisŽ  ...)
- * ˆ l'intŽrieur de chaque semestre, le bloc d'UE principal (un bloc d'UE est dŽfini par : des UE facultatives, des UE obligatoires, des UE ˆ choisir, des BLOC d'UE ˆ choisir)
- * ˆ l'intŽrieur des UE, le bloc d'ECUE principal (un bloc d'ECUE est dŽfini par : des ECUE obligatoires, des ECUE ˆ choisir, des BLOC d'ECUE ˆ choisir)
+ * les semestres (eventuellement un seul si annualisï¿½  ...)
+ * ï¿½ l'intï¿½rieur de chaque semestre, le bloc d'UE principal (un bloc d'UE est dï¿½fini par : des UE facultatives, des UE obligatoires, des UE ï¿½ choisir, des BLOC d'UE ï¿½ choisir)
+ * ï¿½ l'intï¿½rieur des UE, le bloc d'ECUE principal (un bloc d'ECUE est dï¿½fini par : des ECUE obligatoires, des ECUE ï¿½ choisir, des BLOC d'ECUE ï¿½ choisir)
  * pour chaque ECUE le ou les enseignements correspondants
-*/
+ */
 public class AnneeDeFormation extends Choix<Parcours> {
 
 	private int number;
-	
-	public AnneeDeFormation(String name,int number){
-		super(name,name,name,1);
-		this.number=number;
+
+	public AnneeDeFormation(String name, int number) {
+		super(name, name, name, 1);
+		this.number = number;
 	}
 
-
-   public int getNumeroAnnee() {
+	public int getNumeroAnnee() {
 		return number;
 	}
 
-
-
-	
 }
-
-

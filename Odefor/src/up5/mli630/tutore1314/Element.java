@@ -1,32 +1,32 @@
 package up5.mli630.tutore1314;
 
-public abstract class Element  {
-	
-private String id,shortName,longName;
+public abstract class Element {
 
-public Element(String id, String shortName, String longName) {
-	super();
-	this.id = id;
-	this.shortName = shortName;
-	this.longName = longName;
-}
+	private String id, shortName, longName;
 
-public String getId() {
-	return id;
-}
+	public Element(String id, String shortName, String longName) {
+		super();
+		this.id = id;
+		this.shortName = shortName;
+		this.longName = longName;
+	}
 
-public String getShortName() {
-	return shortName;
-}
+	public String getId() {
+		return id;
+	}
 
-public String getLongName() {
-	return longName;
-}
+	public String getShortName() {
+		return shortName;
+	}
 
-public abstract float getCoeff();
-public abstract float getEcts();
+	public String getLongName() {
+		return longName;
+	}
 
-public abstract float getNbHeuresEtudiants();
+	public abstract float getCoeff();
 
+	public abstract float getEcts();
+
+	public abstract float getNbHeuresEtudiants();
 
 }

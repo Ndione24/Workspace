@@ -1,36 +1,35 @@
 package up5.mli630.tutore1314.cout;
 
 import up5.mli630.tutore1314.Activite;
-import up5.mli630.tutore1314.Enseignement;
 
 public interface CalculCoutEnseignement {
 	
 	/**
-	 * rend le nombre de groupes de cours ncessaires compte tenu de l'effectif
-	 * @param effectif le nombre d'tudiants concerns
-	 * @return le nombre de groupes de cours ncessaires
+	 * rend le nombre de groupes de cours nï¿½cessaires compte tenu de l'effectif
+	 * @param effectif le nombre d'ï¿½tudiants concernï¿½s
+	 * @return le nombre de groupes de cours nï¿½cessaires
 	 */
     public abstract int getNbGroupesCours(float effectif);
     
 	/**
-	 * rend le nombre de groupes de td ncessaires compte tenu de l'effectif
-	 * @param effectif le nombre d'tudiants concerns
-	 * @return le nombre de groupes de td ncessaires
+	 * rend le nombre de groupes de td nï¿½cessaires compte tenu de l'effectif
+	 * @param effectif le nombre d'ï¿½tudiants concernï¿½s
+	 * @return le nombre de groupes de td nï¿½cessaires
 	 */
     public abstract int getNbGroupesTD(float effectif);
     
 	/**
-	 * rend le nombre de groupes de tp ncessaires compte tenu de l'effectif
-	 * @param effectif le nombre d'tudiants concerns
-	 * @return le nombre de groupes de tp ncessaires
+	 * rend le nombre de groupes de tp nï¿½cessaires compte tenu de l'effectif
+	 * @param effectif le nombre d'ï¿½tudiants concernï¿½s
+	 * @return le nombre de groupes de tp nï¿½cessaires
 	 */
     public abstract int getNbGroupesTP(float effectif);
     
     /**
      * 
-     * @param f le nombre d'tudiants concerns
-     * @param enseignement l'enseignement concern
-     * @return le nombre total d'heures ˆ payer aux enseignants 
+     * @param f le nombre d'ï¿½tudiants concernï¿½s
+     * @param enseignement l'enseignement concernï¿½
+     * @return le nombre total d'heures ï¿½ payer aux enseignants 
      */
     public abstract float getNbHeuresAPayer(float f,Activite activite);
      

@@ -1,10 +1,9 @@
 package up5.mli630.tutore1314.cout;
 
 import up5.mli630.tutore1314.Activite;
-import up5.mli630.tutore1314.Enseignement;
 
-/** le cout des enseignements dont la rmunration dpend directement du nombre d'tudiants
- * C'est souvent le cas des UE stage, mmoire, projets
+/** le cout des enseignements dont la rï¿½munï¿½ration dï¿½pend directement du nombre d'ï¿½tudiants
+ * C'est souvent le cas des UE stage, mï¿½moire, projets
  * Il n'y a alors pas de groupes de cours tds ou tp
  * */
 public class CoutProjetStageMemoire implements CalculCoutEnseignement {
