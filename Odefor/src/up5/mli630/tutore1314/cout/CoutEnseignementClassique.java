@@ -4,10 +4,10 @@ import up5.mli630.tutore1314.Activite;
 
 /**
  * 
- * le co�t des enseignements classiques :
- * des effectifs maximums sont pr�cis�s pour les cours , les tds et les tps
+ * le cout des enseignements classiques :
+ * des effectifs maximums sont précisés pour les cours , les tds et les tps
  * Exemple : 400 pour les cours, 40 pour les tds, 35 pour les tps
- * Le cout se d�duit du nombre de groupes de cours td et tp sachant qu'une heure de cours est compt�e pour 1,5h
+ * Le cout se déduit du nombre de groupes de cours td et tp sachant qu'une heure de cours est comptée pour 1,5h
  *
  */
 public class CoutEnseignementClassique implements CalculCoutEnseignement {
@@ -39,7 +39,7 @@ public CoutEnseignementClassique(int effC, int effTD, int effTP) {
 
 	@Override
 	public float getNbHeuresAPayer(float effectif,Activite activite) {
-		return activite.getNbHC()*this.getNbGroupesCours(effectif)*1.5f  // 1 heure de cours est pay�e 1,5heures
+		return activite.getNbHC()*this.getNbGroupesCours(effectif)*1.5f  // 1 heure de cours est payée 1,5heures
 				+ activite.getNbHTD()*this.getNbGroupesTD(effectif)
 				+ activite.getNbHTP()*this.getNbGroupesTP(effectif);
 	}

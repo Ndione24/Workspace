@@ -12,25 +12,29 @@ import up5.mli630.tutore1314.maquette.UE;
 public class Main {
 
 	public static void main(String[] args) {
-
 		CalculCoutEnseignement cout = new CoutEnseignementClassique(400, 40, 35);
 		CoutProjetStageMemoire cpms = new CoutProjetStageMemoire(2);
-
-		Enseignement ens1 = new EnseignementNormal("MLI530", "POO",
-				"Programmation Oriente Objet", 18, 0, 36, 15, cout);
-		Enseignement ens2 = new EnseignementNormal("MLI330", "BD",
-				"Base de donn�es", 18, 24, 0, 20, cout);
-		Enseignement ens3 = new EnseignementNormal("MLI630", "Projets",
-				"Projets tutor�s", 0, 84, 0, 30, cpms);
+		Enseignement ens1 = new EnseignementNormal(
+				"MLI530", "POO", 
+				"Programmation Oriente Objet",
+				18, 0, 36, 15, cout);
+		Enseignement ens2 = new EnseignementNormal("MLI330", 
+				"BD",
+				"Base de données",
+				18, 24, 0, 20, cout);
+		Enseignement ens3 = new EnseignementNormal("MLI630", 
+				"Projets",
+				"Projets tutorés", 
+				0, 84, 0, 30, cpms);
 
 		AnneeDeFormation annee = new AnneeDeFormation(
-				"Licence informatique 3�me ann�e", 3);
+				"Licence informatique 3éme année", 3);
 		Parcours parcoursInfo = new Parcours("MLICPINF",
-				"Parcours informatique troisi�me ann�e",
-				"Parcours informatique troisi�me ann�e");
+				"Parcours informatique troisiéme année",
+				"Parcours informatique troisiéme année");
 		Parcours parcoursMiage = new Parcours("MLICPMIA",
-				"Parcours miage troisi�me ann�e",
-				"Parcours miage troisi�me ann�e");
+				"Parcours miage troisiéme année",
+				"Parcours miage troisiéme année");
 
 		annee.ajouterChoix(parcoursInfo, 0.5f);
 		annee.ajouterChoix(parcoursMiage, 0.5f);

@@ -22,10 +22,10 @@ public class Choix<E extends Element> extends Element {
 	/**
 	 * 
 	 * @param element
-	 *            le choix � ajouter
+	 *            le choix à ajouter
 	 * @param importance
 	 *            un nombre indiquant l'importance relative du choix en terme
-	 *            d'effectif �tudiant concern�
+	 *            d'effectif étudiant concerné
 	 */
 	public void ajouterChoix(E element, float importance) {
 		elements.add(element);

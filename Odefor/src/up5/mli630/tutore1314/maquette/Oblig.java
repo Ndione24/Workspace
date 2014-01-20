@@ -14,7 +14,7 @@ public class Oblig<E extends Element> extends Element {
 	}
 
 	/**
-	 * rend le nombre d'heures que les �tudiants doivent suivre pour cette
+	 * rend le nombre d'heures que les étudiants doivent suivre pour cette
 	 * formation
 	 */
 	public float getNbHeuresEtudiants() {

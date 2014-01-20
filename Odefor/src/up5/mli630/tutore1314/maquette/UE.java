@@ -20,11 +20,11 @@ public class UE extends Bloc<ECUE> {
 	}
 
 	public float getEcts() {
-		throw new RuntimeException("Non impl�ment�");
+		throw new RuntimeException("Non implémenté");
 	}
 
 	public float getCoeff() {
-		throw new RuntimeException("Non impl�ment�");
+		throw new RuntimeException("Non implémenté");
 	}
 
 }

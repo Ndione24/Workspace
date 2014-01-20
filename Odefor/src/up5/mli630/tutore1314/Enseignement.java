@@ -11,7 +11,7 @@ public abstract class Enseignement extends Element {
 	 *            le nom court de l'enseignement (exemple : POO)
 	 * @param longName
 	 *            le nom long de l'enseignement (exemple : programmation
-	 *            orient�e objet avanc�e)
+	 *            orientée objet avancée)
 	 */
 	public Enseignement(String id, String shortName, String longName, float ects) {
 		super(id, shortName, longName);

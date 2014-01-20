@@ -15,7 +15,7 @@ public class Activite {
 	 * @param nbHTP
 	 *            le nombre d'heure de tps (exemple : 12*3h = 36h)
 	 * @param calculCoutEnseignement
-	 *            le mode de calcul du cout associ� � cet enseignement
+	 *            le mode de calcul du cout associé à cet enseignement
 	 */
 	public Activite(float nbHC, float nbHTD, float nbHTP,
 			CalculCoutEnseignement calculCoutEnseignement) {

@@ -19,7 +19,7 @@ public class ECUE extends Element {
 	}
 
 	public float getNbHeuresAPayer(float effectif) {
-		throw new RuntimeException("Non impl�ment�");
+		throw new RuntimeException("Non implémenté");
 	}
 
 	@Override
