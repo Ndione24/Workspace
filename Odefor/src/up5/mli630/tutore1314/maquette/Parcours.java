@@ -11,4 +11,8 @@ public class Parcours extends Oblig<Periode> {
 		super(id, sn, ln);
 	}
 
+	public String toString() {
+		return "[" + getId() + "," + getShortName() + "," + getLongName() + "]";
+	}
+
 }

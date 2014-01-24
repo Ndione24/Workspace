@@ -52,7 +52,7 @@ public class Main {
 		ECUE ecue1 = new ECUE(ens1, 5, 5);
 		ue1.addObligatoire(ecue1);
 
-		// System.out.println(annee.getNbHeuresEtudiants());
+		System.out.println(annee.getNbHeuresEtudiants());
 
 	}
 }
