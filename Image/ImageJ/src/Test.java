@@ -14,7 +14,7 @@ public class Test {
 	static final int WIN_WIDTH = 256;
 	static final int WIN_HEIGHT = 256;
 
-	public static ImagePlus getGrayImage(ImagePlus imp) {
+	public static ImagePlus createGrayImage(ImagePlus imp) {
 		ImagePlus impGray = NewImage.createByteImage("Gray " + imp.getTitle(),
 				imp.getWidth(), imp.getHeight(), 1, NewImage.GRAY8);
 		ImageProcessor impp = impGray.getProcessor();
@@ -64,8 +64,29 @@ public class Test {
 		return histo;
 	}
 
-	public static void etirerImage(ImagePlus imp) {
-		
+	/**
+	 * Fonction permettant d'étirer l'image
+	 * 
+	 * @param imp
+	 */
+	public static ImagePlus CreateDrawOutImage(ImagePlus imp) {
+
+		ImagePlus output = NewImage.createByteImage(
+				"Draw out " + imp.getTitle(), imp.getWidth(), imp.getWidth(),
+				imp.getSlice(), NewImage.GRAY8);
+		int[] histo = getHistogram(imp);
+		int min = getMin(histo), max = getMax(histo), value;
+		ImageProcessor impp = output.getProcessor();
+
+		// Nvg(x',y') = 255 * (Nvg(x,y) - min) / (max-min))
+		for (int x = 0; x < histo.length; x++) {
+			for (int y = 0; y < histo.length; y++) {
+				value = 255 * (getGrayValue(imp.getPixel(x, y)) - min
+						/ (max - min));
+				impp.putPixelValue(x, y, value);
+			}
+		}
+		return output;
 	}
 
 	public static int getGrayValue(int[] rgb) {
@@ -101,13 +122,15 @@ public class Test {
 		imp.show();
 
 		// On créer une nouvelle image en gris
-		ImagePlus impGray = getGrayImage(imp);
+		ImagePlus impGray = createGrayImage(imp);
 		impGray.show();
 
 		// On affiche l'histogramme
 		ImagePlus hw = getHistogramWindow(impGray);
 		hw.show();
 
+		ImagePlus impGrayDrawOut = CreateDrawOutImage(impGray);
+		impGrayDrawOut.show();
 		// TODO
 		// Etirement, Egalisation, Seuillage OTSU
 
