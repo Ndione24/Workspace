@@ -1,3 +1,4 @@
+import ij.IJ;
 import ij.ImagePlus;
 import ij.gui.HistogramWindow;
 import ij.gui.ImageWindow;
@@ -13,38 +14,42 @@ public class Test {
 	static final int WIN_WIDTH = 256;
 	static final int WIN_HEIGHT = 256;
 
-	public static int getGray (int[] rgb) {
-		// (Rouge + Vert + Bleu) / 3
-		return (rgb[1]+rgb[2]+rgb[3])/3;
-	}
-	
-	public static int[] changePixelToGray(int[] rgb) {
-		int gray = getGray(rgb);
-		return new int[] { gray, gray, gray };
+	public static ImagePlus getGrayImage(ImagePlus imp) {
+		ImagePlus impGray = NewImage.createByteImage("Gray " + imp.getTitle(),
+				imp.getWidth(), imp.getHeight(), 1, NewImage.GRAY8);
+		ImageProcessor impp = impGray.getProcessor();
+
+		for (int x = 0; x < imp.getWidth(); ++x)
+			for (int y = 0; y < imp.getHeight(); ++y)
+				impp.putPixelValue(x, y, getGrayValue(imp.getPixel(x, y)));
+
+		return impGray;
 	}
 
-	public static void convertToGray(ImagePlus imp) {
-		ImageProcessor impp = imp.getProcessor();
-		int[] rgb;
-		for (int i = 0; i < imp.getWidth(); i++) {
-			for (int j = 0; j < imp.getHeight(); j++) {
-				rgb = changePixelToGray(imp.getPixel(i, j));
-				impp.putPixel(i, j, rgb);
-			}
-		}
-	}
-
-	public static void tracerHistogram(ImagePlus imp) {
+	public static ImagePlus getHistogramWindow(ImagePlus imp) {
 		// Création de l'histogramme nvg
 		ImagePlus impHisto = NewImage.createByteImage(
-				"Histogramme " + imp.getTitle(), WIN_WIDTH, WIN_HEIGHT, 1,
+				"Histogramme " + imp.getTitle(), WIN_WIDTH, WIN_HEIGHT, 0,
 				NewImage.FILL_WHITE);
-		
-		ImageProcessor ipHisto = impHisto.getProcessor();
 
-		// Tableau des occurences, il existe 256 valeurs de gris possibles
-		int[] histo = new int[256];
-		int[] rgb;
+		// On récupére le processor pour tracer le graphe
+		ImageProcessor imppHisto = impHisto.getProcessor();
+		// On récupére le tableau des occurences
+		int[] histo = getHistogram(imp);
+		// On récupére la valeur max pour normalisé
+		int max = getMax(histo);
+		// On trace le graphe
+		for (int i = 0; i < 256; i++) {
+			int hauteur = histo[i] * 256 / max;
+			if (hauteur > 0)
+				imppHisto.drawLine(i, 255, i, 256 - hauteur);
+		}
+		return impHisto;
+
+	}
+
+	public static int[] getHistogram(ImagePlus imp) {
+		int[] histo = new int[256], rgb;
 		// On parcours l'image sur l'axe des x
 		for (int x = 0; x < imp.getHeight(); x++) {
 			// On parcours l'image sur l'axe des y
@@ -56,50 +61,56 @@ public class Test {
 				++histo[rgb[0]];
 			}
 		}
+		return histo;
+	}
+
+	public static void etirerImage(ImagePlus imp) {
 		
-		System.out.print("["+histo[0]);
-		for (int i = 1; i < histo.length; i++) {
-			System.out.print("," + histo[i]);
+	}
+
+	public static int getGrayValue(int[] rgb) {
+		return (rgb[0] + rgb[1] + rgb[2]) / 3;
+	}
+
+	public static int getMax(int[] tab) {
+		int max = tab[0];
+		for (int i = 1; i < tab.length; i++) {
+			if (tab[i] > max)
+				max = tab[i];
 		}
-		System.out.println("]");
+		return max;
+	}
 
-		// Redimensionnement de l'histogramme
-		int max = 0;
-		for (int i = 0; i < 256; i++) {
-			if (histo[i] > max)
-				max = histo[i];
+	public static int getMin(int[] tab) {
+		int min = tab[0];
+		for (int i = 1; i < tab.length; i++) {
+			if (tab[i] < min)
+				min = tab[i];
 		}
-
-		for (int i = 0; i < 256; i++) {
-			int hauteur = histo[i] * 256 / max;
-			if (hauteur > 0)
-				ipHisto.drawLine(i, 255, i, 256 - hauteur);
-		}
-
-		new ImageWindow(impHisto);
-
+		return min;
 	}
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		Opener opener = new Opener();
-		String imageFilePath = new File("src/Images/3D.jpg").getAbsolutePath();
-		
-		ImagePlus imp = opener.openImage(imageFilePath);
-		ImageProcessor ip = imp.getProcessor();
+		// On récupére le chemin vers l'image
+		String imageFilePath = new File("src/Images/enhance-me.bmp")
+				.getAbsolutePath();
+		ImagePlus imp = IJ.openImage(imageFilePath);
+		imp.show();
 
-//		On convertie l'image en gris
-		convertToGray(imp);
-		
-//		On affiche l'image
-//		imp.show();
-		
-//		HistogramWindow hw = new HistogramWindow(imp);
-//		hw.setVisible(true);
-		
-		tracerHistogram(imp);
+		// On créer une nouvelle image en gris
+		ImagePlus impGray = getGrayImage(imp);
+		impGray.show();
+
+		// On affiche l'histogramme
+		ImagePlus hw = getHistogramWindow(impGray);
+		hw.show();
+
+		// TODO
+		// Etirement, Egalisation, Seuillage OTSU
+
 	}
 
 }
