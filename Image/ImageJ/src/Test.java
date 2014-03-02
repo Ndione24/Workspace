@@ -59,13 +59,17 @@ public class Test {
 		final int n = getNvgCount(getHistogram(imp));
 		final int N = impp.getPixelCount();
 		final int[] C = getHistogramCumul(imp);
-		double ratio = 255.0 / impp.getPixelCount();
+		double ratio = 255 / impp.getPixelCount();
 		
-		System.out.println("Histo cumul");
+		int[] histoEgalisation = new int[256];
+		System.out.println("Histo égalisation");
 		for (int i = 0; i < C.length; i++) {
 			System.out.println(i + "=" + C[i] * ratio);
+			histoEgalisation[i] = (int) (C[i] * ratio);
 		}
 		
+		ImagePlus hw = getHistogramWindow(histoEgalisation);
+		hw.show();
 		
 //		for (int x = 0; x < imp.getWidth(); ++x) {
 //			for (int y = 0; y < imp.getHeight(); ++y) {
@@ -99,6 +103,28 @@ public class Test {
 		ImageProcessor imppHisto = impHisto.getProcessor();
 		// On récupére le tableau des occurences
 		int[] histo = getHistogram(imp);
+		// On récupére la valeur max pour normalisé
+		int max = 0;
+		for (int i : histo) 
+			if (i > max) max = i;
+		// On trace le graphe
+		for (int i = 0; i < 256; ++i) {
+			int hauteur = histo[i] * 256 / max;
+			if (hauteur > 0)
+				imppHisto.drawLine(i, 255, i, 256 - hauteur);
+		}
+		
+		return impHisto;
+	}
+	
+	public static ImagePlus getHistogramWindow(int[] histo) {
+		// Création de l'histogramme nvg
+		ImagePlus impHisto = NewImage.createByteImage(
+				"Histogramme", WIN_WIDTH, WIN_HEIGHT, 1,
+				NewImage.FILL_WHITE);
+
+		// On récupére le processor pour tracer le graphe
+		ImageProcessor imppHisto = impHisto.getProcessor();
 		// On récupére la valeur max pour normalisé
 		int max = 0;
 		for (int i : histo) 
