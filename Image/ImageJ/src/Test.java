@@ -59,7 +59,7 @@ public class Test {
 		final int n = getNvgCount(getHistogram(imp));
 		final int N = impp.getPixelCount();
 		final int[] C = getHistogramCumul(imp);
-		double ratio = 255 / impp.getPixelCount();
+		double ratio = 255.0 / impp.getPixelCount();
 		
 		int[] histoEgalisation = new int[256];
 		System.out.println("Histo égalisation");
