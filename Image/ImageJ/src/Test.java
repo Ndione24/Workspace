@@ -1,6 +1,5 @@
 import ij.IJ;
 import ij.ImagePlus;
-import ij.gui.HistogramWindow;
 import ij.gui.NewImage;
 import ij.process.ImageProcessor;
 
@@ -81,34 +80,11 @@ public class Test {
 		// On récupére le processor pour tracer le graphe
 		ImageProcessor imppHisto = impHisto.getProcessor();
 		// On récupére le tableau des occurences
-		int[] histo = getHistogram(imp);
+		final int[] histo = getHistogram(imp);
 		// On récupére la valeur max pour normalisé
 		int max = 0;
 		for (int i : histo)
-			if (i > max)
-				max = i;
-		// On trace le graphe
-		for (int i = 0; i < 256; ++i) {
-			int hauteur = histo[i] * 256 / max;
-			if (hauteur > 0)
-				imppHisto.drawLine(i, 255, i, 256 - hauteur);
-		}
-
-		return impHisto;
-	}
-
-	public static ImagePlus getHistogramWindow(int[] histo) {
-		// Création de l'histogramme nvg
-		ImagePlus impHisto = NewImage.createByteImage("Histogramme", WIN_WIDTH,
-				WIN_HEIGHT, 1, NewImage.FILL_WHITE);
-
-		// On récupére le processor pour tracer le graphe
-		ImageProcessor imppHisto = impHisto.getProcessor();
-		// On récupére la valeur max pour normalisé
-		int max = 0;
-		for (int i : histo)
-			if (i > max)
-				max = i;
+			if (i > max) max = i;
 		// On trace le graphe
 		for (int i = 0; i < 256; ++i) {
 			int hauteur = histo[i] * 256 / max;
@@ -128,12 +104,11 @@ public class Test {
 		// On récupére le processor pour tracer le graphe
 		ImageProcessor imppHisto = impHisto.getProcessor();
 		// On récupére le tableau des occurences cumulés
-		int[] histo = getHistogramCumul(imp);
+		final int[] histo = getHistogramCumul(imp);
 		// On récupére la valeur max pour normalisé
 		int max = 0;
 		for (int i : histo)
-			if (i > max)
-				max = i;
+			if (i > max) max = i;
 		// On trace le graphe
 		for (int i = 0; i < 256; ++i) {
 			int hauteur = histo[i] * 256 / max;
@@ -161,7 +136,6 @@ public class Test {
 
 	public static int[] getHistogramCumul(ImagePlus imp) {
 		int[] histoCumul = getHistogram(imp);
-
 		for (int i = 1; i < histoCumul.length; ++i)
 			histoCumul[i] = histoCumul[i] + histoCumul[i - 1];
 
@@ -187,8 +161,7 @@ public class Test {
 	public static int getNvgCount(int[] tab) {
 		int count = 0;
 		for (int val : tab)
-			if (val > 0)
-				++count;
+			if (val > 0) ++count;
 		return count;
 	}
 
@@ -200,8 +173,7 @@ public class Test {
 	 */
 	public static int getMax(int[] tab) {
 		int i = tab.length - 1;
-		while (tab[i] == 0)
-			--i;
+		while (tab[i] == 0) --i;
 		return i;
 	}
 
@@ -213,8 +185,7 @@ public class Test {
 	 */
 	public static int getMin(int[] tab) {
 		int i = 0;
-		while (tab[i] == 0)
-			++i;
+		while (tab[i] == 0) ++i;
 		return i;
 	}
 
@@ -222,54 +193,51 @@ public class Test {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		/* Déclaration des paramètres */
 		String[] img = { "enhance-me.png", "paysage.png", "3D.jpg" };
 		String path;
 		ImagePlus imp, hw;
 
-		// On récupére le chemin vers l'image
+		// On récupére l'image puis on l'affiche
 		path = new File("src/Images/" + img[0]).getAbsolutePath();
-		// On récupére l'image et son histogramme
 		imp = IJ.openImage(path);
-		hw = getHistogramWindow(imp);
-		// On les affiches
 		imp.show();
-		// hw.show();
+//		hw = getHistogramWindow(imp);
+//		hw.show();
 
 		// Création de l'image en gris
 		final ImagePlus impGray = createGrayImage(imp);
-		ImagePlus hwGray = getHistogramWindow(impGray);
 		impGray.show();
-		// hwGray.show();
+//		ImagePlus hwGray = getHistogramWindow(impGray);
+//		hwGray.show();
 
 		// Création de l'image étiré
 		final ImagePlus impNormalize = createNormalizeImage(imp);
-		ImagePlus hwNormalize = getHistogramWindow(impNormalize);
 		impNormalize.show();
-		// hwNormalize.show();
+//		ImagePlus hwNormalize = getHistogramWindow(impNormalize);
+//		hwNormalize.show();
 
 		// On change d'image pour l'exemple d'égalisation
 		path = new File("src/Images/" + img[1]).getAbsolutePath();
 		imp = IJ.openImage(path);
-		hw = getHistogramWindow(imp);
 		imp.show();
-		// hw.show();
+//		hw = getHistogramWindow(imp);
+//		hw.show();
 
 		// On affiche l'histogramme cumulé
-		hw = getHistogramCumulWindow(imp);
-		// hw.show();
+//		hw = getHistogramCumulWindow(imp);
+//		hw.show();
 
 		final ImagePlus impEgalisation = createEqualizeImage(imp);
 		hw = getHistogramWindow(impEgalisation);
 		impEgalisation.show();
-		// hw.show();
+		hw.show();
 
 		// TODO
 		// Etirement, Egalisation, Seuillage OTSU
 
 		// Vérification
-		// HistogramWindow hw2 = new HistogramWindow(impEgalisation);
-		// hw2.setVisible(true);
+//		HistogramWindow hw2 = new HistogramWindow(impEgalisation);
+//		hw2.setVisible(true);
 	}
 
 }
