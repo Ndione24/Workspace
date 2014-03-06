@@ -1,60 +1,66 @@
 import ij.IJ;
 import ij.ImagePlus;
-import ij.gui.HistogramWindow;
 import ij.gui.NewImage;
 import ij.process.ImageProcessor;
 
 import java.io.File;
-import java.util.Scanner;
 
+import javax.swing.JPanel;
 
-public class Test {
+/**
+ * Projet réalisé dans le cadre d'un projet Paris Descartes L3 Image
+ * 
+ * @author Thibault Vieux
+ */
+public class Image {
 	static final int WIN_WIDTH = 256;
 	static final int WIN_HEIGHT = 256;
 
-	public static void defaultImage(ImagePlus imp) {
-		imp.show();
-		getHistogramWindow(imp).show();
+	public static void createIGImageGray() {
+		String path = new File("src/Images/3Des.jpg").getAbsolutePath();
+		ImagePlus imp = IJ.openImage(path);
+		ImagePlus imp2 = createGrayImage(imp);
+		JPanel panel = new PanelImage(imp, getHistogramWindow(imp), imp2,
+				getHistogramWindow(imp2));
+		new IGImage("Gris", panel);
 	}
 
-	public static void grayImage(ImagePlus imp) {
-		// Création de l'image en gris
-		ImagePlus impGray = createGrayImage(imp);
-		impGray.show();
-		getHistogramWindow(impGray).show();
+	public static void createIGImageNormalize() {
+		String path = new File("src/Images/enhance-me.png").getAbsolutePath();
+		ImagePlus imp = IJ.openImage(path);
+		ImagePlus imp2 = createNormalizeImage(imp);
+		JPanel panel = new PanelImage(imp, getHistogramWindow(imp), imp2,
+				getHistogramWindow(imp2));
+		new IGImage("Normalisation", panel);
 	}
 
-	public static void normalizeImage(ImagePlus imp) {
-		// Création de l'image étiré
-		ImagePlus impNormalize = createNormalizeImage(imp);
-		impNormalize.show();
-		getHistogramWindow(impNormalize).show();
+	public static void createIGImageEqualize() {
+		String path = new File("src/Images/montagne.jpg").getAbsolutePath();
+		ImagePlus imp = IJ.openImage(path);
+		ImagePlus imp2 = createEqualizeImage(imp);
+		JPanel panel = new PanelImage(imp, getHistogramWindow(imp), imp2,
+				getHistogramWindow(imp2));
+		new IGImage("Egalisation", panel);
 	}
 
-	public static void equalizeImage(ImagePlus imp) {
-		// Création de l'image égalisé
-		ImagePlus impEqualize = createEqualizeImage(imp);
-		impEqualize.show();
-		getHistogramWindow(impEqualize).show();
+	public static void createIGImageThresholding() {
+		String path = new File("src/Images/neige.jpg").getAbsolutePath();
+		ImagePlus imp = IJ.openImage(path);
+		ImagePlus imp2 = createThresholingImage(imp, 220, 255);
+		JPanel panel = new PanelImage(imp, getHistogramWindow(imp), imp2,
+				getHistogramWindow(imp2));
+		new IGImage("Seuillage", panel);
 	}
 
-	public static void thresholdingImage(ImagePlus imp) {
-		// On récupére les bornes choisi par l'utilisateur
-		Scanner in = new Scanner(System.in);
-		System.out.print("Borne inférieure (valeur conseillée 220) : ");
-		int inf = in.nextInt();
-		System.out.print("Borne supérieur  (valeur conseillée 255) : ");
-		int sup = in.nextInt();
-		in.close();
-		// Création de l'image avec le seuillage OTSU
-		ImagePlus impThresholing = createThresholingImage(imp, inf, sup);
-		impThresholing.show();
-		getHistogramWindow(impThresholing);
-	}
-
+	/**
+	 * Créer une image de couleur grise à partir d'une image
+	 * 
+	 * @param imp
+	 * @return
+	 */
 	public static ImagePlus createGrayImage(ImagePlus imp) {
-		ImagePlus impGray = NewImage.createByteImage("Gray " + imp.getTitle(),
-				imp.getWidth(), imp.getHeight(), 1, NewImage.GRAY8);
+		ImagePlus impGray = NewImage.createByteImage("Gris " + imp.getTitle(), imp.getWidth(),
+				imp.getHeight(), 1, NewImage.GRAY8);
 		ImageProcessor impp = impGray.getProcessor();
 
 		for (int y = 0; y < imp.getHeight(); ++y)
@@ -65,14 +71,14 @@ public class Test {
 	}
 
 	/**
-	 * Créer une image normalisé
+	 * Créer une image normalisée (étirée) à partir d'une image
 	 * 
 	 * @param imp
+	 * @return
 	 */
 	public static ImagePlus createNormalizeImage(ImagePlus imp) {
-		ImagePlus impNormalize = NewImage.createByteImage(
-				"Normalize " + imp.getTitle() + imp.getTitle(), imp.getWidth(),
-				imp.getHeight(), 1, NewImage.GRAY8);
+		ImagePlus impNormalize = NewImage.createByteImage("Normalisation " + imp.getTitle(),
+				imp.getWidth(), imp.getHeight(), 1, NewImage.GRAY8);
 		ImageProcessor impp = impNormalize.getProcessor();
 
 		// Nvg(x',y') = 255 * (Nvg(x,y) - min) / (max-min)
@@ -90,15 +96,14 @@ public class Test {
 	}
 
 	/**
-	 * Créer une image égalisé
+	 * Créer une image égalisée à partir d'une image
 	 * 
 	 * @param imp
 	 * @return
 	 */
 	public static ImagePlus createEqualizeImage(ImagePlus imp) {
-		ImagePlus impEqualize = NewImage.createByteImage(
-				"Egalisation " + imp.getTitle(), imp.getWidth(),
-				imp.getHeight(), 1, NewImage.GRAY8);
+		ImagePlus impEqualize = NewImage.createByteImage("Egalisation " + imp.getTitle(),
+				imp.getWidth(), imp.getHeight(), 1, NewImage.GRAY8);
 		ImageProcessor impp = impEqualize.getProcessor();
 
 		// Histogramme cumulé C(i) = ∑h(k) -> k[0,i]
@@ -119,10 +124,17 @@ public class Test {
 		return impEqualize;
 	}
 
+	/**
+	 * Créer une image avec la méthode OTSU de seuillage
+	 * 
+	 * @param imp Image
+	 * @param inf Borne inférieur
+	 * @param sup Borne supérieur
+	 * @return
+	 */
 	public static ImagePlus createThresholingImage(ImagePlus imp, int inf, int sup) {
-		ImagePlus impThresholing = NewImage.createByteImage(
-				"Seuillage " + imp.getTitle(), imp.getWidth(),
-				imp.getHeight(), 1, NewImage.GRAY8);
+		ImagePlus impThresholing = NewImage.createByteImage("Seuillage " + imp.getTitle(),
+				imp.getWidth(), imp.getHeight(), 1, NewImage.GRAY8);
 		ImageProcessor impp = impThresholing.getProcessor();
 		
 		int value;
@@ -138,6 +150,12 @@ public class Test {
 		return impThresholing;
 	}
 
+	/**
+	 * Affiche l'histogramme d'une image
+	 * 
+	 * @param imp
+	 * @return
+	 */
 	public static ImagePlus getHistogramWindow(ImagePlus imp) {
 		// Création de l'histogramme nvg
 		ImagePlus impHisto = NewImage.createByteImage(
@@ -162,6 +180,12 @@ public class Test {
 		return impHisto;
 	}
 
+	/**
+	 * Récupére l'histgramme d'une image sous forme d'un tableau d'entier
+	 * 
+	 * @param imp
+	 * @return
+	 */
 	public static int[] getHistogram(ImagePlus imp) {
 		int[] histo = new int[256];
 		// On parcours l'image sur l'axe des y
@@ -171,19 +195,18 @@ public class Test {
 				// On incrémente le nb d'occurence du niveau de gris
 				// correspondant
 				++histo[getGray(imp.getPixel(x, y))];
-				// DEBUG : Affichage des nvg de chaque pixel
-//				System.out.println(getGray(imp.getPixel(x, y)));
 			}
 		}
-
-		// DEBUG : Affichage des valeurs de l'histo
-//		for (int i = 0; i < histo.length; ++i) {
-//			System.out.println(i + " " + histo[i]);
-//		}
 
 		return histo;
 	}
 
+	/**
+	 * Affiche l'histogramme cumulé d'une image
+	 * 
+	 * @param imp
+	 * @return
+	 */
 	public static ImagePlus getHistogramCumulWindow(ImagePlus imp) {
 		// Création de l'histogramme nvg
 		ImagePlus impHisto = NewImage
@@ -208,6 +231,13 @@ public class Test {
 		return impHisto;
 	}
 
+	/**
+	 * Récupére l'histogramme cumulé d'une image sous forme d'un tableau
+	 * d'entier
+	 * 
+	 * @param imp
+	 * @return
+	 */
 	public static int[] getHistogramCumul(ImagePlus imp) {
 		int[] histoCumul = getHistogram(imp);
 		for (int i = 1; i < histoCumul.length; ++i)
@@ -217,17 +247,12 @@ public class Test {
 	}
 
 	/**
-	 * Renvoi la couleur grise d'un pixel de couleur
+	 * Récupére la couleur grise d'un pixel de couleur
 	 * 
 	 * @param rgb
 	 * @return
 	 */
 	public static int getGray(int[] rgb) {
-		/*
-		 * // DEBUG : Affiche les couleurs du pixel
-		 * System.out.println("r:"+rgb[0] + " v:"+rgb[1] + " b:"+rgb[2]);
-		 */
-
 		// Permet de corriger un bug avec la couleur blanc
 		if (rgb[0] == 255 && rgb[1] == 0 && rgb[2] == 0)
 			return 255;
@@ -261,46 +286,11 @@ public class Test {
 
 	/**
 	 * Exercice sur l'étirement, l'égalisation et le seuillage d'une image
+	 * 
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		/* Déclaration des paramètres */
-		String[] img = { "3Des.jpg", "enhance-me.png", "paysage.png",
-				"neige.jpg", "white.jpg" };
-		String path;
-		ImagePlus imp;
-
-		// On prend l'image 3Des pour l'affiche en gris
-		path = new File("src/Images/" + img[0]).getAbsolutePath();
-		imp = IJ.openImage(path);
-
-		defaultImage(imp);
-		grayImage(imp);
-
-		// On prend l'image enhance-me pour la normalisation
-		path = new File("src/Images/" + img[1]).getAbsolutePath();
-		imp = IJ.openImage(path);
-
-		defaultImage(imp);
-		normalizeImage(imp);
-
-		// On prend l'image paysage pour l'égalisation
-		path = new File("src/Images/" + img[2]).getAbsolutePath();
-		imp = IJ.openImage(path);
-
-		defaultImage(imp);
-		equalizeImage(imp);
-
-		// On prend l'image neige pour le seuillage
-		path = new File("src/Images/" + img[3]).getAbsolutePath();
-		imp = IJ.openImage(path);
-		
-		defaultImage(imp);
-		thresholdingImage(imp);
-
-		// Vérification de l'histogramme 
-//		HistogramWindow hw2 = new HistogramWindow(imp); hw2.setVisible(true);
-		
+		new IGSelect();
 	}
 
 }
