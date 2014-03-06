@@ -17,7 +17,7 @@ public class Image {
 	static final int WIN_HEIGHT = 256;
 
 	public static void createIGImageGray() {
-		String path = new File("src/Images/3Des.jpg").getAbsolutePath();
+		String path = new File("images/3Des.jpg").getPath();
 		ImagePlus imp = IJ.openImage(path);
 		ImagePlus imp2 = createGrayImage(imp);
 		JPanel panel = new PanelImage(imp, getHistogramWindow(imp), imp2,
@@ -26,7 +26,7 @@ public class Image {
 	}
 
 	public static void createIGImageNormalize() {
-		String path = new File("src/Images/enhance-me.png").getAbsolutePath();
+		String path = new File("images/enhance-me.png").getPath();
 		ImagePlus imp = IJ.openImage(path);
 		ImagePlus imp2 = createNormalizeImage(imp);
 		JPanel panel = new PanelImage(imp, getHistogramWindow(imp), imp2,
@@ -35,7 +35,7 @@ public class Image {
 	}
 
 	public static void createIGImageEqualize() {
-		String path = new File("src/Images/montagne.jpg").getAbsolutePath();
+		String path = new File("images/montagne.jpg").getPath();
 		ImagePlus imp = IJ.openImage(path);
 		ImagePlus imp2 = createEqualizeImage(imp);
 		JPanel panel = new PanelImage(imp, getHistogramWindow(imp), imp2,
@@ -44,7 +44,7 @@ public class Image {
 	}
 
 	public static void createIGImageThresholding() {
-		String path = new File("src/Images/neige.jpg").getAbsolutePath();
+		String path = new File("images/neige.jpg").getPath();
 		ImagePlus imp = IJ.openImage(path);
 		ImagePlus imp2 = createThresholingImage(imp, 220, 255);
 		JPanel panel = new PanelImage(imp, getHistogramWindow(imp), imp2,
