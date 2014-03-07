@@ -1,5 +1,6 @@
-import javax.swing.JFrame;
+package tp4;
 
+import javax.swing.JFrame;
 
 public class IGSelect extends JFrame {
 	public IGSelect() {

@@ -1,3 +1,5 @@
+package tp4;
+
 import ij.ImagePlus;
 import ij.gui.ImageCanvas;
 
@@ -5,7 +7,6 @@ import java.awt.BorderLayout;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
 
 public class PanelImage extends JPanel {
 	

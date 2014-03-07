@@ -1,8 +1,9 @@
+package tp4;
+
 import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
-
 
 public class PanelSelect extends JPanel {
 
