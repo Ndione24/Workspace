@@ -8,6 +8,7 @@ public class IGImage extends JFrame {
 	public IGImage(String title, JPanel panel) {
 		super(title);
 		setDefaultCloseOperation(HIDE_ON_CLOSE);
+		setResizable(false);
 		add(panel);
 		pack();
 		setVisible(true);

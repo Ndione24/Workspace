@@ -3,9 +3,11 @@ package tp4;
 import ij.IJ;
 import ij.ImagePlus;
 import ij.gui.NewImage;
+import ij.io.Opener;
 import ij.process.ImageProcessor;
 
 import java.io.File;
+import java.net.URL;
 
 import javax.swing.JPanel;
 
@@ -19,8 +21,8 @@ public class Image {
 	static final int WIN_HEIGHT = 256;
 
 	public static void createIGImageGray() {
-		String path = new File("images/lena.png").getAbsolutePath();
-		ImagePlus imp = IJ.openImage(path);
+		URL url = Image.class.getResource("/lena.png");
+		ImagePlus imp = new Opener().openURL(url.toString());
 		ImagePlus imp2 = createGrayImage(imp);
 		JPanel panel = new PanelImage(imp, getHistogramWindow(imp), imp2,
 				getHistogramWindow(imp2));
@@ -28,8 +30,8 @@ public class Image {
 	}
 
 	public static void createIGImageNormalize() {
-		String path = new File("images/enhance-me.png").getAbsolutePath();
-		ImagePlus imp = IJ.openImage(path);
+		URL url = Image.class.getResource("/enhance-me.png");
+		ImagePlus imp = new Opener().openURL(url.toString());
 		ImagePlus imp2 = createNormalizeImage(imp);
 		JPanel panel = new PanelImage(imp, getHistogramWindow(imp), imp2,
 				getHistogramWindow(imp2));
@@ -37,8 +39,8 @@ public class Image {
 	}
 
 	public static void createIGImageEqualize() {
-		String path = new File("images/montagne.jpg").getAbsolutePath();
-		ImagePlus imp = IJ.openImage(path);
+		URL url = Image.class.getResource("/montagne.jpg");
+		ImagePlus imp = new Opener().openURL(url.toString());
 		ImagePlus imp2 = createEqualizeImage(imp);
 		JPanel panel = new PanelImage(imp, getHistogramWindow(imp), imp2,
 				getHistogramWindow(imp2));
@@ -46,8 +48,8 @@ public class Image {
 	}
 
 	public static void createIGImageThresholding() {
-		String path = new File("images/neige.jpg").getAbsolutePath();
-		ImagePlus imp = IJ.openImage(path);
+		URL url = Image.class.getResource("/neige.jpg");
+		ImagePlus imp = new Opener().openURL(url.toString());
 		ImagePlus imp2 = createThresholingImage(imp, 220, 255);
 		JPanel panel = new PanelImage(imp, getHistogramWindow(imp), imp2,
 				getHistogramWindow(imp2));

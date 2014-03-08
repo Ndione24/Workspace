@@ -5,6 +5,7 @@ import ij.gui.ImageCanvas;
 
 import java.awt.BorderLayout;
 
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -12,9 +13,9 @@ public class PanelImage extends JPanel {
 	
 	public PanelImage(ImagePlus imp, ImagePlus histo, ImagePlus imp2, ImagePlus histo2) {
 		BorderLayout mainLayout = new BorderLayout();
-		mainLayout.setHgap(5);
+		mainLayout.setHgap(2);
 		setLayout(mainLayout);
-
+		setBorder(BorderFactory.createEmptyBorder(0,4,4,4));
 		String title = imp.getTitle();
 
 		add(new JLabel("Nom de l'image : " + title), BorderLayout.NORTH);
