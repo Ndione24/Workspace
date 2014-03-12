@@ -2,6 +2,11 @@ package tp5;
 
 import ij.IJ;
 import ij.ImagePlus;
+import ij.io.Opener;
+import ij.process.ImageProcessor;
+
+import java.net.URL;
+
 import tp4.Image;
 
 public class Convolution {
@@ -16,21 +21,29 @@ public class Convolution {
 		}
 	}
 	
-	public static double[][] creerMatrice(ImagePlus imp) {
+	public static double[][] creerMatrice(ImageProcessor ip) {
 		// On récupére les dimensions de l'image
-		int hauteur = imp.getHeight(), largeur = imp.getWidth();
+		int hauteur = ip.getHeight(), largeur = ip.getWidth();
 		double[][] matrice = new double [largeur][hauteur];
 
 		for (int y = 0; y < hauteur; ++y)
 			for (int x = 0; x < largeur; ++x)
-				matrice[x][y] = Image.getGray(imp.getPixel(x, y));
+				matrice[x][y] = (int) ip.getPixelValue(x, y);
 		
 		return matrice;
 	}
 	
 	public static void main(String[] args) {
-		ImagePlus imp = IJ.openImage("images/matrice.png");
-		double[][] matrice = creerMatrice(imp);
+		URL url = Convolution.class.getResource("/matrice.png");
+		ImagePlus imp = new Opener().openURL(url.toString());
+		ImageProcessor ip = imp.getProcessor();
+		
+		double[][] matrice = creerMatrice(ip);
 		afficherMatrice(matrice);
+		
+		Masque masque = new Masque(1);
+		masque.remplirAvec(1);
+		Outils.convoluer(ip, masque);
+		
 	}
 }

@@ -2,6 +2,7 @@ package tp4;
 
 import ij.IJ;
 import ij.ImagePlus;
+import ij.gui.HistogramWindow;
 import ij.gui.NewImage;
 import ij.io.Opener;
 import ij.process.ImageProcessor;
@@ -39,7 +40,8 @@ public class Image {
 	}
 
 	public static void createIGImageEqualize() {
-		URL url = Image.class.getResource("/montagne.jpg");
+//		URL url = Image.class.getResource("/montagne.jpg");
+		URL url = Image.class.getResource("/pays.png");
 		ImagePlus imp = new Opener().openURL(url.toString());
 		ImagePlus imp2 = createEqualizeImage(imp);
 		JPanel panel = new PanelImage(imp, getHistogramWindow(imp), imp2,
@@ -70,7 +72,7 @@ public class Image {
 		for (int y = 0; y < imp.getHeight(); ++y)
 			for (int x = 0; x < imp.getWidth(); ++x)
 				impp.putPixelValue(x, y, getGray(imp.getPixel(x, y)));
-
+		
 		return impGray;
 	}
 
@@ -109,6 +111,7 @@ public class Image {
 		ImagePlus impEqualize = NewImage.createByteImage("Egalisation " + imp.getTitle(),
 				imp.getWidth(), imp.getHeight(), 1, NewImage.GRAY8);
 		ImageProcessor impp = impEqualize.getProcessor();
+		ImageProcessor ip = imp.getProcessor();
 
 		// Histogramme cumulé C(i) = ∑h(k) -> k[0,i]
 		final int[] C = getHistogramCumul(imp);
@@ -192,13 +195,15 @@ public class Image {
 	 */
 	public static int[] getHistogram(ImagePlus imp) {
 		int[] histo = new int[256];
+		ImageProcessor ip = imp.getProcessor();
 		// On parcours l'image sur l'axe des y
 		for (int y = 0; y < imp.getHeight(); ++y) {
 			// On parcours l'image sur l'axe des x
 			for (int x = 0; x < imp.getWidth(); ++x) {
 				// On incrémente le nb d'occurence du niveau de gris
 				// correspondant
-				++histo[getGray(imp.getPixel(x, y))];
+//				++histo[getGray(imp.getPixel(x, y))];
+				++histo[(int) ip.getPixelValue(x, y)];
 			}
 		}
 
@@ -257,10 +262,6 @@ public class Image {
 	 * @return
 	 */
 	public static int getGray(int[] rgb) {
-		// Permet de corriger un bug avec la couleur blanc
-		if (rgb[0] == 255 && rgb[1] == 0 && rgb[2] == 0)
-			return 255;
-
 		return (rgb[0] + rgb[1] + rgb[2]) / 3;
 	}
 
