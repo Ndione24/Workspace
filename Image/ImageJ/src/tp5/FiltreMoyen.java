@@ -25,7 +25,7 @@ public class FiltreMoyen {
 	     */
 		
 		// mat: une matrice pour stocker le resultat de la convolution
-		double[][] mat = new double[ip.getWidth()][ip.getHeight()];
+		double[][] mat = null;
 
 		// Création du masque moyenneur
 		Masque masque = new Masque(rayon);

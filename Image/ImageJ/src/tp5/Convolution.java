@@ -9,9 +9,14 @@ public class Convolution {
 		ImagePlus imp = Outils.openImage("matrice.png");
 		ImageProcessor ip = imp.getProcessor();
 
+		Masque masque = new Masque(1);
+		masque.remplirAvec(1);
+		
+		double mat[][] = Outils.convoluer(ip, masque);
+		Outils.afficherMatrice(mat);
 		// Application du filtre moyen sur l'image
-		new FiltreMoyen(ip);
-		imp.show();
+//		new FiltreMoyen(ip);
+//		imp.show();
 		
 	}
 }
