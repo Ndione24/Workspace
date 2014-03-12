@@ -28,6 +28,8 @@ public class Outils {
      * A faire: effectuer la convolution.
      * Reflechir a la question des bords.
      */
+	
+	// On récupére la taille de la matrice
 	int lig = ip.getWidth(), col = ip.getHeight();
     // resultat: la matrice dans laquelle sera stocke le resultat de la convolution.
 	// matrice:  la matrice d'origine créer à partir de l'image
