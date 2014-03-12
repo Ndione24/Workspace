@@ -1,13 +1,10 @@
 package tp4;
 
-import ij.IJ;
 import ij.ImagePlus;
-import ij.gui.HistogramWindow;
 import ij.gui.NewImage;
 import ij.io.Opener;
 import ij.process.ImageProcessor;
 
-import java.io.File;
 import java.net.URL;
 
 import javax.swing.JPanel;
@@ -40,8 +37,7 @@ public class Image {
 	}
 
 	public static void createIGImageEqualize() {
-//		URL url = Image.class.getResource("/montagne.jpg");
-		URL url = Image.class.getResource("/pays.png");
+		URL url = Image.class.getResource("/montagne.jpg");
 		ImagePlus imp = new Opener().openURL(url.toString());
 		ImagePlus imp2 = createEqualizeImage(imp);
 		JPanel panel = new PanelImage(imp, getHistogramWindow(imp), imp2,
@@ -52,47 +48,39 @@ public class Image {
 	public static void createIGImageThresholding() {
 		URL url = Image.class.getResource("/neige.jpg");
 		ImagePlus imp = new Opener().openURL(url.toString());
-		ImagePlus imp2 = createThresholingImage(imp, 220, 255);
+		ImagePlus imp2 = createThresholingImage(imp, 125);
 		JPanel panel = new PanelImage(imp, getHistogramWindow(imp), imp2,
 				getHistogramWindow(imp2));
 		new IGImage("Seuillage", panel);
 	}
 
-	/**
-	 * Créer une image de couleur grise à partir d'une image
-	 * 
-	 * @param imp
-	 * @return
-	 */
+	/** Créer une image de couleur grise à partir d'une image */
 	public static ImagePlus createGrayImage(ImagePlus imp) {
-		ImagePlus impGray = NewImage.createByteImage("Gris " + imp.getTitle(), imp.getWidth(),
-				imp.getHeight(), 1, NewImage.GRAY8);
+		final int hauteur = imp.getHeight(), largeur = imp.getWidth();
+		ImagePlus impGray = NewImage.createByteImage("Gris " + imp.getTitle(),
+				largeur, hauteur, 1, NewImage.GRAY8);
 		ImageProcessor impp = impGray.getProcessor();
 
-		for (int y = 0; y < imp.getHeight(); ++y)
-			for (int x = 0; x < imp.getWidth(); ++x)
+		for (int y = 0; y < hauteur; ++y)
+			for (int x = 0; x < largeur; ++x)
 				impp.putPixelValue(x, y, getGray(imp.getPixel(x, y)));
 		
 		return impGray;
 	}
 
-	/**
-	 * Créer une image normalisée (étirée) à partir d'une image
-	 * 
-	 * @param imp
-	 * @return
-	 */
+	/** Créer une image normalisée (étirée) à partir d'une image */
 	public static ImagePlus createNormalizeImage(ImagePlus imp) {
-		ImagePlus impNormalize = NewImage.createByteImage("Normalisation " + imp.getTitle(),
-				imp.getWidth(), imp.getHeight(), 1, NewImage.GRAY8);
+		final int hauteur = imp.getHeight(), largeur = imp.getWidth();
+		ImagePlus impNormalize = NewImage.createByteImage("Normalisation "
+				+ imp.getTitle(), largeur, hauteur, 1, NewImage.GRAY8);
 		ImageProcessor impp = impNormalize.getProcessor();
 
 		// Nvg(x',y') = 255 * (Nvg(x,y) - min) / (max-min)
-		int[] histo = getHistogram(imp);
+		int[] histo = getHistogram(createGrayImage(imp));
 		int min = getMin(histo), max = getMax(histo), value;
 
-		for (int y = 0; y < imp.getHeight(); ++y) {
-			for (int x = 0; x < imp.getWidth(); ++x) {
+		for (int y = 0; y < hauteur; ++y) {
+			for (int x = 0; x < largeur; ++x) {
 				value = 255 * (getGray(imp.getPixel(x, y)) - min) / (max - min);
 				impp.putPixelValue(x, y, value);
 			}
@@ -101,17 +89,12 @@ public class Image {
 		return impNormalize;
 	}
 
-	/**
-	 * Créer une image égalisée à partir d'une image
-	 * 
-	 * @param imp
-	 * @return
-	 */
+	/** Créer une image égalisée à partir d'une image */
 	public static ImagePlus createEqualizeImage(ImagePlus imp) {
-		ImagePlus impEqualize = NewImage.createByteImage("Egalisation " + imp.getTitle(),
-				imp.getWidth(), imp.getHeight(), 1, NewImage.GRAY8);
+		final int hauteur = imp.getHeight(), largeur = imp.getWidth();
+		ImagePlus impEqualize = NewImage.createByteImage("Egalisation " 
+				+ imp.getTitle(), largeur, hauteur, 1, NewImage.GRAY8);
 		ImageProcessor impp = impEqualize.getProcessor();
-		ImageProcessor ip = imp.getProcessor();
 
 		// Histogramme cumulé C(i) = ∑h(k) -> k[0,i]
 		final int[] C = getHistogramCumul(imp);
@@ -119,8 +102,8 @@ public class Image {
 		final int n = 255, N = impp.getPixelCount();
 
 		int i, value;
-		for (int y = 0; y < imp.getHeight(); ++y) {
-			for (int x = 0; x < imp.getWidth(); ++x) {
+		for (int y = 0; y < hauteur; ++y) {
+			for (int x = 0; x < largeur; ++x) {
 				i = getGray(imp.getPixel(x, y));
 				// Transformation T(i) = (n/N)*C(i)
 				value = (int) ((double) n / N * C[i]);
@@ -131,24 +114,18 @@ public class Image {
 		return impEqualize;
 	}
 
-	/**
-	 * Créer une image avec la méthode OTSU de seuillage
-	 * 
-	 * @param imp Image
-	 * @param inf Borne inférieur
-	 * @param sup Borne supérieur
-	 * @return
-	 */
-	public static ImagePlus createThresholingImage(ImagePlus imp, int inf, int sup) {
-		ImagePlus impThresholing = NewImage.createByteImage("Seuillage " + imp.getTitle(),
-				imp.getWidth(), imp.getHeight(), 1, NewImage.GRAY8);
+	/** Créer une image binarisée à partir d'une image */
+	public static ImagePlus createThresholingImage(ImagePlus imp, int seuil) {
+		final int hauteur = imp.getHeight(), largeur = imp.getWidth();
+		ImagePlus impThresholing = NewImage.createByteImage("Seuillage " 
+				+ imp.getTitle(), largeur, hauteur, 1, NewImage.GRAY8);
 		ImageProcessor impp = impThresholing.getProcessor();
 		
 		int value;
-		for (int y = 0; y < imp.getHeight(); ++y) {
-			for (int x = 0; x < imp.getWidth(); ++x) {
+		for (int y = 0; y < hauteur; ++y) {
+			for (int x = 0; x < largeur; ++x) {
 				value = getGray(imp.getPixel(x, y));
-				if (value > inf && value < sup) value = 255;
+				if (value > seuil) value = 255;
 				else value = 0;
 				impp.putPixelValue(x, y, value);		
 			}			
@@ -157,17 +134,11 @@ public class Image {
 		return impThresholing;
 	}
 
-	/**
-	 * Affiche l'histogramme d'une image
-	 * 
-	 * @param imp
-	 * @return
-	 */
+	/** Affiche l'histogramme d'une image */
 	public static ImagePlus getHistogramWindow(ImagePlus imp) {
 		// Création de l'histogramme nvg
-		ImagePlus impHisto = NewImage.createByteImage(
-				"Histogramme " + imp.getTitle(), WIN_WIDTH, WIN_HEIGHT, 1,
-				NewImage.FILL_WHITE);
+		ImagePlus impHisto = NewImage.createByteImage("Histogramme " 
+				+ imp.getTitle(), WIN_WIDTH, WIN_HEIGHT, 1, NewImage.FILL_WHITE);
 
 		// On récupére le processor pour tracer le graphe
 		ImageProcessor imppHisto = impHisto.getProcessor();
@@ -187,22 +158,18 @@ public class Image {
 		return impHisto;
 	}
 
-	/**
-	 * Récupére l'histgramme d'une image sous forme d'un tableau d'entier
-	 * 
-	 * @param imp
-	 * @return
-	 */
+	/** Récupére l'histogramme d'une image sous forme d'un tableau d'entier */
 	public static int[] getHistogram(ImagePlus imp) {
 		int[] histo = new int[256];
 		ImageProcessor ip = imp.getProcessor();
+		final int hauteur = imp.getHeight(), largeur = imp.getWidth();
+		
 		// On parcours l'image sur l'axe des y
-		for (int y = 0; y < imp.getHeight(); ++y) {
+		for (int y = 0; y < hauteur; ++y) {
 			// On parcours l'image sur l'axe des x
-			for (int x = 0; x < imp.getWidth(); ++x) {
+			for (int x = 0; x < largeur; ++x) {
 				// On incrémente le nb d'occurence du niveau de gris
 				// correspondant
-//				++histo[getGray(imp.getPixel(x, y))];
 				++histo[(int) ip.getPixelValue(x, y)];
 			}
 		}
@@ -210,17 +177,11 @@ public class Image {
 		return histo;
 	}
 
-	/**
-	 * Affiche l'histogramme cumulé d'une image
-	 * 
-	 * @param imp
-	 * @return
-	 */
+	/** Affiche l'histogramme cumulé d'une image */
 	public static ImagePlus getHistogramCumulWindow(ImagePlus imp) {
 		// Création de l'histogramme nvg
-		ImagePlus impHisto = NewImage
-				.createByteImage("Histogramme cumulé" + imp.getTitle(),
-						WIN_WIDTH, WIN_HEIGHT, 1, NewImage.FILL_WHITE);
+		ImagePlus impHisto = NewImage.createByteImage("Histogramme cumulé" 
+				+ imp.getTitle(), WIN_WIDTH, WIN_HEIGHT, 1, NewImage.FILL_WHITE);
 
 		// On récupére le processor pour tracer le graphe
 		ImageProcessor imppHisto = impHisto.getProcessor();
@@ -240,49 +201,28 @@ public class Image {
 		return impHisto;
 	}
 
-	/**
-	 * Récupére l'histogramme cumulé d'une image sous forme d'un tableau
-	 * d'entier
-	 * 
-	 * @param imp
-	 * @return
-	 */
+	/** Récupére l'histogramme cumulé d'une image */
 	public static int[] getHistogramCumul(ImagePlus imp) {
 		int[] histoCumul = getHistogram(imp);
-		for (int i = 1; i < histoCumul.length; ++i)
+		for (int i = 1, size = histoCumul.length; i < size; ++i)
 			histoCumul[i] = histoCumul[i] + histoCumul[i - 1];
 
 		return histoCumul;
 	}
 
-	/**
-	 * Récupére la couleur grise d'un pixel de couleur
-	 * 
-	 * @param rgb
-	 * @return
-	 */
+	/** Récupére la couleur grise d'un pixel de couleur */
 	public static int getGray(int[] rgb) {
 		return (rgb[0] + rgb[1] + rgb[2]) / 3;
 	}
 
-	/**
-	 * Récupére le dernier nvg ayant une occurence supérieur à 0
-	 * 
-	 * @param tab
-	 * @return
-	 */
+	/** Récupére le dernier nvg ayant une occurence supérieur à 0 */
 	public static int getMax(int[] tab) {
 		int i = tab.length - 1;
 		while (tab[i] == 0) --i;
 		return i;
 	}
 
-	/**
-	 * Récupére le premier nvg ayant une occurence supérieur à 0
-	 * 
-	 * @param tab
-	 * @return
-	 */
+	/** Récupére le premier nvg ayant une occurence supérieur à 0 */
 	public static int getMin(int[] tab) {
 		int i = 0;
 		while (tab[i] == 0) ++i;
@@ -290,9 +230,8 @@ public class Image {
 	}
 
 	/**
-	 * Exercice sur l'étirement, l'égalisation et le seuillage d'une image
-	 * 
-	 * @param args
+	 * Exercice sur l'étirement, l'égalisation, la binarisation et le seuillage
+	 * d'une image
 	 */
 	public static void main(String[] args) {
 		new IGSelect();

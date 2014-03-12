@@ -1,13 +1,10 @@
 package tp5;
 
-import ij.IJ;
 import ij.ImagePlus;
 import ij.io.Opener;
 import ij.process.ImageProcessor;
 
 import java.net.URL;
-
-import tp4.Image;
 
 public class Convolution {
 	
@@ -43,7 +40,9 @@ public class Convolution {
 		
 		Masque masque = new Masque(1);
 		masque.remplirAvec(1);
-		Outils.convoluer(ip, masque);
+		matrice = Outils.convoluer(ip, masque);
+		System.out.println();
+		afficherMatrice(matrice);
 		
 	}
 }

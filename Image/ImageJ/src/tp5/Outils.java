@@ -1,11 +1,8 @@
 package tp5;
 
-import java.net.URL;
-
 import ij.ImagePlus;
 import ij.gui.ImageWindow;
 import ij.gui.NewImage;
-import ij.io.Opener;
 import ij.process.ImageProcessor;
 
 /**
@@ -27,65 +24,35 @@ public class Outils {
      * A faire: effectuer la convolution.
      * Reflechir a la question des bords.
      */
+	int lig = ip.getWidth(), col = ip.getHeight();
     // resultat: la matrice dans laquelle sera stocke le resultat de la convolution.
-    double[][] resultat = null;
+	// matrice:  la matrice d'origine créer à partir de l'image
+    double[][] resultat = new double[lig][col], matrice = creerMatrice(ip);
     // On utilise l'effet mirroir pour gérer les bords
-    // remplir ici
-
     // Miroir : Si un pixel du voisinage est en dehors de l'image d'origine,
 	// sa valeur est celle du pixel symétrique par rapport au bord de
-	// l'image. C'est à dire : Image[-1][y]= Image[1][y]
-    int lig = ip.getWidth(), col = ip.getHeight(), rayon = masque.getRayon();
-    double[][] matrice = creerMatrice(ip);
-    
-    // Convolution
-    // J(x,y) = (I(*)M)(x,y) = ∑u=-1->1∑v=-1->1 I(x-u, y-v)*M(u,v)
-    // Zone affectée par l'effet de bord
-    // J(x,y) = ∑u->?∑v->? I(x-u, y-v)*M(u,v)
+	// l'image. C'est à dire : Image[-1][y]= Image[1][y] pour le bord gauche
 
-    int a,b;
-    double val;
+    // Convolution, zone affectée par l'effet de bord
+    // J(x,y) = (I(*)M)(x,y) = ∑u=-1->1∑v=-1->1 I(x-u, y-v)*M(u,v)
+    int a, b, res = 0, rayon = masque.getRayon();
     for (int y = 0; y < col; ++y) {
 		for (int x = 0; x < lig; ++x) {
 			for (int v = -rayon; v < rayon+1; ++v) {
 				for (int u = -rayon; u < rayon+1; ++u) {
-					val = matrice[x][y] * masque.get(u, v);
-//					System.out.println("x="+x +" y="+y+" u="+u+" v="+v);
-//					a = x-u; b = y-v;
-//					if (a < 0) { a = -a; System.out.println("new value a =" +a);};
-//					if (b < 0) { b = -b; System.out.println("new value b =" +b);};
-//					System.out.print("matrice[" + a + "][" + b + "]="); 
-//					System.out.println(matrice[a][b]);
-//					System.out.println("masque : " + masque.get(u, v));
-//					System.out.println("resultat : " + matrice[x-u][y-v] * masque.get(u, v));
-//        			resultat[x][y] = matrice[x-u][y-v] * masque.get(u, v);
+					a = x+u; b = y+v;
+					// Gestion du bord gauche et droite
+					if (a < 0 || a >= lig) { a = x-u; }
+					// Gestion du bord haut et bas
+					if (b < 0 || b >= col) { b = y-v; }
+					res += matrice[a][b] * masque.get(u, v);
 				}
 			}
+			resultat[x][y] = res/9;
+			res = 0;
 		}
 	}
-    
-    /*
-    // On parcours la matrice sur l'axe des x
-    for (int x = 0; x < lig; ++x) {
-    	// On parcours la matrice sur l'axe des y
-    	for (int y = 0; y < col; ++y) {
-    		// On parcours le masque
-    		for (int u = -rayon; u < rayon; ++u) {
-    			for (int v = -rayon; v < rayon; ++v) {
-					System.out.println("x="+x +" y="+y+" u="+u+" v="+v);
-					System.out.println("matrice : " + matrice[x-u][y-u]);
-					System.out.println("masque : " + masque.get(u, v));
-					System.out.println("resultat : " + matrice[x-u][y-v] * masque.get(u, v));
-//        			resultat[x][y] = matrice[x-u][y-v] * masque.get(u, v);					
-    			}	
-    		}    		
-    	}    	
-    }
-    */
-    
-    /**
-     * Fin de la partie a completer
-     */
+
     return resultat;
   }
 
