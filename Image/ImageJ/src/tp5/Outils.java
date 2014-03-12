@@ -1,8 +1,12 @@
 package tp5;
 
+import java.net.URL;
+
+import tp4.Image;
 import ij.ImagePlus;
 import ij.gui.ImageWindow;
 import ij.gui.NewImage;
+import ij.io.Opener;
 import ij.process.ImageProcessor;
 
 /**
@@ -33,7 +37,7 @@ public class Outils {
 	// sa valeur est celle du pixel symétrique par rapport au bord de
 	// l'image. C'est à dire : Image[-1][y]= Image[1][y] pour le bord gauche
 
-    // Convolution, zone affectée par l'effet de bord
+    // Convolution pour une zone affectée par l'effet de bord
     // J(x,y) = (I(*)M)(x,y) = ∑u=-1->1∑v=-1->1 I(x-u, y-v)*M(u,v)
     int a, b, res = 0, rayon = masque.getRayon();
     for (int y = 0; y < col; ++y) {
@@ -52,7 +56,10 @@ public class Outils {
 			res = 0;
 		}
 	}
-
+	
+    /**
+     * Fin de la partie a completer
+     */
     return resultat;
   }
 
@@ -105,16 +112,33 @@ public class Outils {
 
     new ImageWindow(imp);
   }
-  
-	public static double[][] creerMatrice(ImageProcessor ip) {
+  	
+  	public static double[][] creerMatrice(ImageProcessor ip) {
 		// On récupére les dimensions de l'image
 		int hauteur = ip.getHeight(), largeur = ip.getWidth();
-		double[][] matrice = new double [largeur][hauteur];
+		double[][] matrice = new double[largeur][hauteur];
 
 		for (int y = 0; y < hauteur; ++y)
 			for (int x = 0; x < largeur; ++x)
-				matrice[x][y] = ip.getPixelValue(x, y);
-		
+				matrice[x][y] = (int) ip.getPixelValue(x, y);
+
 		return matrice;
 	}
+
+	public static void afficherMatrice(double[][] matrice) {
+		// On récupére les dimensions de la matrice
+		int largeur = matrice.length, hauteur = matrice[0].length;
+		for (int y = 0; y < hauteur; y++) {
+			for (int x = 0; x < largeur; x++)
+				System.out.print(matrice[x][y] + "\t");
+			System.out.println();
+		}
+	}
+	
+	/** Récupére l'image comme une ressource pour être compatible avec JAR */
+	public static ImagePlus openImage(String name) {
+		URL url = Image.class.getResource("/"+ name);
+		return new Opener().openURL(url.toString());
+	}
+
 }

@@ -7,8 +7,6 @@ import ij.process.ImageProcessor;
 
 import java.net.URL;
 
-import javax.swing.JPanel;
-
 /**
  * Projet réalisé dans le cadre d'un projet Paris Descartes L3 Image
  * 
@@ -17,42 +15,6 @@ import javax.swing.JPanel;
 public class Image {
 	static final int WIN_WIDTH = 256;
 	static final int WIN_HEIGHT = 256;
-
-	public static void createIGImageGray() {
-		URL url = Image.class.getResource("/lena.png");
-		ImagePlus imp = new Opener().openURL(url.toString());
-		ImagePlus imp2 = createGrayImage(imp);
-		JPanel panel = new PanelImage(imp, getHistogramWindow(imp), imp2,
-				getHistogramWindow(imp2));
-		new IGImage("Gris", panel);
-	}
-
-	public static void createIGImageNormalize() {
-		URL url = Image.class.getResource("/enhance-me.png");
-		ImagePlus imp = new Opener().openURL(url.toString());
-		ImagePlus imp2 = createNormalizeImage(imp);
-		JPanel panel = new PanelImage(imp, getHistogramWindow(imp), imp2,
-				getHistogramWindow(imp2));
-		new IGImage("Normalisation", panel);
-	}
-
-	public static void createIGImageEqualize() {
-		URL url = Image.class.getResource("/montagne.jpg");
-		ImagePlus imp = new Opener().openURL(url.toString());
-		ImagePlus imp2 = createEqualizeImage(imp);
-		JPanel panel = new PanelImage(imp, getHistogramWindow(imp), imp2,
-				getHistogramWindow(imp2));
-		new IGImage("Egalisation", panel);
-	}
-
-	public static void createIGImageThresholding() {
-		URL url = Image.class.getResource("/neige.jpg");
-		ImagePlus imp = new Opener().openURL(url.toString());
-		ImagePlus imp2 = createThresholingImage(imp, 125);
-		JPanel panel = new PanelImage(imp, getHistogramWindow(imp), imp2,
-				getHistogramWindow(imp2));
-		new IGImage("Seuillage", panel);
-	}
 
 	/** Créer une image de couleur grise à partir d'une image */
 	public static ImagePlus createGrayImage(ImagePlus imp) {
@@ -157,26 +119,7 @@ public class Image {
 
 		return impHisto;
 	}
-
-	/** Récupére l'histogramme d'une image sous forme d'un tableau d'entier */
-	public static int[] getHistogram(ImagePlus imp) {
-		int[] histo = new int[256];
-		ImageProcessor ip = imp.getProcessor();
-		final int hauteur = imp.getHeight(), largeur = imp.getWidth();
-		
-		// On parcours l'image sur l'axe des y
-		for (int y = 0; y < hauteur; ++y) {
-			// On parcours l'image sur l'axe des x
-			for (int x = 0; x < largeur; ++x) {
-				// On incrémente le nb d'occurence du niveau de gris
-				// correspondant
-				++histo[(int) ip.getPixelValue(x, y)];
-			}
-		}
-
-		return histo;
-	}
-
+	
 	/** Affiche l'histogramme cumulé d'une image */
 	public static ImagePlus getHistogramCumulWindow(ImagePlus imp) {
 		// Création de l'histogramme nvg
@@ -201,6 +144,25 @@ public class Image {
 		return impHisto;
 	}
 
+	/** Récupére l'histogramme d'une image sous forme d'un tableau d'entier */
+	public static int[] getHistogram(ImagePlus imp) {
+		ImageProcessor ip = imp.getProcessor();
+		final int hauteur = imp.getHeight(), largeur = imp.getWidth();
+		int[] histo = new int[256];
+		
+		// On parcours l'image sur l'axe des y
+		for (int y = 0; y < hauteur; ++y) {
+			// On parcours l'image sur l'axe des x
+			for (int x = 0; x < largeur; ++x) {
+				// On incrémente le nb d'occurence du niveau de gris
+				// correspondant
+				++histo[(int) ip.getPixelValue(x, y)];
+			}
+		}
+
+		return histo;
+	}
+
 	/** Récupére l'histogramme cumulé d'une image */
 	public static int[] getHistogramCumul(ImagePlus imp) {
 		int[] histoCumul = getHistogram(imp);
@@ -209,7 +171,7 @@ public class Image {
 
 		return histoCumul;
 	}
-
+	
 	/** Récupére la couleur grise d'un pixel de couleur */
 	public static int getGray(int[] rgb) {
 		return (rgb[0] + rgb[1] + rgb[2]) / 3;
@@ -227,6 +189,12 @@ public class Image {
 		int i = 0;
 		while (tab[i] == 0) ++i;
 		return i;
+	}
+	
+	/** Récupére l'image comme une ressource pour être compatible avec JAR */
+	public static ImagePlus openImage(String name) {
+		URL url = Image.class.getResource("/"+ name);
+		return new Opener().openURL(url.toString());
 	}
 
 	/**

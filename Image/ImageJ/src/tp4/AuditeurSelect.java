@@ -9,13 +9,13 @@ public class AuditeurSelect extends Image implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent evt) {
 		if (evt.getActionCommand().equals("Gris")) {
-			createIGImageGray();
+			IGImage.createIGImageGray();
 		} else if (evt.getActionCommand().equals("Normalisation")) {
-			createIGImageNormalize();
+			IGImage.createIGImageNormalize();
 		} else if (evt.getActionCommand().equals("Egalisation")) {
-			createIGImageEqualize();
+			IGImage.createIGImageEqualize();
 		} else if (evt.getActionCommand().equals("Seuillage")) {
-			createIGImageThresholding();
+			IGImage.createIGImageThresholding();
 		}
 	}
 	

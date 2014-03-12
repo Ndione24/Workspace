@@ -11,13 +11,16 @@ import javax.swing.JPanel;
 
 public class PanelImage extends JPanel {
 	
-	public PanelImage(ImagePlus imp, ImagePlus histo, ImagePlus imp2, ImagePlus histo2) {
+	public PanelImage(ImagePlus imp, ImagePlus imp2) {
 		BorderLayout mainLayout = new BorderLayout();
 		mainLayout.setHgap(2);
 		setLayout(mainLayout);
 		setBorder(BorderFactory.createEmptyBorder(0,4,4,4));
 		String title = imp.getTitle();
-
+		
+		ImagePlus histo = Image.getHistogramWindow(imp);
+		ImagePlus histo2 = Image.getHistogramWindow(imp2);
+		
 		add(new JLabel("Nom de l'image : " + title), BorderLayout.NORTH);
 		add(new ImageCanvas(imp), BorderLayout.WEST);
 		add(new ImageCanvas(histo), BorderLayout.EAST);
