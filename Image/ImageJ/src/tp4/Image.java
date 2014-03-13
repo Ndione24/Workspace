@@ -9,6 +9,7 @@ import java.net.URL;
 
 /**
  * Projet réalisé dans le cadre d'un projet Paris Descartes L3 Image
+ * Exercice sur l'étirement, l'égalisation et le seuillage d'une image
  * 
  * @author Thibault Vieux
  */
@@ -79,9 +80,9 @@ public class Image {
 	/** Créer une image binarisée à partir d'une image */
 	public static ImagePlus createBinaryImage(ImagePlus imp, int seuil) {
 		final int hauteur = imp.getHeight(), largeur = imp.getWidth();
-		ImagePlus impThresholing = NewImage.createByteImage("Seuillage " 
+		ImagePlus impBin = NewImage.createByteImage("Seuillage " 
 				+ imp.getTitle(), largeur, hauteur, 1, NewImage.GRAY8);
-		ImageProcessor impp = impThresholing.getProcessor();
+		ImageProcessor impp = impBin.getProcessor();
 		
 		int value;
 		for (int y = 0; y < hauteur; ++y) {
@@ -93,7 +94,14 @@ public class Image {
 			}			
 		}
 
-		return impThresholing;
+		return impBin;
+	}
+	
+	/** Créer une image binaire avec la méthode OTSU */
+	public static ImagePlus createOTSUImage(ImagePlus imp) {
+		// Même méthode que pour créer une image binaire mais avec un seuil
+		// déterminé automatiquement
+		return createBinaryImage(imp, getThreshold(imp));
 	}
 
 	/** Affiche l'histogramme d'une image */
@@ -172,6 +180,43 @@ public class Image {
 		return histoCumul;
 	}
 	
+	/** Récupére le seuil d'une image */
+	public static int getThreshold(ImagePlus imp) {
+		ImageProcessor ip = imp.getProcessor();
+		int[] histo = getHistogram(createGrayImage(imp));
+		int total = ip.getPixelCount();
+
+		float sum = 0;
+		for (int t = 0; t < 256; t++) sum += t * histo[t];
+
+		float sumB = 0;
+		int wB = 0, wF = 0;
+
+		float varMax = 0;
+		int threshold = 0;
+
+		for (int t = 0; t < 256; t++) {
+			wB += histo[t]; // Weight Background
+			if (wB == 0) continue;
+			wF = total - wB; // Weight Foreground
+			if (wF == 0) break;
+			sumB += (float) (t * histo[t]);
+
+			float mB = sumB / wB; // Mean Background
+			float mF = (sum - sumB) / wF; // Mean Foreground
+
+			// Calculate Between Class Variance
+			float varBetween = (float) wB * (float) wF * (mB - mF) * (mB - mF);
+
+			// Check if new maximum found
+			if (varBetween > varMax) {
+				varMax = varBetween;
+				threshold = t;
+			}
+		}
+		return threshold;
+	}
+	
 	/** Récupére la couleur grise d'un pixel de couleur */
 	public static int getGray(int[] rgb) {
 		return (rgb[0] + rgb[1] + rgb[2]) / 3;
@@ -196,14 +241,6 @@ public class Image {
 		URL url = Image.class.getResource("/"+ name);
 		if (null == url) throw new NullPointerException("Impossible de trouver l'image " + name);
 		return new Opener().openURL(url.toString());
-	}
-
-	/**
-	 * Exercice sur l'étirement, l'égalisation, la binarisation et le seuillage
-	 * d'une image
-	 */
-	public static void main(String[] args) {
-		new IGSelect();
 	}
 
 }

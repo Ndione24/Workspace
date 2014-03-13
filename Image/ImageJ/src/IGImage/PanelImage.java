@@ -1,4 +1,4 @@
-package tp4;
+package IGImage;
 
 import ij.ImagePlus;
 import ij.gui.ImageCanvas;
@@ -8,6 +8,8 @@ import java.awt.BorderLayout;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import tp4.Image;
 
 public class PanelImage extends JPanel {
 	

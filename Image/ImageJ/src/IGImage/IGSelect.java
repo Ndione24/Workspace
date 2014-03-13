@@ -1,5 +1,6 @@
-package tp4;
+package IGImage;
 
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
@@ -12,7 +13,8 @@ import javax.swing.KeyStroke;
 public class IGSelect extends JFrame {
 	public IGSelect() {
 		super("Projet Image");
-		add(new PanelSelect());
+		add(new PanelSelectTrans(), BorderLayout.CENTER);
+		add(new PanelSelectFiltre(), BorderLayout.SOUTH);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 		KeyStroke escapeKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE,0, false);

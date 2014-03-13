@@ -1,16 +1,15 @@
-package tp4;
+package IGImage;
 
 import ij.ImagePlus;
 import ij.gui.GenericDialog;
 
-import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
+import tp4.Image;
 
 
-public class AuditeurSelect extends Image implements ActionListener {
+public class AuditeurSelectTrans extends Image implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent evt) {
@@ -36,6 +35,10 @@ public class AuditeurSelect extends Image implements ActionListener {
 			int rayon = (int) gd.getNextNumber();
 			ImagePlus imp2 = createBinaryImage(imp, rayon);
 			new IGImage("Seuillage", new PanelImage(imp, imp2));
+		} else if (evt.getActionCommand().equals("Otsu")) {
+			ImagePlus imp = openImage("neige.jpg");
+			ImagePlus imp2 = createOTSUImage(imp);
+			new IGImage("Seuillage OTSU", new PanelImage(imp, imp2));
 		}
 	}
 	

@@ -1,4 +1,4 @@
-package tp4;
+package IGImage;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
