@@ -3,20 +3,18 @@ package tp5;
 import ij.ImagePlus;
 import ij.process.ImageProcessor;
 
-public class Convolution {
+public class Main extends Outils {
 	
 	public static void main(String[] args) {
-		ImagePlus imp = Outils.openImage("matrice.png");
+		ImagePlus imp = openImage("lenna_noiser.png");
+//		ImagePlus imp = openImage("matrice.png");
 		ImageProcessor ip = imp.getProcessor();
-
-		Masque masque = new Masque(1);
-		masque.remplirAvec(1);
-		
-		double mat[][] = Outils.convoluer(ip, masque);
-		Outils.afficherMatrice(mat);
+//		imp.show();
 		// Application du filtre moyen sur l'image
 //		new FiltreMoyen(ip);
 //		imp.show();
-		
+		// Application du filtre median sur l'image
+		new FiltreMedian(ip);
+		imp.show();
 	}
 }

@@ -28,9 +28,14 @@ public class FiltreMedian{
      * un voisinage dont la taille est definie plus haut, et stoker le
      * resultat dans l'image 'ipMedian'.
      */
-
-	//remplir ici
-
+	final int lig = ip.getWidth(), col = ip.getHeight();
+	double res;
+	for (int y = 0; y < col; ++y) {
+		for (int x = 0; x < lig; ++x) {
+			res = Outils.getMedian(ip, x, y, rayon);
+			ipMedian.putPixelValue(x, y, res);
+		}
+	}
 
     /**
      * Fin de la partie a completer

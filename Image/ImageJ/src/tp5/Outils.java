@@ -1,13 +1,15 @@
 package tp5;
 
-import java.net.URL;
-
-import tp4.Image;
 import ij.ImagePlus;
 import ij.gui.ImageWindow;
 import ij.gui.NewImage;
 import ij.io.Opener;
 import ij.process.ImageProcessor;
+
+import java.net.URL;
+import java.util.Arrays;
+
+import tp4.Image;
 
 /**
  * Quelques methodes statiques qui seront utiles
@@ -27,11 +29,13 @@ public class Outils {
 		/**
 		 * A faire: effectuer la convolution. Reflechir a la question des bords.
 		 */
-
-		int lig = ip.getWidth(), col = ip.getHeight();
+		
+		// On récupére les dimensions de l'image
+		final int lig = ip.getWidth(), col = ip.getHeight();
 		// resultat: la matrice dans laquelle sera stocke le resultat de la convolution.
+		double[][] resultat = new double[lig][col]; 
 		// matrice: la matrice d'origine créer à partir de l'image
-		double[][] resultat = new double[lig][col], matrice = creerMatrice(ip);
+		final double[][] matrice = creerMatrice(ip);
 		// On utilise l'effet mirroir pour gérer les bords
 		// Miroir : Si un pixel du voisinage est en dehors de l'image d'origine,
 		// sa valeur est celle du pixel symétrique par rapport au bord de
@@ -39,22 +43,22 @@ public class Outils {
 
 		// Convolution pour une zone affectée par l'effet de bord
 		// J(x,y) = (I(*)M)(x,y) = ∑u=-1->1∑v=-1->1 I(x-u, y-v)*M(u,v)
-		int a, b, res = 0, rayon = masque.getRayon();
+
+		// Cas normal : J(x,y) = I(x,y)(*)M(x,y) = ∑∑I(x+u,y+v)*M(u,v)
+		// Cas bord : 	J(x,y) = I(x,y)(*)M(x,y) = ∑∑I(x-u,y-v)*M(u,v)
+		int X, Y, rayon = masque.getRayon();
 		for (int y = 0; y < col; ++y) {
 			for (int x = 0; x < lig; ++x) {
-				for (int v = -rayon; v < rayon + 1; ++v) {
-					for (int u = -rayon; u < rayon + 1; ++u) {
-						a = x + u;
-						b = y + v;
+				for (int v = -rayon; v <= rayon; ++v) {
+					for (int u = -rayon; u <= rayon; ++u) {
+						X = x + u; Y = y + v;
 						// Gestion du bord gauche et droite
-						if (a < 0 || a >= lig) a = x - u;
+						if (X < 0 || X >= lig) X = x - u;
 						// Gestion du bord haut et bas
-						if (b < 0 || b >= col) b = y - v;
-						res += matrice[a][b] * masque.get(u, v);
+						if (Y < 0 || Y >= col) Y = y - v;
+						resultat[x][y] += (double) (matrice[X][Y] * masque.get(u, v));
 					}
 				}
-				resultat[x][y] = res / 9;
-				res = 0;
 			}
 		}
 
@@ -112,9 +116,11 @@ public class Outils {
 		new ImageWindow(imp);
 	}
   	
+	/** Créer une matrice de double à partir d'une image */
   	public static double[][] creerMatrice(ImageProcessor ip) {
 		// On récupére les dimensions de l'image
-		int hauteur = ip.getHeight(), largeur = ip.getWidth();
+		final int hauteur = ip.getHeight(), largeur = ip.getWidth();
+		// matrice : matrice qui contiendra le résultat
 		double[][] matrice = new double[largeur][hauteur];
 
 		for (int y = 0; y < hauteur; ++y)
@@ -124,14 +130,61 @@ public class Outils {
 		return matrice;
 	}
 
+  	/** Affiche le contenu de la matrice dans la console */
 	public static void afficherMatrice(double[][] matrice) {
 		// On récupére les dimensions de la matrice
-		int largeur = matrice.length, hauteur = matrice[0].length;
-		for (int y = 0; y < hauteur; y++) {
-			for (int x = 0; x < largeur; x++)
+		final int largeur = matrice.length, hauteur = matrice[0].length;
+		for (int y = 0; y < hauteur; ++y) {
+			for (int x = 0; x < largeur; ++x)
 				System.out.print(matrice[x][y] + "\t");
 			System.out.println();
 		}
+	}
+	
+	/** Affiche le contenu dans masque dans la console */
+	public static void afficherMasque(Masque masque) {
+		final int rayon = masque.getRayon();
+		for (int y = -rayon; y <= rayon; ++y) {
+			for (int x = -rayon; x <= rayon; ++x) {
+				System.out.print(masque.get(x, y) + " ");				
+			}
+			System.out.println();
+		}
+	}
+	
+	/** Renvoi le médian d'un pixel en fonction de ses voisins */
+	public static double getMedian(ImageProcessor ip, int x, int y, int rayon) {
+		return getMedian(getPixelsVoisins(ip, x, y, rayon));
+	}
+	
+	/** Renvoi la médiane d'un tableau de double */
+	public static double getMedian(double[] value) {
+		Arrays.sort(value);
+		return value[value.length/2];
+	}
+	
+	/**
+	 * Renvoi un tableau de double contenant les pixels voisins au point x, y
+	 * avec gestion des bords
+	 */
+	public static double[] getPixelsVoisins(ImageProcessor ip, int x, int y, int rayon) {
+		// On récupére les dimensions de l'image
+		final int lig = ip.getWidth(), col = ip.getHeight(); 
+		final int voisin = rayon*2+1;
+		double[] res = new double[voisin*voisin];
+		
+		int X, Y, i = 0;
+		for (int v = -rayon; v <= rayon; ++v) {
+			for (int u = -rayon; u <= rayon; ++u) {
+				X = x + u; Y = y + v;
+				// Gestion du bord gauche et droite
+				if (X < 0 || X >= lig) X = x - u;
+				// Gestion du bord haut et bas
+				if (Y < 0 || Y >= col) Y = y - v;
+				res[i++] = ip.getPixelValue(X, Y);
+			}
+		}
+		return res;
 	}
 	
 	/** Récupére l'image comme une ressource pour être compatible avec JAR */

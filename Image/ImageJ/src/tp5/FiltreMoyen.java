@@ -5,6 +5,7 @@ import ij.process.ImageProcessor;
 
 public class FiltreMoyen {
 	
+	/** Elimine le bruit en contre partie on perd des détails sur l'image */
 	public FiltreMoyen(ImageProcessor ip) {
 		GenericDialog gd = new GenericDialog("Options du filtre moyenneur");
 		gd.addNumericField("Rayon du masque", 1, 0);
@@ -29,7 +30,11 @@ public class FiltreMoyen {
 
 		// Création du masque moyenneur
 		Masque masque = new Masque(rayon);
-		masque.remplirAvec(1);
+		// largeur : Largeur du masque 
+		// N : nombre de valeur du masque
+		final int largeur = masque.getLargeur(), N = largeur * largeur;;
+		// Somme des valeurs du masque égal à 1
+		masque.remplirAvec((double)1/N);
 
 		mat = Outils.convoluer(ip, masque);
 
