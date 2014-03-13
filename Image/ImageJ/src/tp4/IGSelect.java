@@ -8,6 +8,7 @@ public class IGSelect extends JFrame {
 		add(new PanelSelect());
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		pack();
+		setLocationRelativeTo(null);
 		setVisible(true);
 	}
 }
