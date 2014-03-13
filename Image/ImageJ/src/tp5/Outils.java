@@ -7,7 +7,6 @@ import ij.io.Opener;
 import ij.process.ImageProcessor;
 
 import java.net.URL;
-import java.util.Arrays;
 
 import tp4.Image;
 
@@ -152,44 +151,10 @@ public class Outils {
 		}
 	}
 	
-	/** Renvoi le médian d'un pixel en fonction de ses voisins */
-	public static double getMedian(ImageProcessor ip, int x, int y, int rayon) {
-		return getMedian(getPixelsVoisins(ip, x, y, rayon));
-	}
-	
-	/** Renvoi la médiane d'un tableau de double */
-	public static double getMedian(double[] value) {
-		Arrays.sort(value);
-		return value[value.length/2];
-	}
-	
-	/**
-	 * Renvoi un tableau de double contenant les pixels voisins au point x, y
-	 * avec gestion des bords
-	 */
-	public static double[] getPixelsVoisins(ImageProcessor ip, int x, int y, int rayon) {
-		// On récupére les dimensions de l'image
-		final int lig = ip.getWidth(), col = ip.getHeight(); 
-		final int voisin = rayon*2+1;
-		double[] res = new double[voisin*voisin];
-		
-		int X, Y, i = 0;
-		for (int v = -rayon; v <= rayon; ++v) {
-			for (int u = -rayon; u <= rayon; ++u) {
-				X = x + u; Y = y + v;
-				// Gestion du bord gauche et droite
-				if (X < 0 || X >= lig) X = x - u;
-				// Gestion du bord haut et bas
-				if (Y < 0 || Y >= col) Y = y - v;
-				res[i++] = ip.getPixelValue(X, Y);
-			}
-		}
-		return res;
-	}
-	
 	/** Récupére l'image comme une ressource pour être compatible avec JAR */
 	public static ImagePlus openImage(String name) {
 		URL url = Image.class.getResource("/"+ name);
+		if (null == url) throw new NullPointerException("Impossible de trouver l'image " + name);
 		return new Opener().openURL(url.toString());
 	}
 

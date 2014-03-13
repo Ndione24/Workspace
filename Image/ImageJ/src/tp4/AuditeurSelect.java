@@ -3,8 +3,11 @@ package tp4;
 import ij.ImagePlus;
 import ij.gui.GenericDialog;
 
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
 
 
 public class AuditeurSelect extends Image implements ActionListener {

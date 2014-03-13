@@ -194,6 +194,7 @@ public class Image {
 	/** Récupére l'image comme une ressource pour être compatible avec JAR */
 	public static ImagePlus openImage(String name) {
 		URL url = Image.class.getResource("/"+ name);
+		if (null == url) throw new NullPointerException("Impossible de trouver l'image " + name);
 		return new Opener().openURL(url.toString());
 	}
 

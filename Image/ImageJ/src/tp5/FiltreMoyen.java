@@ -5,7 +5,7 @@ import ij.process.ImageProcessor;
 
 public class FiltreMoyen {
 	
-	/** Elimine le bruit en contre partie on perd des détails sur l'image */
+	/** Elimine les bruits impusionnels en contre partie on perd des détails l'image */
 	public FiltreMoyen(ImageProcessor ip) {
 		GenericDialog gd = new GenericDialog("Options du filtre moyenneur");
 		gd.addNumericField("Rayon du masque", 1, 0);
@@ -29,13 +29,7 @@ public class FiltreMoyen {
 		double[][] mat = null;
 
 		// Création du masque moyenneur
-		Masque masque = new Masque(rayon);
-		// largeur : Largeur du masque 
-		// N : nombre de valeur du masque
-		final int largeur = masque.getLargeur(), N = largeur * largeur;;
-		// Somme des valeurs du masque égal à 1
-		masque.remplirAvec((double)1/N);
-
+		Masque masque = creerMasqueMoyenneur(rayon);
 		mat = Outils.convoluer(ip, masque);
 
 		/**
@@ -45,6 +39,21 @@ public class FiltreMoyen {
 		if (mat != null) {
 			Outils.afficheMatrice(mat, "Filtre moyen", false);
 		}
+	}
+	
+	/** Creer le masque moyenneur */
+	private static Masque creerMasqueMoyenneur(int rayon) {
+		// Vérification des arguments
+		if (rayon < 1) throw new Error("bad argument for rayon");
+		// Création d'un masque vide
+		Masque masque = new Masque(rayon);
+		// largeur : Largeur du masque 
+		// N : nombre de valeur du masque
+		final int largeur = masque.getLargeur(), N = largeur * largeur;;
+		// Remplissage du masque avec la somme des valeurs du masque égal à 1
+		masque.remplirAvec((double)1/N);
+		
+		return masque;
 	}
 
 }
