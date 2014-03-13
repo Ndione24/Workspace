@@ -9,21 +9,21 @@ public class PanelSelect extends JPanel {
 
 	public PanelSelect() {
 		setLayout(new FlowLayout());
-		JButton bGris, bEgalisation, bNormalisation, bSeuillage;
+		JButton bGris, bEgalisation, bNormalisation, bBinarisation;
 		bGris = new JButton("Gris");
 		bNormalisation = new JButton("Normalisation");
 		bEgalisation = new JButton("Egalisation");
-		bSeuillage = new JButton("Seuillage");
+		bBinarisation = new JButton("Binarisation");
 		
 		add(bGris);
 		add(bNormalisation);
 		add(bEgalisation);
-		add(bSeuillage);
+		add(bBinarisation);
 		
 		AuditeurSelect auditeur = new AuditeurSelect();
 		bGris.addActionListener(auditeur);
 		bNormalisation.addActionListener(auditeur);
 		bEgalisation.addActionListener(auditeur);
-		bSeuillage.addActionListener(auditeur);
+		bBinarisation.addActionListener(auditeur);
 	}
 }

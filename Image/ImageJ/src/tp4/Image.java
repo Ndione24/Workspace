@@ -77,7 +77,7 @@ public class Image {
 	}
 
 	/** Créer une image binarisée à partir d'une image */
-	public static ImagePlus createThresholingImage(ImagePlus imp, int seuil) {
+	public static ImagePlus createBinaryImage(ImagePlus imp, int seuil) {
 		final int hauteur = imp.getHeight(), largeur = imp.getWidth();
 		ImagePlus impThresholing = NewImage.createByteImage("Seuillage " 
 				+ imp.getTitle(), largeur, hauteur, 1, NewImage.GRAY8);
