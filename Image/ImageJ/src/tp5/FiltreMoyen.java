@@ -15,7 +15,6 @@ public class FiltreMoyen {
 
 		// rayon: rayon du masque moyenneur
 		int rayon = (int) gd.getNextNumber();
-
 	    /**
 	     * A faire: convoluer l'image 'ip' avec un masque moyenneur.
 	     * Entree: ip (ImageProcessor)
@@ -31,7 +30,7 @@ public class FiltreMoyen {
 		// Création du masque moyenneur
 		Masque masque = creerMasqueMoyenneur(rayon);
 		mat = Outils.convoluer(ip, masque);
-
+		
 		/**
 		 * Fin de la partie a completer
 		 */
@@ -41,17 +40,14 @@ public class FiltreMoyen {
 		}
 	}
 	
-	/** Creer le masque moyenneur */
-	private static Masque creerMasqueMoyenneur(int rayon) {
+	public static Masque creerMasqueMoyenneur(int rayon) {
 		// Vérification des arguments
 		if (rayon < 1) throw new Error("bad argument for rayon");
-		// Création d'un masque vide
+		// Création du masque vide
 		Masque masque = new Masque(rayon);
-		// largeur : Largeur du masque 
-		// N : nombre de valeur du masque
-		final int largeur = masque.getLargeur(), N = largeur * largeur;;
-		// Remplissage du masque avec la somme des valeurs du masque égal à 1
-		masque.remplirAvec((double)1/N);
+		// Récupération de la taille du masque
+		final int taille = masque.getLargeur() * masque.getLargeur();
+		masque.remplirAvec((double) 1/taille);
 		
 		return masque;
 	}

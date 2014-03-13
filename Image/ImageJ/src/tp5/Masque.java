@@ -59,7 +59,6 @@ public class Masque {
    * @param valeur     Valeur a stocker dans chaque element.
    */
   public void remplirAvec(double valeur) {
-	System.out.println(valeur);
     for (int i = 0; i < largeur * largeur; i++) {
       contenu[i] = valeur;
     }
