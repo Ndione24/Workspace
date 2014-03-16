@@ -59,12 +59,12 @@ public class FiltreMedian{
 	}
 	
 	/** Renvoi le médian d'un pixel en fonction de ses voisins */
-	public static double getMedian(ImageProcessor ip, int x, int y, int rayon) {
+	private double getMedian(ImageProcessor ip, int x, int y, int rayon) {
 		return getMedian(getPixelsVoisins(ip, x, y, rayon));
 	}
 	
 	/** Renvoi la médiane d'un tableau de double */
-	public static double getMedian(double[] value) {
+	private double getMedian(double[] value) {
 		Arrays.sort(value);
 		return value[value.length/2];
 	}
@@ -73,7 +73,7 @@ public class FiltreMedian{
 	 * Renvoi un tableau de double contenant les pixels voisins au point x, y
 	 * avec gestion des bords
 	 */
-	public static double[] getPixelsVoisins(ImageProcessor ip, int x, int y, int rayon) {
+	private double[] getPixelsVoisins(ImageProcessor ip, int x, int y, int rayon) {
 		// On récupére les dimensions de l'image
 		final int lig = ip.getWidth(), col = ip.getHeight(); 
 		final int voisin = rayon*2+1;

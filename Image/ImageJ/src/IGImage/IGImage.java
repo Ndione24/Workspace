@@ -27,7 +27,6 @@ public class IGImage extends JFrame {
 		getRootPane().getActionMap().put("ESCAPE", escapeAction);
 
 		pack();
-//		setLocationRelativeTo(null);
 		setVisible(true);
 	}
 

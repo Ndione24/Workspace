@@ -46,7 +46,7 @@ public class FiltreMoyen {
 		Outils.appliquerMatrice(mat, ip);
 	}
 	
-	public static Masque creerMasque(int rayon) {
+	private Masque creerMasque(int rayon) {
 		// Vérification des arguments
 		if (rayon < 1) throw new Error("bad argument for rayon");
 		// Création du masque vide

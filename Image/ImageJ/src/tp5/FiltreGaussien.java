@@ -39,7 +39,7 @@ public class FiltreGaussien {
 	}
 	
 	/** creer un masque gaussien */
-	public Masque creerMasque(int rayon) {
+	private Masque creerMasque(int rayon) {
 		Masque kernel = new Masque(rayon);
 		// pour avoir une "cloche" a peu pres complete,
 		// on choisit un ecart-type egal a un tiers du rayon.

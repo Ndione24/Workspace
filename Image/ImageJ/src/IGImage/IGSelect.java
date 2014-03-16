@@ -13,8 +13,9 @@ import javax.swing.KeyStroke;
 public class IGSelect extends JFrame {
 	public IGSelect() {
 		super("Projet Image");
-		add(new PanelSelectTrans(), BorderLayout.CENTER);
-		add(new PanelSelectFiltre(), BorderLayout.SOUTH);
+		add(new PanelSelectTrans(), BorderLayout.NORTH);
+		add(new PanelSelectFiltre(), BorderLayout.CENTER);
+		add(new PanelSelectEval(), BorderLayout.SOUTH);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 		KeyStroke escapeKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE,0, false);

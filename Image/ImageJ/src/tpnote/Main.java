@@ -1,33 +1,34 @@
 package tpnote;
 
-import ij.IJ;
 import ij.ImagePlus;
 import ij.process.ImageProcessor;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 
-import tp4.*;
 import tp5.FiltreGaussien;
-import tp5.Masque;
 import tp5.Outils;
 
 public class Main  {
 
 	public static ImagePlus postTraitement(ImagePlus imp) {
+		imp = tp4.Image.createGrayImage(imp);
 		ImageProcessor ip = imp.getProcessor();
 		new FiltreGaussien(ip, 17);
+		imp = tp4.Image.createOTSUImage(imp);
 		return imp;
 	}
 	
 	public static void main(String[] args) {
-		String foldername = "source"+'/';
+		String foldername = "imagesOK/";
 		File dossier = new File(foldername);
 		File[] images = dossier.listFiles();
-		
-		ImagePlus imp = IJ.openImage(images[2].toString());
-		imp = tp4.Image.createGrayImage(imp);
-		postTraitement(imp);
-		imp = tp4.Image.createOTSUImage(imp);
-		imp.show();
+		Arrays.sort(images);
+		for (File image : images) {
+			ImagePlus imp = Outils.openImage(image.getName());
+			imp = postTraitement(imp);
+			imp.show();
+		}
 	}
 }
