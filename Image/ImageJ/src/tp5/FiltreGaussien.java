@@ -1,6 +1,7 @@
 package tp5;
 
 import ij.gui.GenericDialog;
+import ij.process.ImageConverter;
 import ij.process.ImageProcessor;
 
 public class FiltreGaussien {
