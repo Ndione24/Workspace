@@ -60,12 +60,15 @@ public class Sobel {
 		    for (j=0; j<col; j++)
 		       mat[i][j] = (mat[i][j] / maxival) * 255;
 		
+		Outils.appliquerMatrice(mat, ip);
 		/**
 		 * Fin de la partie completer
 		 */
+		/*
 		// Affichage de la matrice
 		if (mat != null) {
 			Outils.afficheMatrice(mat, "Sobel", true);
 		}
+		*/
 	}
 }

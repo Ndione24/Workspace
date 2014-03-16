@@ -55,7 +55,7 @@ public class Outils {
 						if (X < 0 || X >= lig) X = x - u;
 						// Gestion du bord haut et bas
 						if (Y < 0 || Y >= col) Y = y - v;
-						resultat[x][y] += (double) (matrice[X][Y] * masque.get(u, v));
+						resultat[x][y] += (double) (matrice[X][Y] * masque.get(-u, -v));
 					}
 				}
 			}
@@ -67,6 +67,16 @@ public class Outils {
 		return resultat;
 	}
 
+	public static void appliquerMatrice(double[][] mat, ImageProcessor ip) {
+		for (int y = 0; y < mat[0].length; y++) {
+			for (int x = 0; x < mat.length; x++) {
+				int p = (int) Math.min(mat[x][y], 255);
+				p = Math.max(p, 0);
+				ip.putPixel(x, y, p);
+			}
+		}
+	}
+	
 	/**
 	 * Affiche une matrice de nombres reels dans une nouvelle fenetre.
 	 * Comme les elements de cette matrice ne sont pas forcement dans le domaine [0..255],

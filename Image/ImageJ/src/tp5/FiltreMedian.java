@@ -47,6 +47,17 @@ public class FiltreMedian{
 		new ImageWindow(impMedian);
 	}
 	
+	public FiltreMedian(ImageProcessor ip, int rayon) {
+		final int lig = ip.getWidth(), col = ip.getHeight();
+		double res;
+		for (int y = 0; y < col; ++y) {
+			for (int x = 0; x < lig; ++x) {
+				res = getMedian(ip, x, y, rayon);
+				ip.putPixelValue(x, y, res);
+			}
+		}
+	}
+	
 	/** Renvoi le médian d'un pixel en fonction de ses voisins */
 	public static double getMedian(ImageProcessor ip, int x, int y, int rayon) {
 		return getMedian(getPixelsVoisins(ip, x, y, rayon));

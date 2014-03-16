@@ -28,7 +28,7 @@ public class FiltreMoyen {
 		double[][] mat = null;
 
 		// Création du masque moyenneur
-		Masque masque = creerMasqueMoyenneur(rayon);
+		Masque masque = creerMasque(rayon);
 		mat = Outils.convoluer(ip, masque);
 		
 		/**
@@ -40,7 +40,13 @@ public class FiltreMoyen {
 		}
 	}
 	
-	public static Masque creerMasqueMoyenneur(int rayon) {
+	public FiltreMoyen(ImageProcessor ip, int rayon) {
+		Masque masque = creerMasque(rayon);
+		double [][] mat = Outils.convoluer(ip, masque);
+		Outils.appliquerMatrice(mat, ip);
+	}
+	
+	public static Masque creerMasque(int rayon) {
 		// Vérification des arguments
 		if (rayon < 1) throw new Error("bad argument for rayon");
 		// Création du masque vide
