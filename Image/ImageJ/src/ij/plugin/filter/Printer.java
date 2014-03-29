@@ -1,11 +1,18 @@
 package ij.plugin.filter;
-import ij.*;
-import ij.gui.*;
-import ij.process.*;
+
+import ij.IJ;
+import ij.ImagePlus;
+import ij.WindowManager;
+import ij.gui.GenericDialog;
+import ij.gui.Roi;
 import ij.measure.Calibration;
+import ij.process.ImageProcessor;
+
 import java.awt.*;
-import java.util.Properties;
-import java.awt.print.*;
+import java.awt.print.PageFormat;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 
 /** This plugin implements the File/Page Setup and File/Print commands. */
 public class Printer implements PlugInFilter, Printable {

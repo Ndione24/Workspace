@@ -1,8 +1,13 @@
 package ij.plugin;
-import ij.*;
-import ij.process.*;
-import ij.gui.*;
+
+import ij.ImagePlus;
+import ij.WindowManager;
+import ij.gui.DialogListener;
+import ij.gui.GenericDialog;
+import ij.gui.ImageCanvas;
+import ij.gui.Overlay;
 import ij.util.Tools;
+
 import java.awt.*;
 import java.util.Vector;
 

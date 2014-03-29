@@ -1,11 +1,17 @@
 package ij.plugin.filter;
-import ij.*;
+
+import ij.IJ;
+import ij.ImagePlus;
+import ij.Macro;
+import ij.Prefs;
 import ij.gui.DialogListener;
 import ij.gui.GenericDialog;
-import ij.process.*;
+import ij.process.ByteProcessor;
+import ij.process.ColorProcessor;
+import ij.process.FloatProcessor;
+import ij.process.ImageProcessor;
 
-import java.awt.AWTEvent;
-import java.awt.Rectangle;
+import java.awt.*;
 
 /** This plug-in filter uses convolution with a Gaussian function for smoothing.
  * 'Radius' means the radius of decay to exp(-0.5) ~ 61%, i.e. the standard

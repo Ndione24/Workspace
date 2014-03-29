@@ -1,7 +1,11 @@
 package ij.io;
+
 import ij.IJ;
-import java.io.*;
-import java.net.*;
+
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 
 /** ImageJ uses this class loader to load plugins and resources from the
  * plugins directory and immediate subdirectories. This class loader will

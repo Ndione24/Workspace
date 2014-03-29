@@ -1,10 +1,13 @@
 package ij.plugin.tool;
+
 import ij.*;
-import ij.process.*;
 import ij.gui.*;
 import ij.plugin.Colors;
+import ij.process.ImageProcessor;
+
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.InputEvent;
+import java.awt.event.MouseEvent;
 import java.util.Vector;
 
 // Versions

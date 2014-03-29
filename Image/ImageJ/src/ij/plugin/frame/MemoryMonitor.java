@@ -1,10 +1,12 @@
 package ij.plugin.frame;
-import ij.*;
-import ij.gui.*;
-import ij.process.*;
+
+import ij.IJ;
+import ij.ImageJ;
+import ij.Prefs;
+import ij.WindowManager;
+import ij.gui.GUI;
+
 import java.awt.*;
-import java.awt.image.*;
-import java.awt.event.*;
 
 /** This plugin continuously plots ImageJ's memory utilization. 
 	Click on the plot to force the JVM to do garbage collection. */

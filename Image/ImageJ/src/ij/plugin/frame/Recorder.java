@@ -1,17 +1,22 @@
 package ij.plugin.frame;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import java.io.*;
+
 import ij.*;
-import ij.plugin.*;
-import ij.plugin.frame.*; 
-import ij.text.*;
-import ij.gui.*;
-import ij.util.*;
-import ij.io.*;
-import ij.process.*;
-import ij.measure.*;
+import ij.gui.GUI;
+import ij.gui.Roi;
+import ij.gui.TextRoi;
+import ij.gui.Toolbar;
+import ij.measure.CurveFitter;
+import ij.plugin.NewPlugin;
+import ij.plugin.PlugIn;
+import ij.util.Tools;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.Locale;
+import java.util.StringTokenizer;
 
 /** This is ImageJ's macro recorder. */
 public class Recorder extends PlugInFrame implements PlugIn, ActionListener, ImageListener, ItemListener {

@@ -1,11 +1,16 @@
 package ij.plugin;
+
 import ij.*;
-import ij.io.*;
-import ij.process.*;
+import ij.io.FileInfo;
+import ij.io.OpenDialog;
+import ij.process.ByteProcessor;
+import ij.process.ImageProcessor;
+import ij.process.LUT;
+
 import java.awt.*;
+import java.awt.image.IndexColorModel;
 import java.io.*;
-import java.awt.image.*;
-import java.net.*;
+import java.net.URL;
 
 /** Opens NIH Image look-up tables (LUTs), 768 byte binary LUTs
 	(256 reds, 256 greens and 256 blues), LUTs in text format, 

@@ -1,6 +1,6 @@
 package ij.plugin;
-import java.awt.*;
-import ij.*;
+
+import ij.IJ;
 
 /**ImageJ plugin for measuring the speed of various Java operations.*/
 public class Timer implements PlugIn {

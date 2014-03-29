@@ -1,12 +1,14 @@
 package ij.io;
-import ij.*;
-import ij.gui.*;
+
+import ij.IJ;
+import ij.Macro;
+import ij.Prefs;
 import ij.plugin.frame.Recorder;
 import ij.util.Java2;
-import java.awt.*;
-import java.io.*;
+
 import javax.swing.*;
-import javax.swing.filechooser.*;
+import java.awt.*;
+import java.io.File;
 
 /** This class displays a dialog box that allows the user can select a directory. */ 
  public class DirectoryChooser {

@@ -1,8 +1,12 @@
 package  ij.plugin;
-import ij.*;
-import ij.util.*;
-import java.io.*;
-import java.util.*;
+
+import ij.IJ;
+import ij.Menus;
+import ij.Prefs;
+import ij.util.StringSorter;
+
+import java.io.File;
+import java.util.Vector;
 
 /** Checks for duplicate class and JAR files in the plugins folders and deletes older duplicates. */
 public class ClassChecker implements PlugIn {

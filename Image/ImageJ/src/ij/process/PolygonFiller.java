@@ -1,7 +1,8 @@
 package ij.process;
-import ij.*;
-import ij.gui.*;
-import java.awt.Rectangle;
+
+import ij.IJ;
+
+import java.awt.*;
 
 
 /** This class fills polygons using the scan-line filling algorithm 

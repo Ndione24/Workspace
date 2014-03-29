@@ -1,8 +1,12 @@
 package ij.io;
+
 import ij.util.Tools;
-import java.io.*;
-import java.util.*;
-import java.net.*;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.RandomAccessFile;
+import java.util.Vector;
 
 /**
 Decodes single and multi-image TIFF files. The LZW decompression

@@ -1,16 +1,21 @@
 package ij.macro;
+
 import ij.*;
-import ij.process.*;
-import ij.gui.*;
-import ij.plugin.Macro_Runner;
-import ij.plugin.frame.*;
-import ij.util.Tools;
-import ij.text.*;
+import ij.gui.GenericDialog;
 import ij.measure.ResultsTable;
+import ij.plugin.frame.Editor;
+import ij.plugin.frame.Recorder;
+import ij.plugin.frame.RoiManager;
+import ij.process.ColorProcessor;
+import ij.text.TextPanel;
+import ij.text.TextWindow;
+import ij.util.Tools;
+
 import java.awt.*;
-import java.util.*;
 import java.awt.event.KeyEvent;
-import java.io.PrintWriter;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 
 /** This is the recursive descent parser/interpreter for the ImageJ macro language. */
 public class Interpreter implements MacroConstants {

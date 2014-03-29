@@ -1,6 +1,6 @@
 package ij.process;
+
 import ij.IJ;
-import java.util.Arrays;
 
 /** Autothresholding methods from the Auto_Threshold plugin (http://pacific.mpi-cbg.de/wiki/index.php/Auto_Threshold)
     by G.Landini at bham dot ac dot uk. */

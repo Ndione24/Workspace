@@ -1,9 +1,12 @@
 package ij.gui;
-import ij.*;
-import ij.measure.Calibration;
+
+import ij.IJ;
+import ij.ImageJ;
+import ij.ImagePlus;
+import ij.ImageStack;
 import ij.plugin.frame.SyncWindows;
+
 import java.awt.*;
-import java.awt.image.*;
 import java.awt.event.*;
 
 /** This class is an extended ImageWindow used to display image stacks. */

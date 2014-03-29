@@ -1,10 +1,13 @@
 package ij.plugin;
+
 import ij.*;
-import ij.process.*;
 import ij.gui.*;
+import ij.measure.Calibration;
+import ij.process.ImageProcessor;
+
 import java.awt.*;
-import ij.measure.*;
-import java.awt.event.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.TextEvent;
 
 /** This plugin implements the Analyze/Tools/Draw Scale Bar command.
 	Divakar Ramachandran added options to draw a background 

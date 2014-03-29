@@ -1,9 +1,12 @@
 package ij;
-import ij.process.*;
-import ij.gui.*;
-import ij.plugin.*;
-import ij.plugin.frame.*;
+
 import ij.io.FileInfo;
+import ij.plugin.frame.Channels;
+import ij.plugin.frame.ContrastAdjuster;
+import ij.process.ColorProcessor;
+import ij.process.ImageProcessor;
+import ij.process.LUT;
+
 import java.awt.*;
 import java.awt.image.*;
 

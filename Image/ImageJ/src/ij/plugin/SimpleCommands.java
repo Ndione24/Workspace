@@ -1,11 +1,13 @@
 package ij.plugin;
-import ij.*;
-import ij.process.*;
-import ij.gui.*;
+
+import ij.IJ;
+import ij.ImagePlus;
+import ij.ImageStack;
+import ij.Undo;
+import ij.gui.GenericDialog;
 import ij.io.Opener;
-import ij.text.TextWindow;
 import ij.measure.ResultsTable;
-import java.awt.Frame;
+import ij.process.ImageProcessor;
 
 /** This plugin implements the Plugins/Utilities/Unlock, Image/Rename
 	and Plugins/Utilities/Search commands. */

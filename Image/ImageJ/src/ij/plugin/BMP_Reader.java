@@ -1,10 +1,17 @@
 package ij.plugin;
 
+import ij.IJ;
+import ij.ImagePlus;
+import ij.io.FileInfo;
+import ij.io.OpenDialog;
+
 import java.awt.*;
-import java.awt.image.*;
-import java.io.*;
-import ij.*;
-import ij.io.*;
+import java.awt.image.ColorModel;
+import java.awt.image.IndexColorModel;
+import java.awt.image.MemoryImageSource;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 
 /** This plugin reads BMP files. If 'arg' is empty, it

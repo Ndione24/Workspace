@@ -1,9 +1,14 @@
 package ij.plugin.filter;
-import ij.*;
+
+import ij.IJ;
+import ij.ImagePlus;
+import ij.Macro;
+import ij.Undo;
 import ij.gui.*;
-import ij.process.*;
+import ij.process.ImageProcessor;
+
 import java.awt.*;
-import java.awt.geom.*;
+import java.awt.geom.GeneralPath;
 
 
 /** This plugin implements the Image/Rotate/Arbitrarily command. */

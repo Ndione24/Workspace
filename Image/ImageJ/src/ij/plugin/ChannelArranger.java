@@ -1,11 +1,16 @@
 package ij.plugin;
-import ij.*;
-import ij.process.*;
-import ij.gui.*;
+
+import ij.CompositeImage;
+import ij.IJ;
+import ij.ImageJ;
+import ij.ImagePlus;
+import ij.gui.GenericDialog;
+import ij.gui.ImageWindow;
+import ij.process.ImageProcessor;
+
 import java.awt.*;
-import ij.plugin.ChannelSplitter;
-import java.awt.image.BufferedImage;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.util.Vector;
 
 /**

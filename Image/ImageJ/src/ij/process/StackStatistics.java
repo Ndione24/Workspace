@@ -1,8 +1,12 @@
 package ij.process;
-import ij.*;
-import ij.gui.*;
-import ij.measure.*;
+
+import ij.IJ;
+import ij.ImagePlus;
+import ij.ImageStack;
+import ij.gui.Roi;
+import ij.measure.Calibration;
 import ij.plugin.filter.Analyzer;
+
 import java.awt.*;
 
 /** Statistics, including the histogram, of a stack. */

@@ -1,8 +1,11 @@
 package ij.plugin.filter;
+
+import ij.IJ;
+import ij.ImagePlus;
+import ij.process.ImageProcessor;
+
 import java.awt.*;
-import java.util.*;
-import ij.*;
-import ij.process.*;
+import java.util.Random;
 
 /** Implements ImageJ's Process/Noise/Salt and Pepper command. */
 public class SaltAndPepper implements PlugInFilter {

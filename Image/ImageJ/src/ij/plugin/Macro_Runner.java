@@ -1,13 +1,14 @@
 package ij.plugin;
+
 import ij.*;
-import ij.io.*;
-import ij.macro.*;
-import ij.text.*;
-import ij.util.*;
-import ij.plugin.frame.*;
 import ij.gui.GenericDialog;
+import ij.io.OpenDialog;
+import ij.macro.Interpreter;
+import ij.plugin.frame.Editor;
+import ij.plugin.frame.Recorder;
+
 import java.io.*;
-import java.lang.reflect.*;
+import java.lang.reflect.Method;
 
 /** This class runs macros and scripts installed in the Plugins menu as well as
 	macros and scripts opened using the Plugins/Macros/Run command. */

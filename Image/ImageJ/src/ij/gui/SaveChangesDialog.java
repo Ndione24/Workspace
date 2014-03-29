@@ -1,7 +1,12 @@
 package ij.gui;
+
 import ij.IJ;
+
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 /** A modal dialog box with a one line message and
 	"Don't Save", "Cancel" and "Save" buttons. */

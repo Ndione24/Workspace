@@ -1,8 +1,11 @@
 package ij.plugin;
-import ij.*;
-import ij.process.*;
-import ij.gui.*;
-import ij.plugin.frame.ThresholdAdjuster;
+
+import ij.IJ;
+import ij.ImagePlus;
+import ij.WindowManager;
+import ij.gui.ImageCanvas;
+import ij.gui.ImageWindow;
+
 import java.awt.*;
 
 public class WindowOrganizer implements PlugIn {

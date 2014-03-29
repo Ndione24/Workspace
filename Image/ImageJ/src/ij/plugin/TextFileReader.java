@@ -3,7 +3,6 @@ package ij.plugin;
 //import java.awt.*;
 //import java.awt.image.*;
 //import java.io.*;
-import ij.*;
 //import ij.io.*;
 //import ij.process.*;
 

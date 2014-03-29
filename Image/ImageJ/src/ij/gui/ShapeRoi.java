@@ -1,15 +1,17 @@
 package ij.gui;
+
+import ij.ImagePlus;
+import ij.measure.Calibration;
+import ij.process.ByteProcessor;
+import ij.process.FloatPolygon;
+import ij.process.ImageProcessor;
+
 import java.awt.*;
-import java.awt.image.*;
 import java.awt.geom.*;
-import java.awt.event.KeyEvent;
-import java.util.*;
-import ij.*;
-import ij.process.*;
-import ij.measure.*;
-import ij.plugin.frame.Recorder;
-import ij.plugin.filter.Analyzer;
-import ij.util.Tools;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
+import java.awt.image.Raster;
+import java.util.Vector;
 
 /**A subclass of <code>ij.gui.Roi</code> (2D Regions Of Interest) implemented in terms of java.awt.Shape.
  * A ShapeRoi is constructed from a <code>ij.gui.Roi</code> object, or as a result of logical operators

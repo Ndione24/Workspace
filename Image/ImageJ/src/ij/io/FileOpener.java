@@ -1,15 +1,22 @@
 package ij.io;
-import java.awt.*;
-import java.awt.image.*;
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import java.util.zip.GZIPInputStream;
-import ij.gui.*;
-import ij.process.*;
-import ij.measure.*;
+
 import ij.*;
-import ij.plugin.frame.ThresholdAdjuster;
+import ij.gui.GenericDialog;
+import ij.gui.Overlay;
+import ij.gui.ProgressBar;
+import ij.gui.Roi;
+import ij.measure.Calibration;
+import ij.process.*;
+
+import java.awt.*;
+import java.awt.image.ColorModel;
+import java.awt.image.IndexColorModel;
+import java.awt.image.MemoryImageSource;
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Properties;
+import java.util.zip.GZIPInputStream;
 
 /**
  * Opens or reverts an image specified by a FileInfo object. Images can

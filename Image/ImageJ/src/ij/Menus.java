@@ -1,17 +1,17 @@
 package ij;
-import ij.process.*;
-import ij.util.*;
-import ij.gui.ImageWindow;
+
 import ij.plugin.MacroInstaller;
-import ij.gui.Toolbar;
-import java.awt.*;
-import java.awt.image.*;
-import java.awt.event.*;
-import java.util.*;
-import java.io.*;
+import ij.process.ImageProcessor;
+import ij.util.StringSorter;
+
 import java.applet.Applet;
-import java.awt.event.*;
-import java.util.zip.*;
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.image.IndexColorModel;
+import java.io.*;
+import java.util.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 /**
 This class installs and updates ImageJ's menus. Note that menu labels,

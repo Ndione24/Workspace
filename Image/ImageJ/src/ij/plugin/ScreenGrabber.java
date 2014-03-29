@@ -1,7 +1,11 @@
 package ij.plugin;
-import ij.*;
-import ij.process.*;
-import ij.gui.*;
+
+import ij.IJ;
+import ij.ImagePlus;
+import ij.WindowManager;
+import ij.gui.ImageCanvas;
+import ij.gui.ImageWindow;
+
 import java.awt.*;
 
 /** This plugin implements the Image/Flatten, Plugins/Utilities/Capture Screen

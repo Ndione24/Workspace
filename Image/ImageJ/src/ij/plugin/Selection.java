@@ -1,15 +1,18 @@
 package ij.plugin;
+
 import ij.*;
 import ij.gui.*;
-import ij.process.*;
-import ij.measure.*;
-import ij.plugin.frame.*;
 import ij.macro.Interpreter;
-import ij.plugin.filter.*;
-import ij.util.Tools;
+import ij.measure.Calibration;
+import ij.measure.Measurements;
+import ij.plugin.filter.GaussianBlur;
+import ij.plugin.filter.ThresholdToSelection;
+import ij.plugin.frame.LineWidthAdjuster;
+import ij.plugin.frame.RoiManager;
+import ij.process.*;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.util.Vector;
 
 
 /** This plugin implements the commands in the Edit/Section submenu. */

@@ -1,10 +1,15 @@
 package ij.plugin;
-import ij.*;
-import ij.text.*;
+
+import ij.IJ;
+import ij.Menus;
+import ij.Prefs;
 import ij.io.OpenDialog;
-import java.awt.*;
-import java.util.*;
+import ij.text.TextWindow;
+
 import java.applet.Applet;
+import java.awt.*;
+import java.util.Enumeration;
+import java.util.Properties;
 
 /** Displays the Java system properties in a text window. */
 public class JavaProperties implements PlugIn {

@@ -1,14 +1,20 @@
 package ij.plugin;
-import ij.*;
-import ij.process.*;
-import ij.gui.*;
+
+import ij.CompositeImage;
+import ij.IJ;
+import ij.ImagePlus;
+import ij.WindowManager;
+import ij.gui.ColorChooser;
+import ij.gui.GenericDialog;
+import ij.measure.Calibration;
+import ij.measure.SplineFitter;
 import ij.plugin.frame.Recorder;
+import ij.process.ColorProcessor;
+import ij.process.ImageProcessor;
+
 import java.awt.*;
-import java.awt.image.*;
-import ij.util.*;
-import ij.measure.*;
-import java.util.Vector;
 import java.awt.event.*;
+import java.awt.image.IndexColorModel;
 
 public class LUT_Editor implements PlugIn, ActionListener{
     private ImagePlus imp;

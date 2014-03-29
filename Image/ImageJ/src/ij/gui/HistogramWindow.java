@@ -1,15 +1,22 @@
 package ij.gui;
 
-import java.awt.*;
-import java.awt.image.*;
-import java.awt.event.*;
-import java.io.*;
-import java.awt.datatransfer.*;
 import ij.*;
-import ij.process.*;
-import ij.measure.*;
+import ij.measure.Calibration;
+import ij.measure.Measurements;
+import ij.measure.ResultsTable;
 import ij.plugin.filter.Analyzer;
+import ij.process.*;
 import ij.text.TextWindow;
+
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.ClipboardOwner;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
+import java.awt.event.*;
+import java.awt.image.ColorModel;
+import java.io.CharArrayWriter;
+import java.io.PrintWriter;
 
 /** This class is an extended ImageWindow that displays histograms. */
 public class HistogramWindow extends ImageWindow implements Measurements, ActionListener, ClipboardOwner,

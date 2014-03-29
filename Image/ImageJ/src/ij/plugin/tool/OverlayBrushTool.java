@@ -1,12 +1,16 @@
 package ij.plugin.tool;
-import ij.*;
-import ij.process.*;
+
+import ij.IJ;
+import ij.ImagePlus;
+import ij.Prefs;
+import ij.WindowManager;
 import ij.gui.*;
 import ij.plugin.Colors;
+
 import java.awt.*;
-import java.awt.event.*;
-import java.awt.BasicStroke;
-import java.awt.geom.*;
+import java.awt.event.InputEvent;
+import java.awt.event.MouseEvent;
+import java.awt.geom.GeneralPath;
 import java.util.Vector;
 
 //Version history

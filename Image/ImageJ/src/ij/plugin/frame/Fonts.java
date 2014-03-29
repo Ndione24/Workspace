@@ -1,10 +1,15 @@
 package ij.plugin.frame;
-import java.awt.*;
-import java.awt.event.*;
 
-import ij.*;
-import ij.plugin.*;
-import ij.gui.*;
+import ij.IJ;
+import ij.Prefs;
+import ij.WindowManager;
+import ij.gui.GUI;
+import ij.gui.TextRoi;
+import ij.plugin.PlugIn;
+
+import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 /** Displays a window that allows the user to set the font, size and style. */
 public class Fonts extends PlugInFrame implements PlugIn, ItemListener {

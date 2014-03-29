@@ -1,30 +1,37 @@
 package ij.plugin.frame;
+
+import ij.*;
+import ij.gui.*;
+import ij.io.*;
+import ij.macro.Interpreter;
+import ij.macro.MacroRunner;
+import ij.measure.Calibration;
+import ij.measure.Measurements;
+import ij.measure.ResultsTable;
+import ij.plugin.Colors;
+import ij.plugin.OverlayCommands;
+import ij.plugin.OverlayLabels;
+import ij.plugin.filter.Analyzer;
+import ij.plugin.filter.Filler;
+import ij.plugin.filter.ThresholdToSelection;
+import ij.process.ByteProcessor;
+import ij.process.ImageProcessor;
+import ij.process.ImageStatistics;
+import ij.util.StringSorter;
+import ij.util.Tools;
+
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
-import java.util.*;
-import java.awt.List;
-import java.util.zip.*;
-
-import javax.swing.DefaultListModel;
-import javax.swing.JList;
-import javax.swing.JScrollPane;
-import javax.swing.ListSelectionModel;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
-import ij.*;
-import ij.process.*;
-import ij.gui.*;
-import ij.io.*;
-import ij.plugin.filter.*;
-import ij.plugin.Colors;
-import ij.plugin.OverlayLabels;
-import ij.util.*;
-import ij.macro.*;
-import ij.measure.*;
-import ij.plugin.OverlayCommands;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 /** This plugin implements the Analyze/Tools/ROI Manager command. */
 public class RoiManager extends PlugInFrame implements ActionListener, ItemListener, MouseListener, MouseWheelListener, ListSelectionListener {

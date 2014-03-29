@@ -1,10 +1,10 @@
 package ij.plugin;
+
 import ij.*;
-import ij.gui.*;
-import ij.process.*;
-import ij.measure.Calibration;
-import ij.macro.Interpreter;
+import ij.gui.GenericDialog;
 import ij.io.FileInfo;
+import ij.measure.Calibration;
+import ij.process.*;
 
 
 /** Implements the Image/Stacks/Images to Stack" command. */

@@ -1,12 +1,9 @@
 package ij.plugin;
-import ij.*;
-import ij.gui.*;
-import ij.process.*;
-import ij.io.*;
-import ij.plugin.filter.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.util.Vector;
+
+import ij.IJ;
+import ij.ImagePlus;
+import ij.WindowManager;
+import ij.gui.GenericDialog;
 
 /** This plugin implements the Edit/Options/Wand Tool command. */
 public class WandToolOptions implements PlugIn {

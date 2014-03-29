@@ -1,12 +1,11 @@
 package ij.io;
-import ij.gui.*;
+
 import ij.ImagePlus;
-import ij.process.*;
-import java.io.*;
-import java.util.*;
-import java.net.*;
+import ij.gui.*;
+
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
+import java.io.*;
 
 /*	ImageJ/NIH Image 64 byte ROI outline header
 	2 byte numbers are big-endian signed shorts

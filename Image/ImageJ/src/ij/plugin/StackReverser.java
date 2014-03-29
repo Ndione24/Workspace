@@ -1,6 +1,9 @@
 package ij.plugin;
-import ij.*;
-import ij.process.*;
+
+import ij.CompositeImage;
+import ij.IJ;
+import ij.ImagePlus;
+import ij.ImageStack;
 
 /** This plugin implements the Image/Transform/Flip Z and
 	Image/Stacks/Tools/Reverse commands. */

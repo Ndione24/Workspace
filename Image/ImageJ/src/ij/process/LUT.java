@@ -1,8 +1,10 @@
 package ij.process;
+
 import ij.IJ;
 import ij.plugin.Colors;
-import java.awt.image.*;
-import java.awt.Color;
+
+import java.awt.*;
+import java.awt.image.IndexColorModel;
 
 	/** This is an indexed color model that allows an
 		lower and upper bound to be specified. */

@@ -1,16 +1,19 @@
-package ij.plugin; 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.datatransfer.*;
-import java.awt.image.*;
-import java.io.*;
-import java.lang.reflect.*;
-import ij.*;
-import ij.process.*;
-import ij.gui.*;
+package ij.plugin;
+
+import ij.IJ;
+import ij.ImagePlus;
+import ij.WindowManager;
+import ij.gui.Roi;
 import ij.plugin.frame.Editor;
-import ij.text.TextWindow;
+import ij.process.ColorProcessor;
+import ij.process.ImageProcessor;
 import ij.util.Tools;
+
+import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.image.BufferedImage;
 	
 /**	Copies and pastes images to the clipboard. */
 public class Clipboard implements PlugIn, Transferable {

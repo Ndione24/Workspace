@@ -1,17 +1,23 @@
 package ij.plugin.filter;
 //import ij.plugin.filter.PlugInFilter;
-import ij.*;
-import java.awt.*;
-import java.awt.image.*;
-import java.awt.event.*;
-import java.io.*;
-import java.awt.datatransfer.*;
-import ij.gui.*;
-import ij.process.*;
+
+import ij.IJ;
+import ij.ImagePlus;
+import ij.LookUpTable;
+import ij.gui.GUI;
+import ij.gui.GenericDialog;
+import ij.gui.ImageCanvas;
+import ij.gui.Roi;
+import ij.measure.Calibration;
 import ij.measure.Measurements;
-import ij.plugin.filter.Analyzer;
-import ij.text.TextWindow;
-import ij.measure.*;
+import ij.process.ByteProcessor;
+import ij.process.ImageProcessor;
+import ij.process.ImageStatistics;
+
+import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.TextEvent;
+import java.awt.image.IndexColorModel;
 
 /** This plugin displays a calibration bar on the active image.
 	Bob Dougherty, OptiNav, Inc., 4/14/2002

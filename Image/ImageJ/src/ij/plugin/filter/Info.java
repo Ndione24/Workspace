@@ -1,15 +1,20 @@
 package ij.plugin.filter;
-import ij.*;
+
+import ij.CompositeImage;
+import ij.IJ;
+import ij.ImagePlus;
+import ij.ImageStack;
 import ij.gui.*;
-import ij.process.*;
-import ij.measure.*;
-import ij.io.*;
-import ij.util.Tools;
-import ij.plugin.frame.Editor;
+import ij.io.FileInfo;
+import ij.measure.Calibration;
+import ij.measure.CurveFitter;
+import ij.process.ImageProcessor;
+import ij.process.LUT;
 import ij.text.TextWindow;
+import ij.util.Tools;
+
 import java.awt.*;
-import java.util.*;
-import java.lang.reflect.*;
+import java.lang.reflect.Method;
 
 /** This plugin implements the Image/Show Info command. */
 public class Info implements PlugInFilter {

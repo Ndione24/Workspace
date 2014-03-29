@@ -1,13 +1,18 @@
 package ij.gui;
-import ij.*;
-import ij.process.*;
-import ij.measure.*;
+
+import ij.IJ;
+import ij.ImagePlus;
+import ij.Prefs;
+import ij.WindowManager;
+import ij.measure.Calibration;
 import ij.plugin.Straightener;
 import ij.plugin.frame.Recorder;
+import ij.process.FloatPolygon;
+import ij.process.ImageProcessor;
+
 import java.awt.*;
-import java.awt.image.*;
-import java.awt.event.*;
-import java.awt.geom.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 
 
 /** This class represents a straight line selection. */

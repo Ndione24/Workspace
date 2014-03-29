@@ -1,15 +1,25 @@
 package ij.measure;
-import ij.*;
-import ij.plugin.filter.Analyzer;
-import ij.text.*;
-import ij.process.*;
+
+import ij.IJ;
+import ij.ImagePlus;
+import ij.Prefs;
+import ij.WindowManager;
 import ij.gui.Roi;
-import ij.util.Tools;
 import ij.io.SaveDialog;
+import ij.plugin.filter.Analyzer;
+import ij.process.*;
+import ij.text.TextPanel;
+import ij.text.TextWindow;
+import ij.util.Tools;
+
 import java.awt.*;
-import java.text.*;
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.*;
-import java.io.*;
 
 
 /** This is a table for storing measurement results and strings as columns of values. 

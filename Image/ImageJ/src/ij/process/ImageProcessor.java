@@ -1,16 +1,15 @@
 package ij.process;
-import java.util.*;
+
+import ij.Prefs;
+import ij.gui.*;
+import ij.plugin.Binner;
+import ij.plugin.filter.GaussianBlur;
+import ij.process.AutoThresholder.Method;
+import ij.util.Java2;
+import ij.util.Tools;
+
 import java.awt.*;
 import java.awt.image.*;
-import ij.gui.*;
-import ij.util.*;
-import ij.plugin.filter.GaussianBlur;
-import ij.plugin.Binner;
-import ij.process.AutoThresholder.Method;
-import ij.gui.Roi;
-import ij.gui.ShapeRoi;
-import ij.gui.Overlay;
-import ij.Prefs;
 
 /**
 This abstract class is the superclass for classes that process

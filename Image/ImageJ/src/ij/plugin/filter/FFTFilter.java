@@ -1,11 +1,13 @@
 package ij.plugin.filter;
-import ij.*;
-import ij.process.*;
-import ij.gui.*;
-import ij.measure.*;
+
+import ij.IJ;
+import ij.ImagePlus;
+import ij.gui.GenericDialog;
+import ij.measure.Measurements;
 import ij.plugin.ContrastEnhancer;
+import ij.process.*;
+
 import java.awt.*;
-import java.util.*;
 
 /** 
 This class implements the Process/FFT/Bandpass Filter command. It is based on 

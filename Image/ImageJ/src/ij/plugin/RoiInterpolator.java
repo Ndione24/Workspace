@@ -1,12 +1,16 @@
 package ij.plugin;
+
 import ij.IJ;
 import ij.ImagePlus;
 import ij.ImageStack;
-import ij.process.*;
 import ij.gui.Roi;
 import ij.plugin.filter.ThresholdToSelection;
 import ij.plugin.frame.RoiManager;
-import java.awt.Rectangle;
+import ij.process.BinaryInterpolator;
+import ij.process.ByteProcessor;
+import ij.process.ImageProcessor;
+
+import java.awt.*;
 import java.util.ArrayList;
 
 /** This class interpolates between ROIs in the ROI Manager.

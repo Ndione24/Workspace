@@ -1,10 +1,16 @@
 package ij.plugin;
-import ij.*;
+
+import ij.CompositeImage;
+import ij.IJ;
+import ij.ImagePlus;
+import ij.VirtualStack;
+import ij.io.FileInfo;
+import ij.io.FileOpener;
+import ij.io.OpenDialog;
+import ij.io.TiffDecoder;
 import ij.process.*;
-import ij.gui.*;
-import ij.io.*;
-import java.awt.*;
-import java.io.*;
+
+import java.io.IOException;
 import java.util.Properties;
 
 /** This plugin opens a multi-page TIFF file as a virtual stack. It

@@ -1,10 +1,17 @@
 package ij.plugin;
-import ij.*;
-import ij.process.*;
+
+import ij.IJ;
+import ij.ImagePlus;
+import ij.ImageStack;
 import ij.gui.*;
-import ij.measure.*;
+import ij.measure.Calibration;
+import ij.measure.Measurements;
+import ij.measure.ResultsTable;
 import ij.plugin.filter.Analyzer;
+import ij.process.ImageProcessor;
+import ij.process.ImageStatistics;
 import ij.util.Tools;
+
 import java.awt.*;
 
 /** Implements the Image/Stack/Plot Z-axis Profile command. */

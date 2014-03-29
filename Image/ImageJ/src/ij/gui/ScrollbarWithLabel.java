@@ -1,8 +1,10 @@
 package ij.gui;
+
 import ij.IJ;
+
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.*;
+import java.awt.geom.GeneralPath;
 
 
 /** This class, based on Joachim Walter's Image5D package, adds "c", "z" labels 

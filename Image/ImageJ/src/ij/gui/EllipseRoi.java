@@ -1,10 +1,12 @@
 package ij.gui;
-import java.awt.*;
-import java.awt.image.*;
-import ij.*;
+
+import ij.IJ;
+import ij.ImagePlus;
+import ij.measure.Calibration;
 import ij.plugin.frame.Recorder;
 import ij.process.FloatPolygon;
-import ij.measure.Calibration;
+
+import java.awt.*;
 
 /** Elliptical region of interest. */
 public class EllipseRoi extends PolygonRoi {

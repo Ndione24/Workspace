@@ -1,13 +1,23 @@
 package ij.plugin;
+
 import ij.*;
-import ij.process.*;
-import ij.gui.*;
-import ij.util.Tools;
-import ij.io.*;
+import ij.gui.GenericDialog;
+import ij.gui.ImageWindow;
+import ij.gui.NonBlockingGenericDialog;
+import ij.io.OpenDialog;
+import ij.io.Opener;
 import ij.macro.Interpreter;
+import ij.process.ImageProcessor;
+
 import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Vector;
 
 /** This plugin implements the File/Batch/Macro and File/Batch/Virtual Stack commands. */

@@ -1,20 +1,20 @@
 package ij.gui;
 
-import java.awt.*;
-import java.util.Properties;
-import java.awt.image.*;
-import ij.process.*;
-import ij.measure.*;
+import ij.*;
+import ij.macro.MacroRunner;
 import ij.plugin.WandToolOptions;
 import ij.plugin.frame.Recorder;
 import ij.plugin.frame.RoiManager;
 import ij.plugin.tool.PlugInTool;
-import ij.macro.*;
-import ij.*;
-import ij.util.*;
-import java.awt.event.*;
-import java.util.*;
-import java.awt.geom.*;
+import ij.util.Tools;
+
+import java.awt.*;
+import java.awt.event.InputEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.image.IndexColorModel;
+import java.util.Vector;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 

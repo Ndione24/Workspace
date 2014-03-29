@@ -1,22 +1,26 @@
 package ij;
-import java.awt.*;
-import java.awt.image.*;
-import java.net.URL;
-import java.util.*;
-import ij.process.*;
-import ij.io.*;
+
 import ij.gui.*;
-import ij.measure.*;
-import ij.plugin.filter.Analyzer;
-import ij.util.*;
+import ij.io.FileInfo;
+import ij.io.FileOpener;
+import ij.io.Opener;
 import ij.macro.Interpreter;
+import ij.measure.Calibration;
+import ij.measure.Measurements;
+import ij.plugin.ContrastEnhancer;
+import ij.plugin.Duplicator;
 import ij.plugin.frame.ContrastAdjuster;
 import ij.plugin.frame.Recorder;
-import ij.plugin.Converter;
-import ij.plugin.Duplicator;
-import ij.plugin.RectToolOptions;
-import ij.plugin.Colors;
-import ij.plugin.ContrastEnhancer;
+import ij.process.*;
+import ij.util.DicomTools;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.ImageObserver;
+import java.awt.image.PixelGrabber;
+import java.util.Properties;
+import java.util.Vector;
 
 
 /**

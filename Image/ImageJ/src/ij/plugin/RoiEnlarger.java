@@ -1,10 +1,17 @@
 package ij.plugin;
-import ij.*;
-import ij.process.*;
-import ij.gui.*;
+
+import ij.IJ;
+import ij.ImagePlus;
+import ij.Prefs;
+import ij.gui.GenericDialog;
+import ij.gui.OvalRoi;
+import ij.gui.Roi;
 import ij.measure.Calibration;
 import ij.plugin.filter.EDM;
 import ij.plugin.filter.ThresholdToSelection;
+import ij.process.ByteProcessor;
+import ij.process.ImageProcessor;
+
 import java.awt.*;
 
 /** This plugin, which enlarges or shrinks selections, implements the Edit/Selection/Enlarge command. */

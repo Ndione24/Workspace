@@ -1,10 +1,16 @@
 package ij.gui;
-import ij.*;
-import ij.process.*;
-import ij.util.*;
+
+import ij.IJ;
+import ij.ImageJ;
+import ij.ImagePlus;
+import ij.WindowManager;
 import ij.macro.Interpreter;
-import java.awt.geom.Rectangle2D;
+import ij.process.ImageProcessor;
+import ij.util.Java2;
+import ij.util.Tools;
+
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 
 
 /** This class is a rectangular ROI containing text. */

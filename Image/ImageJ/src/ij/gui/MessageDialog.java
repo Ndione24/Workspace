@@ -1,5 +1,7 @@
 package ij.gui;
+
 import ij.IJ;
+
 import java.awt.*;
 import java.awt.event.*;
 

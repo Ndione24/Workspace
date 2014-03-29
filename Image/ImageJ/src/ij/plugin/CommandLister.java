@@ -1,10 +1,13 @@
 package ij.plugin;
-import ij.*;
-import ij.text.*;
-import ij.util.*;
-import java.util.*;
-import java.awt.*;
-import java.awt.event.*;
+
+import ij.Menus;
+import ij.text.TextWindow;
+import ij.util.StringSorter;
+
+import java.awt.event.KeyEvent;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 
 /** Lists ImageJ commands or keyboard shortcuts in a text window. */
 public class CommandLister implements PlugIn {

@@ -1,12 +1,18 @@
 package ij.plugin;
+
 import ij.*;
-import ij.gui.*;
-import ij.process.*;
-import ij.measure.*;
+import ij.gui.GenericDialog;
+import ij.gui.Toolbar;
+import ij.measure.Measurements;
 import ij.plugin.frame.Recorder;
-import ij.plugin.filter.PlugInFilter;
+import ij.process.AutoThresholder;
+import ij.process.ByteProcessor;
+import ij.process.ImageProcessor;
+import ij.process.StackProcessor;
+
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.Vector;
 
 /** This plugin implements the Process/Binary/Make Binary 

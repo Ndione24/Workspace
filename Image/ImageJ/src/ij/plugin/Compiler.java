@@ -1,19 +1,20 @@
 package ij.plugin;
+
+import ij.IJ;
+import ij.Menus;
+import ij.Prefs;
+import ij.gui.GenericDialog;
+import ij.io.OpenDialog;
+import ij.plugin.filter.PlugInFilter;
+import ij.plugin.filter.PlugInFilterRunner;
+import ij.plugin.frame.Editor;
+
 import java.awt.*;
 import java.io.*;
-import java.util.*;
-import ij.*;
-import ij.gui.*;
-import ij.io.*;
-import ij.plugin.frame.Editor;
-import ij.plugin.Macro_Runner;
-import ij.plugin.filter.*;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Locale;
+import java.util.Vector;
 
 /** Compiles and runs plugins using the javac compiler. */
 public class Compiler implements PlugIn, FilenameFilter {

@@ -1,12 +1,18 @@
 package ij.plugin.filter;
-import ij.plugin.filter.*;
+
 import ij.*;
 import ij.gui.*;
-import ij.measure.*;
-import ij.process.*;
+import ij.measure.Calibration;
+import ij.measure.Measurements;
+import ij.measure.ResultsTable;
+import ij.process.ByteProcessor;
+import ij.process.FloatProcessor;
+import ij.process.ImageProcessor;
 import ij.util.Tools;
+
 import java.awt.*;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Vector;
 
 /** This ImageJ plug-in filter finds the maxima (or minima) of an image.
  * It can create a mask where the local maxima of the current image are

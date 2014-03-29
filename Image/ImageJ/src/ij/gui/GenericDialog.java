@@ -1,14 +1,18 @@
 package ij.gui;
+
+import ij.*;
+import ij.macro.Interpreter;
+import ij.macro.MacroRunner;
+import ij.plugin.ScreenGrabber;
+import ij.plugin.filter.PlugInFilterRunner;
+import ij.plugin.frame.Recorder;
+import ij.util.Tools;
+
 import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
-import ij.*;
-import ij.plugin.frame.Recorder;
-import ij.plugin.ScreenGrabber;
-import ij.plugin.filter.PlugInFilter;
-import ij.plugin.filter.PlugInFilterRunner;
-import ij.util.Tools;
-import ij.macro.*;
+import java.util.Hashtable;
+import java.util.Locale;
+import java.util.Vector;
 
 
 /**

@@ -1,8 +1,14 @@
 package ij.plugin.filter;
-import ij.*;
-import ij.gui.*;
-import ij.process.*;
-import java.awt.*;
+
+import ij.IJ;
+import ij.ImagePlus;
+import ij.ImageStack;
+import ij.Prefs;
+import ij.gui.GenericDialog;
+import ij.gui.Roi;
+import ij.process.ImageProcessor;
+import ij.process.ImageStatistics;
+import ij.process.StackStatistics;
 
 /** This plugin implements the Invert, Smooth, Sharpen, Find Edges, 
 	and Add Noise commands. */

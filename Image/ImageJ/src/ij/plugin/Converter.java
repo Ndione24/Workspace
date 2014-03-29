@@ -1,8 +1,12 @@
 package ij.plugin;
+
 import ij.*;
-import ij.process.*;
-import ij.gui.*;
-import java.awt.*;
+import ij.gui.GenericDialog;
+import ij.gui.ImageWindow;
+import ij.gui.Roi;
+import ij.process.ImageConverter;
+import ij.process.ImageProcessor;
+import ij.process.StackConverter;
 
 /** Implements the conversion commands in the Image/Type submenu. */
 public class Converter implements PlugIn {

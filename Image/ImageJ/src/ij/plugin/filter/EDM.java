@@ -1,8 +1,10 @@
 package ij.plugin.filter;
-import ij.*;
-import ij.plugin.*;
+
+import ij.IJ;
+import ij.ImagePlus;
+import ij.ImageStack;
+import ij.Prefs;
 import ij.process.*;
-import ij.gui.*;
 
 /**
  * This plugin implements the Euclidean Distance Map (EDM), Watershed,

@@ -1,15 +1,18 @@
 package ij.plugin;
-import java.awt.*;
-import java.io.*;
-import java.text.DecimalFormat;	
-import java.util.*;
+
 import ij.*;
-import ij.io.*;
-import ij.gui.*;
-import ij.measure.Calibration;
-import ij.process.*;
-import ij.plugin.frame.Recorder;
+import ij.gui.GenericDialog;
+import ij.io.FileSaver;
+import ij.io.SaveDialog;
 import ij.macro.Interpreter;
+import ij.measure.Calibration;
+import ij.plugin.frame.Recorder;
+import ij.process.ImageProcessor;
+import ij.process.LUT;
+
+import java.io.File;
+import java.util.Locale;
+import java.util.Properties;
 
 /** This plugin, which saves the images in a stack as separate files, 
 	implements the File/Save As/Image Sequence command. */

@@ -1,5 +1,9 @@
 package ij.gui;
-import ij.*;
+
+import ij.IJ;
+import ij.ImagePlus;
+import ij.WindowManager;
+
 import java.awt.*;
 
 /** Implements the ROI Brush tool.*/

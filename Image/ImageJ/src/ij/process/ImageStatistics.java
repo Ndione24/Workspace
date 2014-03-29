@@ -1,5 +1,8 @@
 package ij.process;
-import ij.measure.*;
+
+import ij.measure.Calibration;
+import ij.measure.Measurements;
+
 import java.awt.*;
 
 /** Statistics, including the histogram, of an image or selection. */

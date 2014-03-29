@@ -1,6 +1,6 @@
 package ij.gui;
-import ij.*;
-import java.awt.AWTEvent;
+
+import java.awt.*;
 
 /**
 * PlugIns or PlugInFilters that want to listen to changes in a GenericDialog

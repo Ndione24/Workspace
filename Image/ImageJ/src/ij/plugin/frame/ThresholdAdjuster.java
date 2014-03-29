@@ -1,16 +1,22 @@
 package ij.plugin.frame;
+
+import ij.*;
+import ij.gui.GUI;
+import ij.gui.GenericDialog;
+import ij.gui.Roi;
+import ij.gui.TrimmedButton;
+import ij.measure.Calibration;
+import ij.measure.Measurements;
+import ij.plugin.ChannelSplitter;
+import ij.plugin.PlugIn;
+import ij.plugin.Thresholder;
+import ij.plugin.filter.Analyzer;
+import ij.process.*;
+
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.*;
-import ij.*;
-import ij.plugin.*;
-import ij.process.*;
-import ij.gui.*;
-import ij.measure.*;
-import ij.plugin.frame.Recorder;
-import ij.plugin.filter.*;
-import ij.plugin.ChannelSplitter;
-import ij.plugin.Thresholder;
+import java.awt.image.ColorModel;
+import java.awt.image.IndexColorModel;
 
 /** Adjusts the lower and upper threshold levels of the active image. This
 	class is multi-threaded to provide a more responsive user interface. */

@@ -1,9 +1,8 @@
 package ij.plugin.filter;
-import java.awt.*;
-import ij.*;
-import ij.process.*;
-import ij.gui.*;
-import ij.text.*;
+
+import ij.IJ;
+import ij.ImagePlus;
+import ij.process.ImageProcessor;
 /** Implements the Plugins/Utilities/Run Benchmark command. 
 	results and additional benchmarks are available at 
 	"http://imagej.nih.gov/ij/plugins/benchmarks.html". */

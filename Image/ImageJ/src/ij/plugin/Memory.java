@@ -1,8 +1,11 @@
 package ij.plugin;
-import ij.*;
-import ij.gui.*;
-import java.io.*;
+
+import ij.IJ;
+import ij.Prefs;
+import ij.gui.GenericDialog;
 import ij.util.Tools;
+
+import java.io.*;
 
 
 /** This plugin implements the Edit/Options/Memory command. */

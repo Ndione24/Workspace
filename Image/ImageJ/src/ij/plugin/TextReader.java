@@ -1,11 +1,13 @@
 package ij.plugin;
-import java.awt.*;
-import java.awt.image.*;
-import java.io.*;
-import ij.*;
-import ij.io.*;
-import ij.process.*;
+
+import ij.IJ;
+import ij.ImagePlus;
+import ij.io.OpenDialog;
+import ij.process.FloatProcessor;
+import ij.process.ImageProcessor;
 import ij.util.Tools;
+
+import java.io.*;
 
 
 /** This plugin opens a tab or comma delimeted text file as an image.

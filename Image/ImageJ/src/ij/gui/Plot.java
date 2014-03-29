@@ -1,14 +1,18 @@
 package ij.gui;
 
-import java.awt.*;
-import java.util.*;
-import ij.*;
-import ij.gui.*;
-import ij.process.*;
-import ij.util.*;
-import ij.plugin.filter.Analyzer;
+import ij.IJ;
+import ij.ImagePlus;
+import ij.Prefs;
+import ij.WindowManager;
 import ij.macro.Interpreter;
 import ij.measure.Calibration;
+import ij.process.ByteProcessor;
+import ij.process.ColorProcessor;
+import ij.process.ImageProcessor;
+import ij.util.Tools;
+
+import java.awt.*;
+import java.util.ArrayList;
 
 /*		Plots are now accepting ArrayList input and allowing to display arrow
  *		plots, logarithmic (log in x and/or y) plots, minor ticks (decimal and

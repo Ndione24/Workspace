@@ -1,10 +1,9 @@
 package ij.process;
 
-import java.awt.*;
-import java.awt.image.*;
 import ij.*;
-import ij.gui.*;
-import ij.measure.*;
+import ij.measure.Calibration;
+
+import java.awt.image.ColorModel;
 
 /** This class converts an ImagePlus object to a different type. */
 public class ImageConverter {

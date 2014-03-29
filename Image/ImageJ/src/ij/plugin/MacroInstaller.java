@@ -1,16 +1,22 @@
 package ij.plugin;
-import java.awt.*;
-import java.io.*;
-import java.awt.event.*;
-import ij.*;
-import ij.gui.*;
+
+import ij.IJ;
+import ij.ImageJ;
+import ij.Menus;
+import ij.gui.Toolbar;
+import ij.io.OpenDialog;
 import ij.macro.*;
-import ij.text.*;
-import ij.util.Tools;
-import ij.io.*;
-import ij.macro.MacroConstants;
-import ij.plugin.frame.*;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                import java.util.*;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+import ij.plugin.frame.Editor;
+import ij.plugin.frame.Recorder;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Locale;
 
 /** This plugin implements the Plugins/Macros/Install Macros command. It is also used by the Editor
 	class to install macro in menus and by the ImageJ class to install macros at startup. */

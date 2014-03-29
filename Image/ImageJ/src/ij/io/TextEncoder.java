@@ -1,8 +1,14 @@
 package ij.io;
-import java.io.*;
-import ij.*;
-import ij.process.*;
-import ij.measure.*;
+
+import ij.IJ;
+import ij.measure.Calibration;
+import ij.process.ByteProcessor;
+import ij.process.ImageProcessor;
+import ij.process.ShortProcessor;
+
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /** Saves an image described by an ImageProcessor object as a tab-delimited text file. */
 public class TextEncoder {

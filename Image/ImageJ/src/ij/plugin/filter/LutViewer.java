@@ -1,11 +1,17 @@
 package ij.plugin.filter;
-import ij.*;
-import ij.process.*;
-import ij.gui.*;
-import ij.text.*;
+
+import ij.IJ;
+import ij.ImagePlus;
+import ij.LookUpTable;
+import ij.gui.ImageCanvas;
+import ij.gui.ImageWindow;
+import ij.process.ImageProcessor;
+import ij.text.TextWindow;
+
 import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.IndexColorModel;
 
 /** Displays the active image's look-up table. */
 public class LutViewer implements PlugInFilter {

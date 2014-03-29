@@ -1,11 +1,19 @@
 package ij.plugin;
-import java.awt.*;
-import java.io.*;
+
+import ij.IJ;
+import ij.ImagePlus;
+import ij.ImageStack;
+import ij.io.FileInfo;
+import ij.io.FileOpener;
+import ij.io.OpenDialog;
+import ij.measure.Calibration;
+import ij.process.ImageProcessor;
+
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.zip.GZIPInputStream;
-import ij.*;
-import ij.io.*;
-import ij.process.*;
-import ij.measure.*;
 
 /** Opens and displays FITS images. The FITS format is 
 	described at "http://fits.gsfc.nasa.gov/fits_standard.html".

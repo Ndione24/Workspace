@@ -1,7 +1,9 @@
 package ij;
-import java.awt.*;
-import java.awt.image.*;
+
 import ij.process.*;
+
+import java.awt.*;
+import java.awt.image.ColorModel;
 
 /**
 This class represents an expandable array of images.

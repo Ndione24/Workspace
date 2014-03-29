@@ -1,17 +1,25 @@
 package ij.plugin.frame;
+
+import ij.IJ;
+import ij.ImagePlus;
+import ij.WindowManager;
+import ij.gui.GUI;
+import ij.gui.GenericDialog;
+import ij.gui.Plot;
+import ij.gui.PlotWindow;
+import ij.io.OpenDialog;
+import ij.measure.CurveFitter;
+import ij.measure.Minimizer;
+import ij.plugin.PlugIn;
+import ij.process.FloatProcessor;
+import ij.process.ImageProcessor;
+import ij.util.Tools;
+
 import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
-import java.io.*;
-import ij.*;
-import ij.plugin.*;
-import ij.plugin.frame.*;
-import ij.text.*;
-import ij.gui.*;
-import ij.util.*;
-import ij.io.*;
-import ij.process.*;
-import ij.measure.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.StringTokenizer;
 
 /** ImageJ plugin that does curve fitting using the modified CurveFitter class.
  *  Includes simplex settings dialog option.

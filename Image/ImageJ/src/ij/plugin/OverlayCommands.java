@@ -1,13 +1,13 @@
 package ij.plugin;
+
 import ij.*;
-import ij.process.*;
 import ij.gui.*;
-import ij.plugin.frame.RoiManager;
 import ij.macro.Interpreter;
-import ij.io.RoiDecoder;
 import ij.plugin.filter.PlugInFilter;
+import ij.plugin.frame.RoiManager;
+import ij.process.ImageProcessor;
 import ij.text.TextWindow;
-import ij.measure.ResultsTable;
+
 import java.awt.*;
 
 /** This plugin implements the commands in the Image/Overlay menu. */

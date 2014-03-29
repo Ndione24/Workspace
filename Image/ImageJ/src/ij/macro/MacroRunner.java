@@ -1,11 +1,13 @@
 package ij.macro;
+
 import ij.*;
-import ij.text.*;
-import ij.util.*;
 import ij.gui.ImageCanvas;
-import java.io.*;
-import java.awt.*;
 import ij.plugin.frame.Editor;
+
+import java.awt.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 																																																																																																																																																					   
 
 /** This class runs macros in a separate thread. */

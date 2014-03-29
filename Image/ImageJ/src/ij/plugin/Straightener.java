@@ -1,8 +1,13 @@
 package ij.plugin;
+
 import ij.*;
-import ij.gui.*;
-import ij.process.*;
+import ij.gui.GenericDialog;
+import ij.gui.Line;
+import ij.gui.PolygonRoi;
+import ij.gui.Roi;
 import ij.measure.Calibration;
+import ij.process.*;
+
 import java.awt.*;
 
 /** This plugin implements the Edit/Selection/Straighten command. */

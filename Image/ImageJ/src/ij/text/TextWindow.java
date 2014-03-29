@@ -1,13 +1,17 @@
 package ij.text;
 
-import java.awt.*;
-import java.io.*;
-import java.awt.event.*;
 import ij.*;
-import ij.io.*;
-import ij.gui.*;
-import ij.plugin.filter.Analyzer;
+import ij.gui.GUI;
+import ij.gui.YesNoCancelDialog;
+import ij.io.OpenDialog;
 import ij.macro.Interpreter;
+import ij.plugin.filter.Analyzer;
+
+import java.awt.*;
+import java.awt.event.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 /** Uses a TextPanel to displays text in a window.
 	@see TextPanel

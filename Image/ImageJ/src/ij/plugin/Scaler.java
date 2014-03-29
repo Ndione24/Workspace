@@ -1,12 +1,20 @@
 package ij.plugin;
+
 import ij.*;
-import ij.gui.*;
-import ij.process.*;
-import ij.measure.*;
+import ij.gui.GenericDialog;
+import ij.gui.Roi;
+import ij.gui.Toolbar;
+import ij.measure.Calibration;
+import ij.process.ImageProcessor;
+import ij.process.StackProcessor;
 import ij.util.Tools;
+
 import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.TextEvent;
+import java.awt.event.TextListener;
+import java.util.Vector;
 
 /** This plugin implements the Image/Scale command. */
 public class Scaler implements PlugIn, TextListener, FocusListener {

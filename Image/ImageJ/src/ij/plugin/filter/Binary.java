@@ -1,8 +1,15 @@
 package ij.plugin.filter;
-import ij.*;
-import ij.gui.*;
-import ij.process.*;
+
+import ij.IJ;
+import ij.ImagePlus;
+import ij.Prefs;
+import ij.gui.DialogListener;
+import ij.gui.GenericDialog;
 import ij.plugin.frame.ThresholdAdjuster;
+import ij.process.ByteProcessor;
+import ij.process.FloodFiller;
+import ij.process.ImageProcessor;
+
 import java.awt.*;
 
 /** Implements the Erode, Dilate, Open, Close, Outline, Skeletonize

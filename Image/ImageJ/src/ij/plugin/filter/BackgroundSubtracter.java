@@ -1,9 +1,14 @@
 package ij.plugin.filter;
-import ij.*;
-import ij.gui.*;
+
+import ij.IJ;
+import ij.ImagePlus;
+import ij.Macro;
+import ij.Prefs;
+import ij.gui.DialogListener;
+import ij.gui.GenericDialog;
 import ij.process.*;
-import ij.measure.*;
 import ij.util.Tools;
+
 import java.awt.*;
 
 

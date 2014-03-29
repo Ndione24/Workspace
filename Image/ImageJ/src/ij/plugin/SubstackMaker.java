@@ -1,9 +1,15 @@
 package ij.plugin;
-import ij.*;
-import ij.process.*;
-import ij.gui.*;
-import ij.io.FileInfo;
-import java.awt.Color;
+
+import ij.IJ;
+import ij.ImagePlus;
+import ij.ImageStack;
+import ij.gui.GenericDialog;
+import ij.gui.ImageWindow;
+import ij.gui.Roi;
+import ij.gui.StackWindow;
+import ij.process.ImageProcessor;
+
+import java.awt.*;
 
 /**
  * This plugin implements the Image/Stacks/Tools/Make Substack command.

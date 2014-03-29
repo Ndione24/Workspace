@@ -1,14 +1,22 @@
 package ij.plugin;
-import java.awt.*;
-import java.io.*;
-import java.awt.event.*;
-import java.awt.image.ColorModel;
+
 import ij.*;
-import ij.io.*;
-import ij.gui.*;
-import ij.process.*;
+import ij.gui.GenericDialog;
+import ij.gui.Overlay;
+import ij.gui.Roi;
+import ij.io.FileInfo;
+import ij.io.OpenDialog;
+import ij.io.Opener;
 import ij.measure.Calibration;
-import ij.util.*;
+import ij.process.ImageProcessor;
+import ij.util.DicomTools;
+import ij.util.StringSorter;
+
+import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.TextEvent;
+import java.awt.image.ColorModel;
+import java.io.File;
 
 /** Implements the File/Import/Image Sequence command, which
 	opens a folder of images as a stack. */

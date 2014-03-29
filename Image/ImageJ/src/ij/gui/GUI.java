@@ -1,6 +1,8 @@
 package ij.gui;
+
+import ij.IJ;
+
 import java.awt.*;
-import ij.*;
 
 /** This class consists of static GUI utility methods. */
 public class GUI {

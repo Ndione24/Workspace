@@ -1,11 +1,15 @@
 package ij.plugin.filter;
-import java.awt.Color;
-import ij.*;
-import ij.gui.*;
-import ij.process.*;
-import ij.plugin.filter.ParticleAnalyzer;
-import ij.measure.*;
-import ij.util.*;
+
+import ij.IJ;
+import ij.ImagePlus;
+import ij.gui.Plot;
+import ij.measure.Calibration;
+import ij.measure.Measurements;
+import ij.measure.ResultsTable;
+import ij.process.ImageProcessor;
+import ij.util.Tools;
+
+import java.awt.*;
 
 /** Implements ImageJ's Analyze/Tools/Analyze Line Graph command. */
 public class LineGraphAnalyzer implements PlugInFilter, Measurements  {

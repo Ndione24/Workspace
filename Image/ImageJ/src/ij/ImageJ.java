@@ -1,21 +1,26 @@
 package ij;
+
 import ij.gui.*;
-import ij.process.*;
-import ij.io.*;
-import ij.plugin.*;
-import ij.plugin.filter.*;
-import ij.plugin.frame.*;
-import ij.text.*;
 import ij.macro.Interpreter;
-import ij.io.Opener;
-import ij.util.*;
+import ij.plugin.JavaProperties;
+import ij.plugin.MacroInstaller;
+import ij.plugin.Orthogonal_Views;
+import ij.plugin.filter.PlugInFilterRunner;
+import ij.plugin.frame.ContrastAdjuster;
+import ij.plugin.frame.Editor;
+import ij.plugin.frame.ThresholdAdjuster;
+import ij.text.TextWindow;
+import ij.util.Tools;
+
+import javax.swing.*;
 import java.awt.*;
-import java.util.*;
 import java.awt.event.*;
-import java.io.*;
-import java.net.*;
-import java.awt.image.*;
-import javax.swing.ImageIcon;
+import java.awt.image.ImageProducer;
+import java.io.File;
+import java.net.URL;
+import java.util.Hashtable;
+import java.util.Properties;
+import java.util.Vector;
 
 /**
 This frame is the main ImageJ class.

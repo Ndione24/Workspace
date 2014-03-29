@@ -1,9 +1,11 @@
 package ij.plugin;
-import ij.*;
-import ij.process.*;
-import ij.io.*;
-import ij.text.*;
+
+import ij.IJ;
+import ij.WindowManager;
 import ij.plugin.frame.Editor;
+import ij.text.TextPanel;
+import ij.text.TextWindow;
+
 import java.awt.*;
 
 /** This plugin implements the File/Save As/Text command. What it does

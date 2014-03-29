@@ -1,9 +1,8 @@
 package ij.gui;
+
 import java.awt.*;
-import java.util.Vector;
 import java.awt.geom.Rectangle2D;
-import ij.*;
-import ij.process.ImageProcessor;
+import java.util.Vector;
 
 /** An Overlay is a list of Rois that can be drawn non-destructively on an Image. */
 public class Overlay {

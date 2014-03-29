@@ -1,8 +1,12 @@
 package ij.util;
-import java.awt.Color;
-import java.util.*;
-import java.io.*;
+
+import java.awt.*;
+import java.io.BufferedReader;
+import java.io.StringReader;
+import java.util.Arrays;
 import java.util.Comparator;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
 /** This class contains static utility methods. */
  public class Tools {

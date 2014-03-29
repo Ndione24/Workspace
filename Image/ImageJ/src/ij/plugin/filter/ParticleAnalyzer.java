@@ -1,18 +1,21 @@
 package ij.plugin.filter;
+
+import ij.*;
+import ij.gui.*;
+import ij.macro.Interpreter;
+import ij.measure.Calibration;
+import ij.measure.Measurements;
+import ij.measure.ResultsTable;
+import ij.plugin.Colors;
+import ij.plugin.frame.RoiManager;
+import ij.process.*;
+import ij.text.TextPanel;
+import ij.text.TextWindow;
+import ij.util.Tools;
+
 import java.awt.*;
 import java.awt.image.IndexColorModel;
 import java.util.Properties;
-import ij.*;
-import ij.gui.*;
-import ij.process.*;
-import ij.measure.*;
-import ij.text.*;
-import ij.plugin.filter.Analyzer;
-import ij.plugin.frame.Recorder;
-import ij.plugin.frame.RoiManager;
-import ij.plugin.Colors;
-import ij.macro.Interpreter;
-import ij.util.Tools;
 
 /** Implements ImageJ's Analyze Particles command.
 	<p>

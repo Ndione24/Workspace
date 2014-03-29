@@ -1,7 +1,8 @@
 package ij.io;
+
 import ij.VirtualStack;
-import java.io.*;
-import java.util.Properties;
+
+import java.io.InputStream;
 
 /** This class consists of public fields that describe an image file. */
 public class FileInfo implements Cloneable {
