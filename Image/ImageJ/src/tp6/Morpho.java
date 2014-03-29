@@ -197,7 +197,7 @@ public class Morpho {
                     for (int v = es.getYmin(); v <= es.getYmax(); v++) {
                         for (int u = es.getXmin(); u <= es.getXmax(); u++) {
                             // Un pixel noir du masque n'est pas dans l'image
-                            if (es.get(u, v) == NOIR && in.getPixel(x-u,y-v) == BLANC) {
+                            if (es.get(u, v) == NOIR && in.getPixel(x - u, y - v) == BLANC) {
                                 // La condition n'est pas vérifiée
                                 cond = false;
                                 // On arrête de parcourir le masque, la condition n'étant pas vérifié
@@ -206,7 +206,7 @@ public class Morpho {
                         }
                     }
                     // Si la condition est vérifiée le pixel est noir autrement il est blanc
-                    out.putPixel(x,y, (cond) ? NOIR : BLANC);
+                    out.putPixel(x, y, (cond) ? NOIR : BLANC);
 
                 } else {
                     // Autrement on met un pixel blanc dans l'image de sortie
