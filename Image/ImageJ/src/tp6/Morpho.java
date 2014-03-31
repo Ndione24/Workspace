@@ -10,8 +10,8 @@ import java.util.Arrays;
 
 public class Morpho {
 
-    public static final int BLANC = 255;
-    public static final int NOIR = 0;
+    private static final int BLANC = 255;
+    private static final int NOIR = 0;
 
     /**
      * Quelques opérations ensemblistes et morphologiques.
@@ -192,22 +192,19 @@ public class Morpho {
                 // Si un pixel est noir dans l'image
                 if (in.getPixel(x, y) == NOIR) {
                     // On vérifie que tous les pixels noir de l'es. existe dans l'image
-                    Boolean cond = true;
-                    esloop:
-                    for (int v = es.getYmin(); v <= es.getYmax(); v++) {
+                    Boolean abord = false;
+                    for (int v = es.getYmin(); v <= es.getYmax() && !abord; v++) {
                         for (int u = es.getXmin(); u <= es.getXmax(); u++) {
                             // Un pixel noir du masque n'est pas dans l'image
                             if (es.get(u, v) == NOIR && in.getPixel(x - u, y - v) == BLANC) {
                                 // La condition n'est pas vérifiée
-                                cond = false;
-                                // On arrête de parcourir le masque, la condition n'étant pas vérifié
-                                break esloop;
+                                abord = true;
+                                break;
                             }
                         }
                     }
-                    // Si la condition est vérifiée le pixel est noir autrement il est blanc
-                    out.putPixel(x, y, (cond) ? NOIR : BLANC);
-
+                    // Si la condition n'est pas vérifiée le pixel est blanc autrement il est noir
+                    out.putPixel(x, y, (abord) ? BLANC : NOIR);
                 } else {
                     // Autrement on met un pixel blanc dans l'image de sortie
                     out.putPixel(x, y, BLANC);

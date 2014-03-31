@@ -14,8 +14,8 @@ import java.net.URL;
  * @author Thibault Vieux
  */
 public class Image {
-    static final int WIN_WIDTH = 256;
-    static final int WIN_HEIGHT = 256;
+    private static final int WIN_WIDTH = 256;
+    private static final int WIN_HEIGHT = 256;
 
     /**
      * Créer une image de couleur grise à partir d'une image
@@ -124,7 +124,7 @@ public class Image {
 
         // On récupére le processor pour tracer le graphe
         ImageProcessor imppHisto = impHisto.getProcessor();
-        // On récupére le tableau des occurences
+        // On récupére le tableau des occurrences
         final int[] histo = getHistogram(imp);
         // On récupére la valeur max pour normalisé
         int max = 0;
@@ -150,7 +150,7 @@ public class Image {
 
         // On récupére le processor pour tracer le graphe
         ImageProcessor imppHisto = impHisto.getProcessor();
-        // On récupére le tableau des occurences cumulés
+        // On récupére le tableau des occurrences cumulés
         final int[] histo = getHistogramCumul(imp);
         // On récupére la valeur max pour normalisé
         int max = 0;
@@ -167,7 +167,7 @@ public class Image {
     }
 
     /**
-     * Récupére l'histogramme d'une image sous forme d'un tableau d'entier
+     * Récupère l'histogramme d'une image sous forme d'un tableau d'entier
      */
     public static int[] getHistogram(ImagePlus imp) {
         ImageProcessor ip = imp.getProcessor();
@@ -245,7 +245,7 @@ public class Image {
     }
 
     /**
-     * Récupére le dernier nvg ayant une occurence supérieur à 0
+     * Récupére le dernier nvg ayant une occurrence supérieur à 0
      */
     public static int getMax(int[] tab) {
         int i = tab.length - 1;
@@ -254,7 +254,7 @@ public class Image {
     }
 
     /**
-     * Récupére le premier nvg ayant une occurence supérieur à 0
+     * Récupére le premier nvg ayant une occurrence supérieur à 0
      */
     public static int getMin(int[] tab) {
         int i = 0;

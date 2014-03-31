@@ -88,7 +88,7 @@ public class Outils {
      * et tous les elements dont la valeur est superieure a 255 sont fixes a 255.
      *
      * @param mat        La matrice a afficher.
-     * @param titre      Le titre de la fenetre.
+     * @param titre      Le titre de la fenêtre.
      * @param normaliser Faut-il normaliser ?
      */
     public static void afficheMatrice(double[][] mat, String titre,

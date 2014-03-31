@@ -229,18 +229,15 @@ public class ElementStructurant {
             throw new IllegalArgumentException("Le tableau doit avoir le méme " +
                     "d'éléments que l'élément structurant");
 
-        for (int i = 0; i < contenu.length; i++) {
-            if (contenu[i] != AVANT_PLAN && contenu[i] != ARRIERE_PLAN &&
-                    contenu[i] != INDEFINI)
+        for (int aContenu : contenu) {
+            if (aContenu != AVANT_PLAN && aContenu != ARRIERE_PLAN &&
+                    aContenu != INDEFINI)
                 throw new IllegalArgumentException(
                         "Les 3 seules valeurs possibles sont ElementStructurant.AVANT_PLAN," +
                                 " ElementStructurant.ARRIERE_PLAN et ElementStructurant.INDEFINI"
                 );
         }
-
-        for (int i = 0; i < contenu.length; i++) {
-            this.contenu[i] = contenu[i];
-        }
+        System.arraycopy(contenu, 0, this.contenu, 0, contenu.length);
     }
 
     /**
