@@ -224,8 +224,8 @@ public class Morpho {
             ImageProcessor in,
             ElementStructurant es,
             ImageProcessor out) {
-        // érosion avec l'élément structurant puis dilatation avec l'élément structurant symétrique
-        ImageProcessor temp = (ImageProcessor)out.clone();
+        // érosion avec l'élément structurant puis dilatation avec l'élément structurant symétrique sur l'image érodé
+        ImageProcessor temp = NewImage.createByteImage("ouverture", out.getWidth(), out.getHeight(), 1, NewImage.GRAY8).getProcessor();
         erosion(in, es, temp);
         dilatation(temp, es.symetrique(), out);
     }
@@ -242,8 +242,8 @@ public class Morpho {
             ImageProcessor in,
             ElementStructurant es,
             ImageProcessor out) {
-        // dilatation avec l'élément structurant puis érosion avec l'élément structurant symétrique
-        ImageProcessor temp = (ImageProcessor)out.clone();
+        // dilatation avec l'élément structurant puis érosion avec l'élément structurant symétrique sur l'image dilaté
+        ImageProcessor temp = NewImage.createByteImage("ouverture", out.getWidth(), out.getHeight(), 1, NewImage.GRAY8).getProcessor();
         dilatation(in, es, temp);
         erosion(temp, es.symetrique(), out);
     }
@@ -270,16 +270,23 @@ public class Morpho {
     }
 
     public static void main(String[] args) {
-        ImagePlus ip = Outils.openImage("lenna.png");
-        ip = Image.createOTSUImage(ip);
-//        ImagePlus ip2 = NewImage.createByteImage("Dilatation " + ip.getTitle(), ip.getWidth(), ip.getHeight(), 1, NewImage.GRAY8);
-//        dilatation(ip.getProcessor(), ElementStructurant.creerRectangle4connexe(), ip2.getProcessor());
-//        ImagePlus ip2 = NewImage.createByteImage("Erosion " + ip.getTitle(), ip.getWidth(), ip.getHeight(), 1, NewImage.GRAY8);
-//        erosion(ip.getProcessor(), ElementStructurant.creerRectangle4connexe(), ip2.getProcessor());
-        ImagePlus ip2 = NewImage.createByteImage("Erosion " + ip.getTitle(), ip.getWidth(), ip.getHeight(), 1, NewImage.GRAY8);
-//        ouverture(ip.getProcessor(), ElementStructurant.creerRectangle4connexe(), ip2.getProcessor());
-//        fermeture(ip.getProcessor(), ElementStructurant.creerRectangle4connexe(), ip2.getProcessor());
-        ip.show();
-        ip2.show();
+        // Création des images d'entrée et de sortie
+        ImagePlus imp = Outils.openImage("lenna.png");
+        ImagePlus imp2 = NewImage.createByteImage(imp.getTitle(), imp.getWidth(), imp.getHeight(), 1, NewImage.GRAY8);
+        // On binarise l'image d'entrée
+        imp = Image.createOTSUImage(imp);
+        // On récupére les processor et on créer l'élément structurant
+        ImageProcessor ip = imp.getProcessor();
+        ImageProcessor ip2 = imp2.getProcessor();
+        ElementStructurant es = ElementStructurant.creerRectangle4connexe();
+        // On applique une morphologie binaire
+//        dilatation(ip, es, ip2);
+//        erosion(ip, es, ip2);
+//        ouverture(ip, es, ip2);
+        fermeture(ip, es, ip2);
+
+        // On visualise la modification
+        imp.show();
+        imp2.show();
     }
 }
