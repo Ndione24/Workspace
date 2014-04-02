@@ -150,14 +150,16 @@ public class Morpho {
             ImageProcessor out) {
         verifie(in, out);
 
-        Boolean abord = false;
+        Boolean abord;
         // Pour chaque pixel de l'image in
         for (int y = 0; y < in.getHeight(); y++) {
             for (int x = 0; x < in.getWidth(); x++) {
+                // On vérifie que la condition soit vérifié pour que le pixel soit noir
+                abord = false;
                 // On lui applique l'élément structurant es
                 for (int v = es.getYmin(); v <= es.getYmax() && !abord; v++) {
                     for (int u = es.getXmin(); u <= es.getXmax(); u++) {
-                        // Si un pixel de l'image est noir dans l'es et dans l'image d'entrée
+                        // Si un pixel est noir de l'image d'entrée et qu'il l'est aussi dans l'es
                         if (es.get(u,v) == NOIR && in.getPixel(x - u, y - v) == NOIR) {
                             // La condition est vérifié
                             abord = true;
@@ -165,10 +167,9 @@ public class Morpho {
                         }
                     }
                 }
-                // Si la condition est vérifié le pixel est noir dans l'image de sortie
+                // Si la condition est vérifié le pixel est noir dans l'image de sortie out
+                // Autrement le pixel est blanc
                 out.putPixel(x, y, (abord) ? NOIR : BLANC);
-                // on réinitialise la condition pour le prochain pixel
-                abord = false;
             }
         }
     }
@@ -187,31 +188,28 @@ public class Morpho {
             ImageProcessor out) {
         verifie(in, out);
 
-        // Pour chaque pixel de l'image
+        Boolean abord;
+        // Pour chaque pixel de l'image in
         for (int y = 0; y < in.getHeight(); y++) {
             for (int x = 0; x < in.getWidth(); x++) {
-                // Si un pixel est noir dans l'image
-                if (in.getPixel(x, y) == NOIR) {
-                    // On vérifie que tous les pixels noir de l'es. existe dans l'image
-                    Boolean abord = false;
-                    for (int v = es.getYmin(); v <= es.getYmax() && !abord; v++) {
-                        for (int u = es.getXmin(); u <= es.getXmax(); u++) {
-                            // Un pixel noir du masque n'est pas dans l'image
-                            if (es.get(u, v) == NOIR && in.getPixel(x - u, y - v) == BLANC) {
-                                // La condition n'est pas vérifiée
-                                abord = true;
-                                break;
-                            }
+                // On vérifie que la condition soit vérifié pour que le pixel soit noir
+                abord = false;
+                for (int v = es.getYmin(); v <= es.getYmax() && !abord; v++) {
+                    for (int u = es.getXmin(); u <= es.getXmax(); u++) {
+                        // Si un pixel noir de l'es n'est pas dans l'image d'entrée in
+                        if (es.get(u, v) == NOIR && in.getPixel(x - u, y - v) == BLANC) {
+                            // La condition n'est pas vérifiée
+                            abord = true;
+                            break;
                         }
                     }
-                    // Si la condition n'est pas vérifiée le pixel est blanc autrement il est noir
-                    out.putPixel(x, y, (abord) ? BLANC : NOIR);
-                } else {
-                    // Autrement on met un pixel blanc dans l'image de sortie
-                    out.putPixel(x, y, BLANC);
                 }
+                // Si la condition n'est pas vérifié le pixel est blanc dans l'image de sortie out
+                // Autrement le pixel est noir
+                out.putPixel(x, y, (abord) ? BLANC : NOIR);
             }
         }
+
     }
 
     /**
@@ -272,10 +270,10 @@ public class Morpho {
     public static void main(String[] args) {
         ImagePlus ip = Outils.openImage("lenna.png");
         ip = Image.createOTSUImage(ip);
-        ImagePlus ip2 = NewImage.createByteImage("Dilatation " + ip.getTitle(), ip.getWidth(), ip.getHeight(), 1, NewImage.GRAY8);
-        dilatation(ip.getProcessor(), ElementStructurant.creerRectangle4connexe(), ip2.getProcessor());
-//        ImagePlus ip2 = NewImage.createByteImage("Erosion " + ip.getTitle(), ip.getWidth(), ip.getHeight(), 1, NewImage.GRAY8);
-//        erosion(ip.getProcessor(), ElementStructurant.creerRectangle4connexe(), ip2.getProcessor());
+//        ImagePlus ip2 = NewImage.createByteImage("Dilatation " + ip.getTitle(), ip.getWidth(), ip.getHeight(), 1, NewImage.GRAY8);
+//        dilatation(ip.getProcessor(), ElementStructurant.creerRectangle4connexe(), ip2.getProcessor());
+        ImagePlus ip2 = NewImage.createByteImage("Erosion " + ip.getTitle(), ip.getWidth(), ip.getHeight(), 1, NewImage.GRAY8);
+        erosion(ip.getProcessor(), ElementStructurant.creerRectangle4connexe(), ip2.getProcessor());
         ip.show();
         ip2.show();
     }
