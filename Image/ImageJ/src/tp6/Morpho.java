@@ -150,24 +150,25 @@ public class Morpho {
             ImageProcessor out) {
         verifie(in, out);
 
-        // Pour chaque pixel de l'image
+        Boolean abord = false;
+        // Pour chaque pixel de l'image in
         for (int y = 0; y < in.getHeight(); y++) {
             for (int x = 0; x < in.getWidth(); x++) {
-                // Si un pixel est noir dans l'image
-                if (in.getPixel(x, y) == NOIR) {
-                    // On le met dans l'image de sortie
-                    out.putPixelValue(x, y, NOIR);
-                    for (int v = es.getYmin(); v <= es.getYmax(); v++) {
-                        for (int u = es.getXmin(); u <= es.getXmax(); u++) {
-                            if (es.get(u, v) == NOIR) {
-                                out.putPixel(x - u, y - v, NOIR);
-                            }
+                // On lui applique l'élément structurant es
+                for (int v = es.getYmin(); v <= es.getYmax() && !abord; v++) {
+                    for (int u = es.getXmin(); u <= es.getXmax(); u++) {
+                        // Si un pixel de l'image est noir dans l'es et dans l'image d'entrée
+                        if (es.get(u,v) == NOIR && in.getPixel(x - u, y - v) == NOIR) {
+                            // La condition est vérifié
+                            abord = true;
+                            break;
                         }
                     }
-                } else {
-                    // Autrement on met un pixel blanc
-                    out.putPixel(x, y, BLANC);
                 }
+                // Si la condition est vérifié le pixel est noir dans l'image de sortie
+                out.putPixel(x, y, (abord) ? NOIR : BLANC);
+                // on réinitialise la condition pour le prochain pixel
+                abord = false;
             }
         }
     }
@@ -225,6 +226,9 @@ public class Morpho {
             ImageProcessor in,
             ElementStructurant es,
             ImageProcessor out) {
+        // érosion avec l'élément structurant puis dilatation avec l'élément structurant symétrique
+        erosion(in, es, out);
+        dilatation(out, es.symetrique(), out);
     }
 
     /**
@@ -239,7 +243,9 @@ public class Morpho {
             ImageProcessor in,
             ElementStructurant es,
             ImageProcessor out) {
-
+        // dilatation avec l'élément structurant puis érosion avec l'élément structurant symétrique
+        dilatation(in, es, out);
+        erosion(out, es, out);
     }
 
     /**
@@ -266,10 +272,10 @@ public class Morpho {
     public static void main(String[] args) {
         ImagePlus ip = Outils.openImage("lenna.png");
         ip = Image.createOTSUImage(ip);
-//        ImagePlus ip2 = NewImage.createByteImage("Dilatation " + ip.getTitle(), ip.getWidth(), ip.getHeight(), 1, NewImage.GRAY8);
-//        dilatation(ip.getProcessor(), ElementStructurant.creerRectangle4connexe(), ip2.getProcessor());
-        ImagePlus ip2 = NewImage.createByteImage("Erosion " + ip.getTitle(), ip.getWidth(), ip.getHeight(), 1, NewImage.GRAY8);
-        erosion(ip.getProcessor(), ElementStructurant.creerRectangle4connexe(), ip2.getProcessor());
+        ImagePlus ip2 = NewImage.createByteImage("Dilatation " + ip.getTitle(), ip.getWidth(), ip.getHeight(), 1, NewImage.GRAY8);
+        dilatation(ip.getProcessor(), ElementStructurant.creerRectangle4connexe(), ip2.getProcessor());
+//        ImagePlus ip2 = NewImage.createByteImage("Erosion " + ip.getTitle(), ip.getWidth(), ip.getHeight(), 1, NewImage.GRAY8);
+//        erosion(ip.getProcessor(), ElementStructurant.creerRectangle4connexe(), ip2.getProcessor());
         ip.show();
         ip2.show();
     }
