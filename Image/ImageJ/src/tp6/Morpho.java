@@ -225,8 +225,9 @@ public class Morpho {
             ElementStructurant es,
             ImageProcessor out) {
         // érosion avec l'élément structurant puis dilatation avec l'élément structurant symétrique
-        erosion(in, es, out);
-        dilatation(out, es.symetrique(), out);
+        ImageProcessor temp = (ImageProcessor)out.clone();
+        erosion(in, es, temp);
+        dilatation(temp, es.symetrique(), out);
     }
 
     /**
@@ -242,8 +243,9 @@ public class Morpho {
             ElementStructurant es,
             ImageProcessor out) {
         // dilatation avec l'élément structurant puis érosion avec l'élément structurant symétrique
-        dilatation(in, es, out);
-        erosion(out, es, out);
+        ImageProcessor temp = (ImageProcessor)out.clone();
+        dilatation(in, es, temp);
+        erosion(temp, es.symetrique(), out);
     }
 
     /**
@@ -272,8 +274,11 @@ public class Morpho {
         ip = Image.createOTSUImage(ip);
 //        ImagePlus ip2 = NewImage.createByteImage("Dilatation " + ip.getTitle(), ip.getWidth(), ip.getHeight(), 1, NewImage.GRAY8);
 //        dilatation(ip.getProcessor(), ElementStructurant.creerRectangle4connexe(), ip2.getProcessor());
+//        ImagePlus ip2 = NewImage.createByteImage("Erosion " + ip.getTitle(), ip.getWidth(), ip.getHeight(), 1, NewImage.GRAY8);
+//        erosion(ip.getProcessor(), ElementStructurant.creerRectangle4connexe(), ip2.getProcessor());
         ImagePlus ip2 = NewImage.createByteImage("Erosion " + ip.getTitle(), ip.getWidth(), ip.getHeight(), 1, NewImage.GRAY8);
-        erosion(ip.getProcessor(), ElementStructurant.creerRectangle4connexe(), ip2.getProcessor());
+//        ouverture(ip.getProcessor(), ElementStructurant.creerRectangle4connexe(), ip2.getProcessor());
+//        fermeture(ip.getProcessor(), ElementStructurant.creerRectangle4connexe(), ip2.getProcessor());
         ip.show();
         ip2.show();
     }
