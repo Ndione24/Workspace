@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-public class PanelSelectFiltre extends JPanel {
+class PanelSelectFiltre extends JPanel {
 
     public PanelSelectFiltre() {
         setLayout(new FlowLayout());
@@ -20,7 +20,7 @@ public class PanelSelectFiltre extends JPanel {
         add(bFiltreGaussien);
         add(bFiltreSobel);
 
-        ActionListener auditeur = new AuditeurSelectFiltre();
+        ActionListener auditeur = new AuditeurFiltre();
         bFiltreMoyen.addActionListener(auditeur);
         bFiltreMedian.addActionListener(auditeur);
         bFiltreGaussien.addActionListener(auditeur);

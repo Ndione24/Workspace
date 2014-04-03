@@ -1,19 +1,12 @@
 package ij.gui;
-
-import ij.IJ;
-import ij.ImagePlus;
-import ij.Prefs;
-import ij.measure.Calibration;
-import ij.measure.SplineFitter;
-import ij.plugin.frame.LineWidthAdjuster;
-import ij.plugin.frame.Recorder;
-import ij.process.FloatPolygon;
-import ij.process.ImageProcessor;
-import ij.process.PolygonFiller;
-
+import ij.*;
+import ij.process.*;
+import ij.measure.*;
+import ij.plugin.frame.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.geom.GeneralPath;
+import java.awt.image.*;
+import java.awt.geom.*;
+import java.awt.event.*;
 
 /** This class represents a polygon region of interest or polyline of interest. */
 public class PolygonRoi extends Roi {
@@ -1589,6 +1582,14 @@ public class PolygonRoi extends Roi {
 				xpf = toFloat(xp);
 				ypf = toFloat(yp);
 			}
+		}
+	}
+
+	public void enableSubPixelResolution() {
+		super.enableSubPixelResolution();
+		if (xpf==null) {
+			xpf = toFloat(xp);
+			ypf = toFloat(yp);
 		}
 	}
 

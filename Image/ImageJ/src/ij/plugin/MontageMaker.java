@@ -1,16 +1,11 @@
 package ij.plugin;
-
 import ij.*;
-import ij.gui.GenericDialog;
-import ij.gui.Toolbar;
-import ij.measure.Calibration;
-import ij.measure.Measurements;
-import ij.process.ByteProcessor;
-import ij.process.ColorProcessor;
-import ij.process.ImageProcessor;
-import ij.process.ImageStatistics;
-
+import ij.gui.*;
+import ij.process.*;
+import ij.measure.*;
 import java.awt.*;
+import java.awt.image.*;
+import java.awt.event.*;
 
 /** Implements the Image/Stacks/Make Montage command. */
 public class MontageMaker implements PlugIn {
@@ -40,8 +35,8 @@ public class MontageMaker implements PlugIn {
 			int channel = imp.getChannel();
 			CompositeImage ci = (CompositeImage)imp;
 			int mode = ci.getMode();
-			if (mode==CompositeImage.COMPOSITE)
-				ci.setMode(CompositeImage.COLOR);
+			if (mode==IJ.COMPOSITE)
+				ci.setMode(IJ.COLOR);
 			ImageStack stack = new ImageStack(imp.getWidth(), imp.getHeight());
 			for (int c=1; c<=channels; c++) {
 				imp.setPosition(c, imp.getSlice(), imp.getFrame());

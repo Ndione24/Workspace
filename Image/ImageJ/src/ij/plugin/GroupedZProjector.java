@@ -1,8 +1,7 @@
 package ij.plugin;
-
-import ij.IJ;
-import ij.ImagePlus;
+import ij.*;
 import ij.gui.GenericDialog;
+import ij.process.*;
 import ij.measure.Calibration;
 
 /** This plugin implements the Image/Stacks/Tools/Grouped Z Project command. */

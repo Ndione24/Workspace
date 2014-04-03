@@ -1,22 +1,17 @@
 package ij.io;
-
+import java.awt.*;
+import java.io.*;
+import java.util.zip.*;
 import ij.*;
-import ij.gui.GenericDialog;
-import ij.gui.ImageCanvas;
-import ij.gui.Overlay;
-import ij.gui.Roi;
+import ij.process.*;
 import ij.measure.Calibration;
-import ij.measure.Measurements;
+import ij.plugin.filter.Analyzer;
+import ij.plugin.frame.Recorder;
 import ij.plugin.JpegWriter;
 import ij.plugin.Orthogonal_Views;
-import ij.plugin.filter.Analyzer;
-import ij.process.FHT;
-import ij.process.ImageProcessor;
-import ij.process.LUT;
-
-import java.io.*;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
+import ij.gui.*;
+import ij.measure.Measurements;
+import javax.imageio.*;
 
 /** Saves images in tiff, gif, jpeg, raw, zip and text format. */
 public class FileSaver {
@@ -711,7 +706,7 @@ public class FileSaver {
 		if (!cal.getTimeUnit().equals("sec"))
 			sb.append("tunit="+cal.getTimeUnit()+"\n");
 		if (fi.nImages>1) {
-			if (fi.pixelDepth!=0.0 && fi.pixelDepth!=1.0)
+			if (fi.pixelDepth!=1.0)
 				sb.append("spacing="+fi.pixelDepth+"\n");
 			if (cal.fps!=0.0) {
 				if ((int)cal.fps==cal.fps)

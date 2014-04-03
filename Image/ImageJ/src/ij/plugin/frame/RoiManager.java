@@ -1,37 +1,30 @@
 package ij.plugin.frame;
-
-import ij.*;
-import ij.gui.*;
-import ij.io.*;
-import ij.macro.Interpreter;
-import ij.macro.MacroRunner;
-import ij.measure.Calibration;
-import ij.measure.Measurements;
-import ij.measure.ResultsTable;
-import ij.plugin.Colors;
-import ij.plugin.OverlayCommands;
-import ij.plugin.OverlayLabels;
-import ij.plugin.filter.Analyzer;
-import ij.plugin.filter.Filler;
-import ij.plugin.filter.ThresholdToSelection;
-import ij.process.ByteProcessor;
-import ij.process.ImageProcessor;
-import ij.process.ImageStatistics;
-import ij.util.StringSorter;
-import ij.util.Tools;
-
-import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
-import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
-import java.util.zip.ZipOutputStream;
+import java.util.*;
+import java.awt.List;
+import java.util.zip.*;
+
+import javax.swing.DefaultListModel;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
+import ij.*;
+import ij.process.*;
+import ij.gui.*;
+import ij.io.*;
+import ij.plugin.filter.*;
+import ij.plugin.Colors;
+import ij.plugin.OverlayLabels;
+import ij.util.*;
+import ij.macro.*;
+import ij.measure.*;
+import ij.plugin.OverlayCommands;
 
 /** This plugin implements the Analyze/Tools/ROI Manager command. */
 public class RoiManager extends PlugInFrame implements ActionListener, ItemListener, MouseListener, MouseWheelListener, ListSelectionListener {
@@ -780,6 +773,13 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 		} catch (IOException e) {
 			IJ.error("ROI Manager", e.getMessage());
 		}
+		if (record()) {
+			String path = dir+name2;
+			if (Recorder.scriptMode())
+				Recorder.recordCall("IJ.saveAs(imp, \"Selection\", \""+path+"\");");
+			else
+				Recorder.record("saveAs", "Selection", path);
+		}
 		return true;
 	}
 
@@ -1121,6 +1121,8 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 		Font font = null;
 		int justification = TextRoi.LEFT;
 		double opacity = -1;
+		int position = -1;
+		int cpos=-1, zpos=-1, tpos=-1;
 		if (showDialog) {
 			String label = (String) listModel.getElementAt(indexes[0]);
 			rpRoi = (Roi)rois.get(label);
@@ -1142,6 +1144,10 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 			color =	 rpRoi.getStrokeColor();
 			fillColor =	 rpRoi.getFillColor();
 			defaultColor = color;
+			position = rpRoi.getPosition();
+			cpos = rpRoi.getCPosition();
+			zpos = rpRoi.getZPosition();
+			tpos = rpRoi.getTPosition();
 			if (rpRoi instanceof TextRoi) {
 				font = ((TextRoi)rpRoi).getCurrentFont();
 				justification = ((TextRoi)rpRoi).getJustification();
@@ -1159,18 +1165,23 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 		for (int i=0; i<n; i++) {
 			String label = (String) listModel.getElementAt(indexes[i]);
 			Roi roi = (Roi)rois.get(label);
+			if (roi==null) continue;
 			//IJ.log("set "+color+"	 "+lineWidth+"	"+fillColor);
 			if (color!=null) roi.setStrokeColor(color);
 			if (lineWidth>=0) roi.setStrokeWidth(lineWidth);
 			roi.setFillColor(fillColor);
-			if (roi!=null && (roi instanceof TextRoi)) {
+			if (cpos>0 || zpos>0 || tpos>0)
+				roi.setPosition(cpos, zpos, tpos);
+			else if (position!=-1)
+				roi.setPosition(position);
+			if (roi instanceof TextRoi) {
 				roi.setImage(imp);
 				if (font!=null)
 					((TextRoi)roi).setCurrentFont(font);
 				((TextRoi)roi).setJustification(justification);
 				roi.setImage(null);
 			}
-			if (roi!=null && (roi instanceof ImageRoi) && opacity!=-1)
+			if ((roi instanceof ImageRoi) && opacity!=-1)
 				((ImageRoi)roi).setOpacity(opacity);
 		}
 		if (rpRoi!=null && rpName!=null && !rpRoi.getName().equals(rpName))
@@ -2054,7 +2065,8 @@ public class RoiManager extends PlugInFrame implements ActionListener, ItemListe
 			overlay.add(roi);
 		}
 		imp.setOverlay(overlay);
-		setOverlay(imp, null);
+		if (imp.getCanvas()!=null)
+			setOverlay(imp, null);
 	}
 	
 	public void mousePressed (MouseEvent e) {

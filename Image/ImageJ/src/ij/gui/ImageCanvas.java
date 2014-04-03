@@ -1,20 +1,20 @@
 package ij.gui;
 
-import ij.*;
-import ij.macro.MacroRunner;
+import java.awt.*;
+import java.util.Properties;
+import java.awt.image.*;
+import ij.process.*;
+import ij.measure.*;
 import ij.plugin.WandToolOptions;
 import ij.plugin.frame.Recorder;
 import ij.plugin.frame.RoiManager;
 import ij.plugin.tool.PlugInTool;
-import ij.util.Tools;
-
-import java.awt.*;
-import java.awt.event.InputEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.awt.image.IndexColorModel;
-import java.util.Vector;
+import ij.macro.*;
+import ij.*;
+import ij.util.*;
+import java.awt.event.*;
+import java.util.*;
+import java.awt.geom.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 
@@ -72,6 +72,8 @@ public class ImageCanvas extends Canvas implements MouseListener, MouseMotionLis
 	private boolean drawNames;
 	private AtomicBoolean paintPending;
 	private boolean scaleToFit;
+	private boolean painted;
+	private boolean hideZoomIndicator;
 
 		
 	public ImageCanvas(ImagePlus imp) {
@@ -150,6 +152,7 @@ public class ImageCanvas extends Canvas implements MouseListener, MouseMotionLis
 	}
 
     public void paint(Graphics g) {
+		painted = true;
 		Roi roi = imp.getRoi();
 		if (roi!=null || overlay!=null || showAllOverlay!=null || Prefs.paintDoubleBuffered) {
 			if (roi!=null) roi.updatePaste();
@@ -277,7 +280,7 @@ public class ImageCanvas extends Canvas implements MouseListener, MouseMotionLis
 				int position =  stackSize>1?roi.getPosition():0;
 				if (position==0 && stackSize>1)
 					position = getSliceNumber(roi.getName());
-				if (position>0 && imp.getCompositeMode()==CompositeImage.COMPOSITE)
+				if (position>0 && imp.getCompositeMode()==IJ.COMPOSITE)
 					position = 0;
 				//IJ.log(position+"  "+currentImage+" "+roiManagerShowAllMode);
 				if (position==0 || position==currentImage || roiManagerShowAllMode)
@@ -382,6 +385,8 @@ public class ImageCanvas extends Canvas implements MouseListener, MouseMotionLis
 	} 
 
 	void drawZoomIndicator(Graphics g) {
+		if (hideZoomIndicator)
+			return;
 		int x1 = 10;
 		int y1 = 10;
 		double aspectRatio = (double)imageHeight/imageWidth;
@@ -632,7 +637,7 @@ public class ImageCanvas extends Canvas implements MouseListener, MouseMotionLis
 		if (height>imageHeight*magnification)
 			height = (int)(imageHeight*magnification);
 		Dimension size = getSize();
-        if (srcRect.width<imageWidth || srcRect.height<imageHeight || width!=size.width || height!=size.height) {
+		if (srcRect.width<imageWidth || srcRect.height<imageHeight || (painted&&(width!=size.width||height!=size.height))) {
 			setDrawingSize(width, height);
 			srcRect.width = (int)(dstWidth/magnification);
 			srcRect.height = (int)(dstHeight/magnification);
@@ -751,7 +756,8 @@ public class ImageCanvas extends Canvas implements MouseListener, MouseMotionLis
 	}
 	
 	protected Dimension canEnlarge(int newWidth, int newHeight) {
-		//if ((flags&Event.CTRL_MASK)!=0 || IJ.controlKeyDown()) return null;
+		if (IJ.altKeyDown())
+			return null;
 		ImageWindow win = imp.getWindow();
 		if (win==null) return null;
 		Rectangle r1 = win.getBounds();
@@ -762,8 +768,8 @@ public class ImageCanvas extends Canvas implements MouseListener, MouseMotionLis
 			r1.height = newHeight+insets.top+insets.bottom+10;
 			if (win instanceof StackWindow) r1.height+=20;
 		} else {
-			r1.width = r1.width - dstWidth + newWidth+10;
-			r1.height = r1.height - dstHeight + newHeight+10;
+			r1.width = r1.width - dstWidth + newWidth;
+			r1.height = r1.height - dstHeight + newHeight;
 		}
 		Rectangle max = win.getMaxWindow(r1.x, r1.y);
 		boolean fitsHorizontally = r1.x+r1.width<max.x+max.width;
@@ -1396,7 +1402,10 @@ public class ImageCanvas extends Canvas implements MouseListener, MouseMotionLis
 		int oy = offScreenY(e.getY());
 		if ((overlay!=null||showAllOverlay!=null) && ox==mousePressedX && oy==mousePressedY) {
 			boolean cmdDown = IJ.isMacOSX() && e.isMetaDown();
-			if (e.isAltDown()||e.isControlDown()||cmdDown||overOverlayLabel) {
+			Roi roi = imp.getRoi();
+			if (roi!=null && roi.getBounds().width==0)
+				roi=null;
+			if ((e.isAltDown()||e.isControlDown()||cmdDown||overOverlayLabel) && roi==null) {
 				if (activateOverlayRoi(ox, oy))
 					return;
 			} else if ((System.currentTimeMillis()-mousePressedTime)>250L && !drawingTool()) {
@@ -1542,6 +1551,17 @@ public class ImageCanvas extends Canvas implements MouseListener, MouseMotionLis
 
 	public boolean getScaleToFit() {
 		return scaleToFit;
+	}
+	
+	public boolean hideZoomIndicator(boolean hide) {
+		boolean hidden = this.hideZoomIndicator;
+		this.hideZoomIndicator = hide;
+		setPaintPending(true);
+		repaint();
+		long t0 = System.currentTimeMillis();
+		while(getPaintPending() && (System.currentTimeMillis()-t0)<250L)
+			IJ.wait(1);
+		return hidden;
 	}
 
 }

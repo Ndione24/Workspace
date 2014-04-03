@@ -1,15 +1,9 @@
 package ij.plugin;
-
-import ij.IJ;
-import ij.ImagePlus;
-import ij.ImageStack;
-import ij.gui.GenericDialog;
-import ij.gui.ImageWindow;
-import ij.gui.Roi;
-import ij.gui.StackWindow;
-import ij.process.ImageProcessor;
-
-import java.awt.*;
+import ij.*;
+import ij.process.*;
+import ij.gui.*;
+import ij.io.FileInfo;
+import java.awt.Color;
 
 /**
  * This plugin implements the Image/Stacks/Tools/Make Substack command.
@@ -145,7 +139,8 @@ public class SubstackMaker implements PlugIn {
 			// next three lines for updating the scroll bar
 			ImageWindow win = imp.getWindow();
 			StackWindow swin = (StackWindow) win;
-			swin.updateSliceSelector();
+			if (swin!=null)
+				swin.updateSliceSelector();
 		}
 		ImagePlus impSubstack = imp.createImagePlus();
 		impSubstack.setStack(stackTitle, stack2);
@@ -176,7 +171,8 @@ public class SubstackMaker implements PlugIn {
 			// next three lines for updating the scroll bar
 			ImageWindow win = imp.getWindow();
 			StackWindow swin = (StackWindow) win;
-			swin.updateSliceSelector();
+			if (swin!=null)
+				swin.updateSliceSelector();
 		}
 		ImagePlus substack = imp.createImagePlus();
 		substack.setStack(title, stack2);

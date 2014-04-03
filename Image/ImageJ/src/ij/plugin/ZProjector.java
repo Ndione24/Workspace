@@ -1,14 +1,12 @@
-package ij.plugin;
-
-import ij.*;
-import ij.gui.GenericDialog;
-import ij.gui.Overlay;
-import ij.gui.Roi;
-import ij.process.ByteProcessor;
-import ij.process.FloatProcessor;
-import ij.process.ImageProcessor;
-import ij.process.ShortProcessor;
-
+package ij.plugin; 
+import ij.*; 
+import ij.gui.*; 
+import ij.process.*;
+import ij.plugin.filter.*; 
+import ij.measure.Measurements;
+import java.lang.*; 
+import java.awt.*; 
+import java.awt.event.*; 
 import java.util.Arrays;
 
 /** This plugin performs a z-projection of the input stack. Type of
@@ -131,13 +129,14 @@ public class ZProjector implements PlugIn {
 			stopSlice  = stackSize;
 			
 		// Build control dialog
-		GenericDialog gd = buildControlDialog(startSlice,stopSlice); 
+		GenericDialog gd = buildControlDialog(startSlice,stopSlice);
+		gd.setSmartRecording(true);
 		gd.showDialog(); 
-		if(gd.wasCanceled()) return; 
+		if (gd.wasCanceled()) return; 
 
 		if (!imp.lock()) return;   // exit if in use
 		long tstart = System.currentTimeMillis();
-		setStartSlice((int)gd.getNextNumber()); 
+		setStartSlice((int)gd.getNextNumber());
 		setStopSlice((int)gd.getNextNumber()); 
 		method = gd.getNextChoiceIndex();
 		Prefs.set(METHOD_KEY, method);
@@ -262,8 +261,10 @@ public class ZProjector implements PlugIn {
 
 		// Do the projection.
 		for(int n=startSlice; n<=stopSlice; n+=increment) {
-	    	IJ.showStatus("ZProjection " + color +": " + n + "/" + stopSlice);
-	    	IJ.showProgress(n-startSlice, stopSlice-startSlice);
+			if (!isHyperstack) {
+	    		IJ.showStatus("ZProjection " + color +": " + n + "/" + stopSlice);
+	    		IJ.showProgress(n-startSlice, stopSlice-startSlice);
+	    	}
 	    	projectSlice(stack.getPixels(n), rayFunc, ptype);
 		}
 
@@ -329,6 +330,8 @@ public class ZProjector implements PlugIn {
 		increment = channels;
 		boolean rgb = imp.getBitDepth()==24;
 		for (int frame=firstFrame; frame<=lastFrame; frame++) {
+			IJ.showStatus(""+ (frame-firstFrame) + "/" + (lastFrame-firstFrame));
+			IJ.showProgress(frame-firstFrame, lastFrame-firstFrame);
 			for (int channel=1; channel<=channels; channel++) {
 				startSlice = (frame-1)*channels*slices + (start-1)*channels + channel;
 				stopSlice = (frame-1)*channels*slices + (stop-1)*channels + channel;

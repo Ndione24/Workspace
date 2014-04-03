@@ -1,13 +1,8 @@
 package ij.plugin.filter;
-
-import ij.IJ;
-import ij.ImagePlus;
+import ij.*;
 import ij.gui.*;
-import ij.measure.Measurements;
-import ij.measure.ResultsTable;
-import ij.process.ByteProcessor;
-import ij.process.ImageProcessor;
-
+import ij.process.*;
+import ij.measure.*;
 import java.awt.*;
 
 /** This plugin implements ImageJ's Fill, Clear, Clear Outside and Draw commands. */
@@ -26,6 +21,11 @@ public class Filler implements PlugInFilter, Measurements {
 		if (imp!=null)
 			roi = imp.getRoi();			
 		isTextRoi = roi!=null && (roi instanceof TextRoi);
+	 	if (isTextRoi && (arg.equals("draw") || arg.equals("fill")) && ((TextRoi)roi).getAngle()!=0.0) {
+	 		String s = IJ.isMacOSX()?"command+b":"ctrl+b";
+	 		IJ.error("Draw rotated text by pressing "+s+" (Image>Overlay>Add Selection).");
+	 		return DONE;
+		}
 		IJ.register(Filler.class);
 		int baseCapabilities = DOES_ALL+ROI_REQUIRED;
 	 	if (arg.equals("clear")) {

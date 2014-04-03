@@ -1,11 +1,10 @@
 package ij.plugin;
-
-import ij.IJ;
-import ij.ImagePlus;
-import ij.WindowManager;
-import ij.gui.GenericDialog;
-import ij.process.FHT;
-import ij.process.ImageProcessor;
+import ij.*;
+import ij.gui.*;
+import ij.process.*;
+import ij.text.*;
+import java.awt.*;
+import java.io.*;
 
 /** The class implements the Process/FFT/Math command. */
 public class FFTMath implements PlugIn {

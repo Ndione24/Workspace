@@ -1,18 +1,11 @@
 package ij.plugin;
-
-import ij.IJ;
-import ij.ImagePlus;
-import ij.Prefs;
-import ij.WindowManager;
-import ij.gui.GenericDialog;
-import ij.gui.Line;
-import ij.gui.Roi;
-import ij.io.FileSaver;
+import ij.*;
+import ij.gui.*;
+import ij.process.*;
+import ij.io.*;
+import ij.plugin.filter.*;
 import ij.plugin.frame.LineWidthAdjuster;
-import ij.process.ColorProcessor;
-import ij.process.FloatBlitter;
-import ij.process.ImageConverter;
-import ij.process.ImageProcessor;
+import java.awt.*;
 
 /** This plugin implements most of the commands
 	in the Edit/Options sub-menu. */

@@ -1,12 +1,9 @@
 package ij.gui;
-
-import ij.IJ;
-import ij.ImageJ;
-import ij.ImagePlus;
-import ij.ImageStack;
+import ij.*;
+import ij.measure.Calibration;
 import ij.plugin.frame.SyncWindows;
-
 import java.awt.*;
+import java.awt.image.*;
 import java.awt.event.*;
 
 /** This class is an extended ImageWindow used to display image stacks. */
@@ -199,7 +196,11 @@ public class StackWindow extends ImageWindow implements Runnable, AdjustmentList
 		int max = zSelector.getMaximum();
 		if (max!=(stackSize+1))
 			zSelector.setMaximum(stackSize+1);
-		zSelector.setValue(imp.getCurrentSlice());
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				zSelector.setValue(imp.getCurrentSlice());
+			}
+		});
 	}
 	
 	public void run() {

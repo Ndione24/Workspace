@@ -1,15 +1,11 @@
 package ij.plugin;
-
 import ij.*;
-import ij.gui.GenericDialog;
-import ij.gui.ImageWindow;
+import ij.gui.*;
+import ij.process.*;
+import ij.plugin.filter.*;
 import ij.measure.Calibration;
-import ij.plugin.filter.PlugInFilter;
 import ij.plugin.frame.Recorder;
-import ij.process.Blitter;
-import ij.process.ByteProcessor;
-import ij.process.ImageProcessor;
-import ij.process.StackProcessor;
+import ij.macro.Interpreter;
 
 /** This plugin implements the Process/Image Calculator command.
 <pre>

@@ -1,18 +1,17 @@
 package ij.io;
 
-import ij.IJ;
-import ij.ImagePlus;
-import ij.ImageStack;
-import ij.Prefs;
-import ij.gui.GenericDialog;
-import ij.measure.Calibration;
-import ij.plugin.FileInfoVirtualStack;
+import java.awt.*;
+import java.awt.image.*;
+import java.io.*;
+import java.util.*;
+import ij.*;
+import ij.gui.*;
+import ij.process.*;
+import ij.util.*;
+import ij.plugin.frame.Recorder;
 import ij.plugin.FolderOpener;
-import ij.process.ImageProcessor;
-import ij.util.Tools;
-
-import java.io.File;
-import java.util.Properties;
+import ij.plugin.FileInfoVirtualStack;
+import ij.measure.Calibration;
 
 
 /** This is a dialog box used to imports raw 8, 16, 24 and 32-bit images. */
@@ -50,7 +49,6 @@ public class ImportDialog {
     	options = Prefs.getInt(OPTIONS,0);
     	whiteIsZero = (options&WHITE_IS_ZERO)!=0;
     	intelByteOrder = (options&INTEL_BYTE_ORDER)!=0;
-    	//openAll = (options&OPEN_ALL)!=0;
     }
 	
     public ImportDialog(String fileName, String directory) {
@@ -97,7 +95,6 @@ public class ImportDialog {
 	
 	/** Opens all the images in the directory. */
 	void openAll(String[] list, FileInfo fi) {
-		//StringSorter.sort(list);
 		FolderOpener fo = new FolderOpener();
 		list = fo.trimFileList(list);
 		list = fo.sortFileList(list);
@@ -106,6 +103,7 @@ public class ImportDialog {
 		ImagePlus imp=null;
 		double min = Double.MAX_VALUE;
 		double max = -Double.MAX_VALUE;
+		int digits = 0;
 		for (int i=0; i<list.length; i++) {
 			if (list[i].startsWith("."))
 				continue;
@@ -115,14 +113,25 @@ public class ImportDialog {
 				IJ.log(list[i] + ": unable to open");
 			else {
 				if (stack==null)
-					stack = imp.createEmptyStack();	
+					stack = imp.createEmptyStack();
 				try {
-					ImageProcessor ip = imp.getProcessor();
-					if (ip.getMin()<min) min = ip.getMin();
-					if (ip.getMax()>max) max = ip.getMax();
-					stack.addSlice(list[i], ip);
-				}
-				catch(OutOfMemoryError e) {
+					ImageStack stack2 = imp.getStack();
+					int slices = stack2.getSize();
+					if (digits==0) {
+						digits = 2;
+						if (slices>99) digits=3;
+						if (slices>999) digits=4;
+						if (slices>9999) digits=5;
+					}
+					for (int n=1; n<=slices; n++) {
+						ImageProcessor ip = stack2.getProcessor(n);
+						if (ip.getMin()<min) min = ip.getMin();
+						if (ip.getMax()>max) max = ip.getMax();
+						String label = list[i];
+						if (slices>1) label += "-" + IJ.pad(n,digits);
+						stack.addSlice(label, ip);
+					}
+				} catch(OutOfMemoryError e) {
 					IJ.outOfMemory("OpenAll");
 					stack.trim();
 					break;
@@ -242,8 +251,6 @@ public class ImportDialog {
 			options |= WHITE_IS_ZERO;
 		if (intelByteOrder)
 			options |= INTEL_BYTE_ORDER;
-		//if (openAll)
-		//	options |= OPEN_ALL;
 		prefs.put(OPTIONS, Integer.toString(options));
 	}
 	

@@ -1,17 +1,11 @@
 package ij.plugin.filter;
-
-import ij.IJ;
-import ij.ImagePlus;
-import ij.WindowManager;
-import ij.gui.GenericDialog;
-import ij.measure.Measurements;
+import ij.*;
+import ij.process.*;
+import ij.gui.*;
+import ij.measure.*;
 import ij.plugin.ContrastEnhancer;
-import ij.process.ColorProcessor;
-import ij.process.FHT;
-import ij.process.FloatProcessor;
-import ij.process.ImageProcessor;
-
 import java.awt.*;
+import java.util.*;
 
 
 /** This class implements the Process/FFT/Custom Filter command. */

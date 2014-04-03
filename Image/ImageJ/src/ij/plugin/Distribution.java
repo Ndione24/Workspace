@@ -1,20 +1,13 @@
 package ij.plugin;
-
-import ij.IJ;
-import ij.ImagePlus;
-import ij.gui.GenericDialog;
-import ij.gui.HistogramWindow;
-import ij.measure.ResultsTable;
-import ij.process.FloatProcessor;
-import ij.process.ImageProcessor;
-import ij.process.ImageStatistics;
-import ij.process.StackStatistics;
+import ij.*;
+import ij.gui.*;
+import ij.process.*;
+import ij.plugin.PlugIn;
+import ij.measure.*;
 import ij.util.Tools;
-
+import java.util.*;
 import java.awt.*;
-import java.awt.event.TextEvent;
-import java.awt.event.TextListener;
-import java.util.StringTokenizer;
+import java.awt.event.*;
 import java.util.Vector;
 
 /**

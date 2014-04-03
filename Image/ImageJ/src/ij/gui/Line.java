@@ -1,18 +1,13 @@
 package ij.gui;
-
-import ij.IJ;
-import ij.ImagePlus;
-import ij.Prefs;
-import ij.WindowManager;
-import ij.measure.Calibration;
+import ij.*;
+import ij.process.*;
+import ij.measure.*;
 import ij.plugin.Straightener;
 import ij.plugin.frame.Recorder;
-import ij.process.FloatPolygon;
-import ij.process.ImageProcessor;
-
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
+import java.awt.image.*;
+import java.awt.event.*;
+import java.awt.geom.*;
 
 
 /** This class represents a straight line selection. */
@@ -375,9 +370,13 @@ public class Line extends Roi {
 			drawHandle(g, sx3-size2, sy3-size2);
 		}
 		if (state!=NORMAL)
-			IJ.showStatus(imp.getLocationAsString(x2,y2)+", angle=" + IJ.d2s(getAngle(x1,y1,x2,y2)) + ", length=" + IJ.d2s(getLength()));
+			IJ.showStatus(imp.getLocationAsString(x2,y2)+", angle=" + IJ.d2s(getAngle()) + ", length=" + IJ.d2s(getLength()));
 		if (updateFullWindow)
 			{updateFullWindow = false; imp.draw();}
+	}
+	
+	public double getAngle() {
+		return getFloatAngle(x1d, y1d, x2d, y2d);
 	}
 
 	/** Returns the length of this line. */

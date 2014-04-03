@@ -1,11 +1,6 @@
 package ij.plugin;
-
-import ij.IJ;
-import ij.ImagePlus;
-import ij.Prefs;
-import ij.WindowManager;
+import ij.*;
 import ij.gui.*;
-
 import java.awt.*;
 
 /** This plugin implements the rounded rectangle tool dialog box. */

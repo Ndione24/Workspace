@@ -1,8 +1,7 @@
 package ij.plugin.filter;
-
-import ij.ImagePlus;
-import ij.io.FileSaver;
-import ij.process.ImageProcessor;
+import ij.*;
+import ij.process.*;
+import ij.io.*;
 
 
 /** This plugin saves an image in tiff, gif, jpeg, bmp, png, text or raw format. */

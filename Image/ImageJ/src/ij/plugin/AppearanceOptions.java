@@ -1,14 +1,12 @@
 package ij.plugin;
-
 import ij.*;
-import ij.gui.DialogListener;
-import ij.gui.GenericDialog;
-import ij.gui.ImageWindow;
-import ij.gui.Toolbar;
-import ij.measure.Calibration;
+import ij.gui.*;
+import ij.process.*;
+import ij.io.*;
+import ij.plugin.filter.*;
+import ij.plugin.frame.LineWidthAdjuster;
 import ij.plugin.frame.ContrastAdjuster;
-import ij.process.LUT;
-
+import ij.measure.Calibration;
 import java.awt.*;
 
 /** This plugin implements the Edit/Options/Appearance command. */

@@ -1,12 +1,8 @@
 package ij.plugin;
-
-import ij.IJ;
-import ij.ImagePlus;
-import ij.ImageStack;
-import ij.WindowManager;
-import ij.gui.GenericDialog;
-import ij.process.ImageProcessor;
-import ij.process.StackProcessor;
+import ij.*;
+import ij.gui.*;
+import ij.process.*;
+import ij.plugin.*;
 
 /** The plugin implements the Image/Stacks/Tools/Montage to Stack command.
 	It creates a w*h image stack from an wxh image montage.

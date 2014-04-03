@@ -1,10 +1,11 @@
 package ij.process;
-
-import ij.IJ;
-import ij.ImageStack;
+import java.awt.*;
+import ij.*;
+import ij.process.*;
 import ij.macro.Interpreter;
-import ij.plugin.Filters3D;
 import ij.util.ArrayUtil;
+import ij.plugin.Filters3D;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 /** This class processes stacks. */

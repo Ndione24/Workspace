@@ -1,13 +1,11 @@
 package ij.plugin;
 
-import ij.IJ;
-import ij.ImagePlus;
-import ij.ImageStack;
-import ij.Prefs;
+import ij.*;
+import ij.process.*;
 import ij.gui.GenericDialog;
-import ij.process.StackProcessor;
 import ij.util.ThreadUtil;
-
+import ij.plugin.RGBStackMerge;
+import ij.gui.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /*

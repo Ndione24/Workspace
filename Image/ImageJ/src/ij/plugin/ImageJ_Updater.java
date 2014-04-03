@@ -1,16 +1,11 @@
 package ij.plugin;
-
-import ij.IJ;
-import ij.ImageJ;
-import ij.Menus;
-import ij.Prefs;
-import ij.gui.GenericDialog;
-
+import ij.*;
+import ij.gui.*;
+import ij.util.Tools;
 import java.io.*;
-import java.lang.reflect.Field;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.Vector;
+import java.net.*;
+import java.util.*;
+import java.lang.reflect.*;
 
 
 /** This plugin implements the Help/Update ImageJ command. */
@@ -85,7 +80,7 @@ public class ImageJ_Updater implements PlugIn {
 		GenericDialog gd = new GenericDialog("ImageJ Updater");
 		gd.addChoice("Upgrade To:", versions, versions[0]);
 		String msg = 
-			"You are currently running v"+version()+".\n"+
+			"You are currently running v"+ImageJ.VERSION+ImageJ.BUILD+".\n"+
 			" \n"+
 			"If you click \"OK\", ImageJ will quit\n"+
 			"and you will be running the upgraded\n"+
@@ -213,15 +208,17 @@ public class ImageJ_Updater implements PlugIn {
 
 	// Use reflection to get version since early versions
 	// of ImageJ do not have the IJ.getVersion() method.
+	/*
 	String version() {
 		String version = "";
 		try {
 			Class ijClass = ImageJ.class;
 			Field field = ijClass.getField("VERSION");
 			version = (String)field.get(ijClass);
-		}catch (Exception ex) {}
+		} catch (Exception ex) {}
 		return version;
 	}
+	*/
 
 	boolean isMac() {
 		String osname = System.getProperty("os.name");

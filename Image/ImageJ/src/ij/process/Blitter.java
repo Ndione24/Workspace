@@ -1,6 +1,5 @@
 package ij.process;
-
-import java.awt.*;
+import java.awt.Color;
 
 /** ImageJ bit blitting classes must implement this interface. */
 public interface Blitter {

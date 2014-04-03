@@ -4,7 +4,7 @@ package tp5;
  * Masque de convolution (carre).
  * Les coordonnees des elements du masque vont de -rayon a +rayon.
  */
-public class Masque {
+class Masque {
     private double[] contenu;
     private int rayon;
     private int largeur;
@@ -28,7 +28,7 @@ public class Masque {
      * @param rayon           Rayon du masque de convolution.
      * @param valeurParDefaut Valeur a mettre dans chaque element.
      */
-    public Masque(int rayon, double valeurParDefaut) {
+    private Masque(int rayon, double valeurParDefaut) {
         if (rayon < 1)
             throw new IllegalArgumentException("Le rayon doit etre >= 1");
 

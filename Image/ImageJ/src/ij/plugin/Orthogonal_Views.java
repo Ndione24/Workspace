@@ -1,17 +1,13 @@
 package ij.plugin;
-
 import ij.*;
-import ij.gui.ImageCanvas;
-import ij.gui.ImageWindow;
-import ij.gui.Roi;
-import ij.gui.ScrollbarWithLabel;
-import ij.measure.Calibration;
+import ij.gui.*;
+import ij.measure.*;
 import ij.process.*;
-
 import java.awt.*;
+import java.awt.image.*;
 import java.awt.event.*;
-import java.awt.geom.GeneralPath;
-import java.awt.image.ColorModel;
+import java.awt.geom.*;
+import java.util.*;
  
 /**
  * This plugin projects dynamically orthogonal XZ and YZ views of a stack. 

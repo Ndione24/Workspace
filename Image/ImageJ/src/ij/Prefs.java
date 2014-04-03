@@ -1,24 +1,21 @@
 package ij;
-
-import ij.gui.*;
-import ij.io.FileSaver;
-import ij.io.ImportDialog;
-import ij.io.OpenDialog;
-import ij.plugin.Animator;
-import ij.plugin.filter.Analyzer;
-import ij.plugin.filter.Filters;
-import ij.plugin.filter.ParticleAnalyzer;
-import ij.process.ColorProcessor;
-import ij.process.FloatBlitter;
-import ij.text.TextWindow;
-import ij.util.Tools;
-
-import java.applet.Applet;
-import java.awt.*;
+import ij.util.Java2;
 import java.io.*;
+import java.util.*;
+import java.applet.*;
 import java.net.URL;
-import java.util.Enumeration;
-import java.util.Properties;
+import java.awt.*;
+import java.applet.Applet;
+import ij.io.*;
+import ij.util.Tools;
+import ij.gui.*;
+import ij.plugin.filter.*;
+import ij.process.ImageConverter;
+import ij.plugin.Animator;
+import ij.process.FloatBlitter;
+import ij.plugin.GelAnalyzer;
+import ij.process.ColorProcessor;
+import ij.text.TextWindow;
 
 /**
 This class contains the ImageJ preferences, which are 
@@ -576,7 +573,11 @@ public class Prefs {
 		double yloc = Tools.parseDouble(value.substring(index+1));
 		if (Double.isNaN(yloc)) return null;
 		Point p = new Point((int)xloc, (int)yloc);
-		Dimension screen = IJ.getScreenSize();
+		Dimension screen = null;
+		if (IJ.debugMode)
+			screen = Toolkit.getDefaultToolkit().getScreenSize();
+		else
+			screen = IJ.getScreenSize();
 		if (p.x>screen.width-100 || p.y>screen.height-40)
 			return null;
 		else

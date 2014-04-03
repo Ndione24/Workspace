@@ -1,6 +1,7 @@
 package ij.process;
-
-import java.awt.*;
+import ij.*;
+import ij.gui.Toolbar;
+import java.awt.Rectangle;
 
 
 /**	This class, which does flood filling, is used by the floodFill() macro function and

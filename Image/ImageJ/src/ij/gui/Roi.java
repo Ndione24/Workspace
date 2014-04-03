@@ -1,27 +1,19 @@
 package ij.gui;
-
 import ij.*;
-import ij.macro.Interpreter;
-import ij.measure.Calibration;
-import ij.plugin.RectToolOptions;
-import ij.plugin.filter.ThresholdToSelection;
+import ij.process.*;
+import ij.measure.*;
 import ij.plugin.frame.Recorder;
-import ij.process.Blitter;
-import ij.process.FloatPolygon;
-import ij.process.ImageProcessor;
-
+import ij.plugin.filter.Analyzer;
+import ij.plugin.filter.ThresholdToSelection;
+import ij.plugin.RectToolOptions;
+import ij.macro.Interpreter;
+import ij.io.RoiDecoder;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Rectangle2D;
-import java.awt.geom.RoundRectangle2D;
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.Properties;
-import java.util.Vector;
+import java.util.*;
+import java.io.*;
+import java.awt.image.*;
+import java.awt.event.*;
+import java.awt.geom.*;
 
 /** A rectangular region of interest and superclass for the other ROI classes. */
 public class Roi extends Object implements Cloneable, java.io.Serializable {
@@ -670,7 +662,6 @@ public class Roi extends Object implements Cloneable, java.io.Serializable {
 				y=y2=yc;
 			}
 			bounds = null;
-
 		}
 		
 		if (constrain) {
@@ -763,13 +754,14 @@ public class Roi extends Object implements Cloneable, java.io.Serializable {
 				if(height<1) height =1;
 				width=(int)Math.rint((double)height*asp_bk);
 			}
-			
 		}
 		
 		updateClipRect();
 		imp.draw(clipX, clipY, clipWidth, clipHeight);
 		oldX=x; oldY=y;
 		oldWidth=width; oldHeight=height;
+		bounds = null;
+		subPixel = false;
 	}
 
 	void move(int sx, int sy) {
@@ -793,6 +785,8 @@ public class Roi extends Object implements Cloneable, java.io.Serializable {
 		}
 		startX = xNew;
 		startY = yNew;
+		if ((this instanceof TextRoi) && ((TextRoi)this).getAngle()!=0.0)
+			ignoreClipRect = true;
 		updateClipRect();
 		if ((lineWidth>1 && isLine()) || ignoreClipRect || ((this instanceof PolygonRoi)&&((PolygonRoi)this).isSplineFit()))
 			imp.draw();
@@ -922,7 +916,7 @@ public class Roi extends Object implements Cloneable, java.io.Serializable {
 	public void draw(Graphics g) {
 		Color color =  strokeColor!=null? strokeColor:ROIColor;
 		if (fillColor!=null) color = fillColor;
-		if (Interpreter.isBatchMode() && ic!=null && ic.getDisplayList()!=null && strokeColor==null && fillColor==null)
+		if (Interpreter.isBatchMode() && imp!=null && imp.getOverlay()!=null && strokeColor==null && fillColor==null)
 			return;
 		g.setColor(color);
 		mag = getMagnification();
@@ -955,8 +949,12 @@ public class Roi extends Object implements Cloneable, java.io.Serializable {
 				if (!overlay && isActiveOverlayRoi()) {
 					g.setColor(Color.cyan);
 					g.drawRect(sx1, sy1, sw, sh);
-				} else
-					g.fillRect(sx1, sy1, sw, sh);
+				} else {
+					if (!(this instanceof TextRoi))
+						g.fillRect(sx1, sy1, sw, sh);
+					else
+						g.drawRect(sx1, sy1, sw, sh);
+				}
 			} else
 				g.drawRect(sx1, sy1, sw, sh);
 		}
@@ -1064,10 +1062,14 @@ public class Roi extends Object implements Cloneable, java.io.Serializable {
 		double mag = ic.getMagnification();
 		int size = HANDLE_SIZE+3;
 		int halfSize = size/2;
-		int sx1 = ic.screenX(x) - halfSize;
-		int sy1 = ic.screenY(y) - halfSize;
-		int sx3 = ic.screenX(x+width) - halfSize;
-		int sy3 = ic.screenY(y+height) - halfSize;
+		double x = getXBase();
+		double y = getYBase();
+		double width = getFloatWidth();
+		double height = getFloatHeight();
+		int sx1 = ic.screenXD(x) - halfSize;
+		int sy1 = ic.screenYD(y) - halfSize;
+		int sx3 = ic.screenXD(x+width) - halfSize;
+		int sy3 = ic.screenYD(y+height) - halfSize;
 		int sx2 = sx1 + (sx3 - sx1)/2;
 		int sy2 = sy1 + (sy3 - sy1)/2;
 		if (sx>=sx1&&sx<=sx1+size&&sy>=sy1&&sy<=sy1+size) return 0;
@@ -1793,8 +1795,39 @@ public class Roi extends Object implements Cloneable, java.io.Serializable {
 			return y;
 	}
 	
+	public double getFloatWidth() {
+		if (bounds!=null)
+			return bounds.width;
+		else
+			return width;
+	}
+
+	public double getFloatHeight() {
+		if (bounds!=null)
+			return bounds.height;
+		else
+			return height;
+	}
+	
+	/** Overridden by PolygonRoi (angle between first two points), TextRoi (text angle) and Line (line angle). */
+	public double getAngle() {
+		return 0.0;
+	}
+	
+	public void enableSubPixelResolution() {
+		bounds = new Rectangle2D.Double(getXBase(), getYBase(), getFloatWidth(), getFloatHeight());
+		subPixel = true;
+	}
+
 	public String getDebugInfo() {
 		return "";
+	}
+
+	/** Returns a hashcode for this Roi that typically changes 
+		if it is moved,  even though it is still the same object. */
+	public int getHashCode() {
+		return hashCode() ^ (new Double(getXBase()).hashCode()) ^
+			Integer.rotateRight(new Double(getYBase()).hashCode(),16);
 	}
 
 }

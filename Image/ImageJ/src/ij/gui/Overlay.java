@@ -1,8 +1,9 @@
 package ij.gui;
-
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
 import java.util.Vector;
+import java.awt.geom.Rectangle2D;
+import ij.*;
+import ij.process.ImageProcessor;
 
 /** An Overlay is a list of Rois that can be drawn non-destructively on an Image. */
 public class Overlay {
@@ -12,6 +13,7 @@ public class Overlay {
     private boolean drawBackgrounds;
     private Color labelColor;
     private Font labelFont;
+    private boolean isCalibrationBar;
     
     /** Constructs an empty Overlay. */
     public Overlay() {
@@ -156,6 +158,8 @@ public class Overlay {
 		Roi[] allRois = toArray();
 		for (Roi roi: allRois) {
 			Rectangle roiBounds = roi.getBounds();
+			if (roiBounds.width==0) roiBounds.width=1;
+			if (roiBounds.height==0) roiBounds.height=1;
 			if (bounds.intersects(roiBounds))
 				overlay2.add((Roi)roi.clone());
 		}
@@ -305,6 +309,14 @@ public class Overlay {
     	//if (labelFont==null && labelFontSize!=0)
     	//	labelFont = new Font("SansSerif", Font.PLAIN, labelFontSize);
     	return labelFont;
+    }
+
+    public void setIsCalibrationBar(boolean b) {
+    	this.isCalibrationBar = b;
+    }
+    
+    public boolean isCalibrationBar() {
+    	return isCalibrationBar;
     }
 
     void setVector(Vector v) {list = v;}

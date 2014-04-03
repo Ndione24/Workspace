@@ -1,12 +1,8 @@
 package ij.plugin;
-
 import ij.*;
-import ij.gui.GenericDialog;
-import ij.gui.Overlay;
-import ij.gui.TextRoi;
-import ij.process.ImageProcessor;
+import ij.gui.*;
 import ij.util.Tools;
-
+import ij.process.*;
 import java.awt.*;
 
 /** This plugin implements the File/New/Hyperstack command. */

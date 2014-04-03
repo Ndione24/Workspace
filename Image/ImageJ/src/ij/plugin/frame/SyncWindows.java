@@ -1,14 +1,10 @@
 package ij.plugin.frame;
-
 import ij.*;
 import ij.gui.*;
 import ij.measure.Calibration;
-
 import java.awt.*;
 import java.awt.event.*;
-import java.util.EventListener;
-import java.util.EventObject;
-import java.util.Vector;
+import java.util.*;
 
 
 /** This class "synchronizes" mouse input in multiple windows. Once

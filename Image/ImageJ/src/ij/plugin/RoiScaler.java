@@ -1,13 +1,9 @@
 package ij.plugin;
-
-import ij.IJ;
-import ij.ImagePlus;
-import ij.Undo;
+import ij.*;
+import ij.process.*;
 import ij.gui.*;
-import ij.process.FloatPolygon;
-
 import java.awt.*;
-import java.awt.geom.AffineTransform;
+import java.awt.geom.*;
 
 /** This plugin implements the Edit/Selection/Scale command. */
 public class RoiScaler implements PlugIn {

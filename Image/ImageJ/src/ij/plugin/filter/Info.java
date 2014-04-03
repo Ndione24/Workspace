@@ -1,20 +1,15 @@
 package ij.plugin.filter;
-
-import ij.CompositeImage;
-import ij.IJ;
-import ij.ImagePlus;
-import ij.ImageStack;
+import ij.*;
 import ij.gui.*;
-import ij.io.FileInfo;
-import ij.measure.Calibration;
-import ij.measure.CurveFitter;
-import ij.process.ImageProcessor;
-import ij.process.LUT;
-import ij.text.TextWindow;
+import ij.process.*;
+import ij.measure.*;
+import ij.io.*;
 import ij.util.Tools;
-
+import ij.plugin.frame.Editor;
+import ij.text.TextWindow;
 import java.awt.*;
-import java.lang.reflect.Method;
+import java.util.*;
+import java.lang.reflect.*;
 
 /** This plugin implements the Image/Show Info command. */
 public class Info implements PlugInFilter {
@@ -258,13 +253,20 @@ public class Info implements PlugInFilter {
 			else if (fi.directory!=null && fi.fileName!=null)
 				s += "Path: " + fi.directory + fi.fileName + "\n";
 		}
+		
+		ImageWindow win = imp.getWindow();
+		if (win!=null) {
+			Point loc = win.getLocation();
+			Dimension screen = IJ.getScreenSize();
+			s += "Screen location: "+loc.x+","+loc.y+" ("+screen.width+"x"+screen.height+")\n";
+		}
 	    
 	    Overlay overlay = imp.getOverlay();
 		if (overlay!=null) {
-			String hidden = imp.getHideOverlay()?" (hidden) ":" ";
+			String hidden = imp.getHideOverlay()?" (hidden)":" ";
 			int n = overlay.size();
-			String items = n==1?" item\n":" items\n";
-			s += "Overlay" + hidden + "has " + n + items;
+			String elements = n==1?" element":" elements";
+			s += "Overlay: " + n + elements + (imp.getHideOverlay()?" (hidden)":"") + "\n";
 		} else
 	    	s += "No Overlay\n";
 

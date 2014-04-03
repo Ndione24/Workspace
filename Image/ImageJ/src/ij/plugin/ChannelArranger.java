@@ -1,16 +1,11 @@
 package ij.plugin;
-
-import ij.CompositeImage;
-import ij.IJ;
-import ij.ImageJ;
-import ij.ImagePlus;
-import ij.gui.GenericDialog;
-import ij.gui.ImageWindow;
-import ij.process.ImageProcessor;
-
+import ij.*;
+import ij.process.*;
+import ij.gui.*;
 import java.awt.*;
-import java.awt.event.*;
+import ij.plugin.ChannelSplitter;
 import java.awt.image.BufferedImage;
+import java.awt.event.*;
 import java.util.Vector;
 
 /**
@@ -77,7 +72,7 @@ public class ChannelArranger implements PlugIn, TextListener {
 			imp2 = channels2[0];
 		else
 			imp2 = RGBStackMerge.mergeChannels(channels2, false);
-		int mode2 = CompositeImage.COLOR;
+		int mode2 = IJ.COLOR;
 		if (imp.isComposite())
 			mode2 = ((CompositeImage)imp).getMode();
 		if (imp2.isComposite())
@@ -188,8 +183,8 @@ class ThumbnailsCanvas extends Canvas implements MouseListener, MouseMotionListe
 			return;
 		}
 		int savedMode = cImp.getMode();
-		if (savedMode==CompositeImage.COMPOSITE)
-			cImp.setMode(CompositeImage.COLOR);
+		if (savedMode==IJ.COMPOSITE)
+			cImp.setMode(IJ.COLOR);
 		BufferedImage bImg;
 		ImageProcessor ipSmall;
 
@@ -231,7 +226,7 @@ class ThumbnailsCanvas extends Canvas implements MouseListener, MouseMotionListe
 			return;
 		}
 		g.drawImage(os, 0, 0, this);
-		if (savedMode==CompositeImage.COMPOSITE)
+		if (savedMode==IJ.COMPOSITE)
 			cImp.setMode(savedMode);
 		cImp.setPosition(currentChannel, currentSlice, currentFrame);
 		cImp.updateImage();

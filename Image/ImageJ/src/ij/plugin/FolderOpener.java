@@ -1,22 +1,14 @@
 package ij.plugin;
-
-import ij.*;
-import ij.gui.GenericDialog;
-import ij.gui.Overlay;
-import ij.gui.Roi;
-import ij.io.FileInfo;
-import ij.io.OpenDialog;
-import ij.io.Opener;
-import ij.measure.Calibration;
-import ij.process.ImageProcessor;
-import ij.util.DicomTools;
-import ij.util.StringSorter;
-
 import java.awt.*;
-import java.awt.event.ItemEvent;
-import java.awt.event.TextEvent;
+import java.io.*;
+import java.awt.event.*;
 import java.awt.image.ColorModel;
-import java.io.File;
+import ij.*;
+import ij.io.*;
+import ij.gui.*;
+import ij.process.*;
+import ij.measure.Calibration;
+import ij.util.*;
 
 /** Implements the File/Import/Image Sequence command, which
 	opens a folder of images as a stack. */
@@ -373,6 +365,7 @@ public class FolderOpener implements PlugIn {
 		gd.addCheckbox("Use virtual stack", openAsVirtualStack);
 		gd.addMessage("10000 x 10000 x 1000 (100.3MB)");
 		gd.addHelp(IJ.URL+"/docs/menus/file.html#seq1");
+		gd.setSmartRecording(true);
 		gd.showDialog();
 		if (gd.wasCanceled())
 			return false;

@@ -1,11 +1,7 @@
 package ij.util;
-
-import ij.IJ;
-import ij.ImagePlus;
-import ij.ImageStack;
-import ij.VirtualStack;
+import ij.*;
+import ij.process.*;
 import ij.plugin.DICOM;
-import ij.process.ImageProcessor;
 
 /** DICOM utilities */
 public class DicomTools {

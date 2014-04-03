@@ -1,19 +1,12 @@
 package ij.io;
-
-import ij.IJ;
-import ij.process.ColorProcessor;
-import ij.process.ImageProcessor;
-
-import javax.imageio.ImageIO;
+import ij.*;
+import ij.process.*;
+import java.io.*;
+import java.net.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.zip.DataFormatException;
+import javax.imageio.ImageIO;
 import java.util.zip.Inflater;
+import java.util.zip.DataFormatException;
 
 
 /** Reads raw 8-bit, 16-bit or 32-bit (float or RGB)

@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
-public class IGImage extends JFrame {
+class IGImage extends JFrame {
 
     public IGImage(String title, JPanel panel) {
         super(title);

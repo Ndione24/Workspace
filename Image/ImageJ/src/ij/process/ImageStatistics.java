@@ -1,8 +1,5 @@
 package ij.process;
-
-import ij.measure.Calibration;
-import ij.measure.Measurements;
-
+import ij.measure.*;
 import java.awt.*;
 
 /** Statistics, including the histogram, of an image or selection. */
@@ -240,8 +237,8 @@ public class ImageStatistics implements Measurements {
 	void calculateAreaFraction(ImageProcessor ip, int[] hist) {
 		int sum = 0;
 		int total = 0;
-		int t1 = (int)ip.getMinThreshold();
-		int t2 = (int)ip.getMaxThreshold();
+		int t1 = (int)Math.round(ip.getMinThreshold());
+		int t2 = (int)Math.round(ip.getMaxThreshold());
 		if (t1==ImageProcessor.NO_THRESHOLD) {
 			for (int i=0; i<hist.length; i++)
 				total += hist[i];

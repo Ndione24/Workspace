@@ -1,10 +1,9 @@
 package ij.plugin;
-
 import ij.*;
-import ij.gui.GenericDialog;
-import ij.gui.Roi;
-import ij.measure.Measurements;
 import ij.process.*;
+import ij.gui.*;
+import ij.measure.*;
+import java.awt.*;
 
 /** Implements ImageJ's Process/Enhance Contrast command. */
 public class ContrastEnhancer implements PlugIn, Measurements {
@@ -349,4 +348,16 @@ public class ContrastEnhancer implements PlugIn, Measurements {
 		return Math.sqrt((double)(h));
 	}
 	
+	public void setNormalize(boolean normalize) {
+		this.normalize = normalize;
+	}
+	
+	public void setProcessStack(boolean processStack) {
+		this.processStack = processStack;
+	}
+
+	public void setUseStackHistogram(boolean useStackHistogram) {
+		this.useStackHistogram = useStackHistogram;
+	}
+
 }

@@ -1,18 +1,10 @@
 package ij.plugin;
-
-import ij.IJ;
-import ij.ImagePlus;
-import ij.ImageStack;
-import ij.Undo;
-import ij.gui.GenericDialog;
+import ij.*;
+import ij.process.*;
+import ij.gui.*;
 import ij.measure.Calibration;
-import ij.process.ByteProcessor;
-import ij.process.ColorProcessor;
-import ij.process.FloatProcessor;
-import ij.process.ImageProcessor;
-
 import java.awt.*;
-import java.awt.image.ColorModel;
+import java.awt.image.*;
 
 /** This plugin implements the Image/Transform/Bin command.
  * It reduces the size of an image or stack by binning groups of 

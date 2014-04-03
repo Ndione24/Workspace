@@ -7,7 +7,7 @@ import tp4.Image;
 import javax.swing.*;
 import java.awt.*;
 
-public class PanelImage extends JPanel {
+class PanelImage extends JPanel {
 
     public PanelImage(ImagePlus imp, ImagePlus imp2) {
         BorderLayout mainLayout = new BorderLayout();

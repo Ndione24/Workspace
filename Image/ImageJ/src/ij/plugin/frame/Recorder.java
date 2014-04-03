@@ -1,22 +1,17 @@
 package ij.plugin.frame;
-
-import ij.*;
-import ij.gui.GUI;
-import ij.gui.Roi;
-import ij.gui.TextRoi;
-import ij.gui.Toolbar;
-import ij.measure.CurveFitter;
-import ij.plugin.NewPlugin;
-import ij.plugin.PlugIn;
-import ij.util.Tools;
-
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.util.Locale;
-import java.util.StringTokenizer;
+import java.awt.event.*;
+import java.util.*;
+import java.io.*;
+import ij.*;
+import ij.plugin.*;
+import ij.plugin.frame.*; 
+import ij.text.*;
+import ij.gui.*;
+import ij.util.*;
+import ij.io.*;
+import ij.process.*;
+import ij.measure.*;
 
 /** This is ImageJ's macro recorder. */
 public class Recorder extends PlugInFrame implements PlugIn, ActionListener, ImageListener, ItemListener {
@@ -449,11 +444,11 @@ public class Recorder extends PlugInFrame implements PlugIn, ActionListener, Ima
 					textArea.append("doCommand(\"Start Animation [\\\\]\");\n");
 				else if (name.equals("Add to Manager "))
 					;
-				else if (name.equals("Draw")&&!scriptMode) {
+				else if (name.equals("Draw") || name.equals("Add Selection...") ) {
 					ImagePlus imp = WindowManager.getCurrentImage();
-					Roi roi = imp.getRoi();
+					Roi roi = imp!=null?imp.getRoi():null;
 					if (roi!=null && (roi instanceof TextRoi))
-						textArea.append(((TextRoi)roi).getMacroCode(imp.getProcessor()));
+						textArea.append(((TextRoi)roi).getMacroCode(name, imp));
 					else
 						textArea.append("run(\""+name+"\");\n");
 				} else {
@@ -582,8 +577,12 @@ public class Recorder extends PlugInFrame implements PlugIn, ActionListener, Ima
 				+ "if (rm==null) rm = new RoiManager();\n"
 				+ text;
 			}
-			if (text.indexOf("imp =")==-1 && text.indexOf("IJ.openImage")==-1 && text.indexOf("IJ.createImage")==-1)
+			if (text.contains("overlay.add"))
+				text = (java?"Overlay ":"") + "overlay = new Overlay();\n" + text;
+			if ((text.contains("imp.")||text.contains("overlay.add")) && !text.contains("IJ.openImage") && !text.contains("IJ.createImage"))
 				text = (java?"ImagePlus ":"") + "imp = IJ.getImage();\n" + text;
+			if (text.contains("overlay.add"))
+				text = text + "imp.setOverlay(overlay);\n";
 			if (text.indexOf("imp =")!=-1 && !(text.indexOf("IJ.getImage")!=-1||text.indexOf("IJ.saveAs")!=-1||text.indexOf("imp.close")!=-1))
 				text = text + "imp.show();\n";
 			if (java) {

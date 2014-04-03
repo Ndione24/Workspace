@@ -1,11 +1,9 @@
 package ij.plugin;
-
-import ij.IJ;
-import ij.ImagePlus;
-import ij.Prefs;
+import ij.*;
+import ij.process.*;
 import ij.gui.*;
-
 import java.awt.*;
+import java.awt.event.*;
 
 /** Implements the Analyze/Plot Profile and Edit/Options/Profile Plot Options commands. */
 public class Profiler implements PlugIn, PlotMaker {

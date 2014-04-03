@@ -1,16 +1,11 @@
 package ij.plugin;
-
 import ij.*;
-import ij.io.FileInfo;
-import ij.io.OpenDialog;
-import ij.process.ByteProcessor;
-import ij.process.ImageProcessor;
-import ij.process.LUT;
-
+import ij.io.*;
+import ij.process.*;
 import java.awt.*;
-import java.awt.image.IndexColorModel;
 import java.io.*;
-import java.net.URL;
+import java.awt.image.*;
+import java.net.*;
 
 /** Opens NIH Image look-up tables (LUTs), 768 byte binary LUTs
 	(256 reds, 256 greens and 256 blues), LUTs in text format, 
@@ -80,9 +75,9 @@ public class LutLoader extends ImagePlus implements PlugIn {
 		if (imp!=null) {
 			if (imp.getType()==ImagePlus.COLOR_RGB)
 				IJ.error("LUTs cannot be assiged to RGB Images.");
-			else if (imp.isComposite() && ((CompositeImage)imp).getMode()==CompositeImage.GRAYSCALE) {
+			else if (imp.isComposite() && ((CompositeImage)imp).getMode()==IJ.GRAYSCALE) {
 				CompositeImage cimp = (CompositeImage)imp;
-				cimp.setMode(CompositeImage.COLOR);
+				cimp.setMode(IJ.COLOR);
 				int saveC = cimp.getChannel();
 				IndexColorModel cm = new IndexColorModel(8, 256, fi.reds, fi.greens, fi.blues);
 				for (int c=1; c<=cimp.getNChannels(); c++) {

@@ -1,22 +1,15 @@
 package ij.io;
-
-import ij.*;
-import ij.gui.GenericDialog;
-import ij.gui.Overlay;
-import ij.gui.ProgressBar;
-import ij.gui.Roi;
-import ij.measure.Calibration;
-import ij.process.*;
-
 import java.awt.*;
-import java.awt.image.ColorModel;
-import java.awt.image.IndexColorModel;
-import java.awt.image.MemoryImageSource;
+import java.awt.image.*;
 import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Properties;
+import java.net.*;
+import java.util.*;
 import java.util.zip.GZIPInputStream;
+import ij.gui.*;
+import ij.process.*;
+import ij.measure.*;
+import ij.*;
+import ij.plugin.frame.ThresholdAdjuster;
 
 /**
  * Opens or reverts an image specified by a FileInfo object. Images can
@@ -125,12 +118,12 @@ public class FileOpener {
         		if (planar)
         			imp.getProcessor().resetMinAndMax();
 				imp.setFileInfo(fi);
-				int mode = CompositeImage.COMPOSITE;
+				int mode = IJ.COMPOSITE;
 				if (fi.description!=null) {
 					if (fi.description.indexOf("mode=color")!=-1)
-					mode = CompositeImage.COLOR;
+					mode = IJ.COLOR;
 					else if (fi.description.indexOf("mode=gray")!=-1)
-					mode = CompositeImage.GRAYSCALE;
+					mode = IJ.GRAYSCALE;
 				}
         		imp = new CompositeImage(imp, mode);
         		if (!planar && fi.displayRanges==null) {
@@ -542,8 +535,9 @@ public class FileOpener {
 		n = getNumber(props,"images");
 		if (n!=null && n.doubleValue()>1.0)
 		fi.nImages = (int)n.doubleValue();
-		double spacing = getDouble(props,"spacing");
-		if (spacing!=0.0) {
+		n = getNumber(props, "spacing");
+		if (n!=null) {
+			double spacing = n.doubleValue();
 			if (spacing<0) spacing = -spacing;
 			fi.pixelDepth = spacing;
 		}

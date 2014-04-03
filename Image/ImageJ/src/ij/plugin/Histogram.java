@@ -1,25 +1,13 @@
 package ij.plugin;
-
-import ij.IJ;
-import ij.ImagePlus;
-import ij.ImageStack;
-import ij.Macro;
-import ij.gui.GenericDialog;
-import ij.gui.HistogramWindow;
-import ij.gui.ImageWindow;
-import ij.gui.YesNoCancelDialog;
-import ij.measure.Calibration;
+import ij.*;
+import ij.process.*;
+import ij.gui.*;
+import ij.util.Tools;
 import ij.plugin.filter.PlugInFilter;
 import ij.plugin.frame.Recorder;
-import ij.process.ImageProcessor;
-import ij.process.ImageStatistics;
-import ij.process.StackStatistics;
-import ij.util.Tools;
-
+import ij.measure.Calibration;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.TextEvent;
-import java.awt.event.TextListener;
+import java.awt.event.*;
 import java.util.Vector;
 
 
@@ -79,7 +67,7 @@ public class Histogram implements PlugIn, TextListener {
  		}
  		int iyMax = (int)Tools.parseDouble(yMax, 0.0);
  		boolean customHistogram = (bitDepth==8||bitDepth==24) && (!(xMin==0.0&&xMax==0.0)||nBins!=256||iyMax>0);
- 		ImageWindow.centerNextImage();
+		ImageWindow.centerNextImage();
  		if (stackHistogram || customHistogram) {
  			ImagePlus imp2 = imp;
  			if (customHistogram && !stackHistogram && imp.getStackSize()>1)

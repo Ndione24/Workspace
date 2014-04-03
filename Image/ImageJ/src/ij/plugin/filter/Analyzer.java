@@ -1,21 +1,16 @@
 package ij.plugin.filter;
-
+import java.awt.*;
+import java.util.Vector;
+import java.util.Properties;
 import ij.*;
 import ij.gui.*;
-import ij.macro.Interpreter;
-import ij.measure.Calibration;
-import ij.measure.Measurements;
-import ij.measure.ResultsTable;
+import ij.process.*;
+import ij.measure.*;
+import ij.text.*;
 import ij.plugin.MeasurementsWriter;
 import ij.plugin.Straightener;
-import ij.process.FloatPolygon;
-import ij.process.FloatProcessor;
-import ij.process.ImageProcessor;
-import ij.process.ImageStatistics;
-import ij.text.TextPanel;
-
-import java.awt.*;
-import java.util.Properties;
+import ij.util.Tools;
+import ij.macro.Interpreter;
 
 /** This plugin implements ImageJ's Analyze/Measure and Analyze/Set Measurements commands. */
 public class Analyzer implements PlugInFilter, Measurements {
@@ -562,7 +557,8 @@ public class Analyzer implements PlugInFilter, Measurements {
 				if (index<0 || !rt.columnExists(index)) update=true;
 				rt.addValue("Slice", imp!=null?imp.getCurrentSlice():1.0);
 			}
-			if (update && rt==systemRT) rt.update(measurements, imp, roi);
+			if (update && rt==systemRT && IJ.isResultsWindow())
+				rt.update(measurements, imp, roi);
 		}
 		if (roi!=null) {
 			if (roi.isLine()) {

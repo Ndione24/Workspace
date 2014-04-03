@@ -1,16 +1,8 @@
 package ij.plugin.frame;
-
-import ij.IJ;
-import ij.ImageJ;
-import ij.Menus;
-import ij.WindowManager;
-import ij.plugin.PlugIn;
-
 import java.awt.*;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import java.awt.event.*;
+import ij.*;
+import ij.plugin.*;
 
 /**  This is a closeable window that plugins can extend. */
 public class PlugInFrame extends Frame implements PlugIn, WindowListener, FocusListener {

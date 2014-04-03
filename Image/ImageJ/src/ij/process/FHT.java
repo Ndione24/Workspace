@@ -1,11 +1,7 @@
 package ij.process;
-
-import ij.IJ;
-import ij.ImagePlus;
-import ij.ImageStack;
-import ij.plugin.ContrastEnhancer;
+import ij.*;
 import ij.plugin.FFT;
-
+import ij.plugin.ContrastEnhancer;
 import java.awt.image.ColorModel; 
 
 /**

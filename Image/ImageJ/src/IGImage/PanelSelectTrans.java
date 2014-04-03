@@ -2,8 +2,9 @@ package IGImage;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
-public class PanelSelectTrans extends JPanel {
+class PanelSelectTrans extends JPanel {
 
     public PanelSelectTrans() {
         setLayout(new FlowLayout());
@@ -13,14 +14,14 @@ public class PanelSelectTrans extends JPanel {
         bEgalisation = new JButton("Egalisation");
         bBinarisation = new JButton("Binarisation");
         bOTSU = new JButton("Otsu");
-
+        add(new JLabel("Transformation"));
         add(bGris);
         add(bNormalisation);
         add(bEgalisation);
         add(bBinarisation);
         add(bOTSU);
 
-        AuditeurSelectTrans auditeur = new AuditeurSelectTrans();
+        ActionListener auditeur = new AuditeurTrans();
         bGris.addActionListener(auditeur);
         bNormalisation.addActionListener(auditeur);
         bEgalisation.addActionListener(auditeur);

@@ -1,18 +1,14 @@
 package ij.gui;
-
-import ij.*;
-import ij.macro.Interpreter;
-import ij.macro.MacroRunner;
-import ij.plugin.ScreenGrabber;
-import ij.plugin.filter.PlugInFilterRunner;
-import ij.plugin.frame.Recorder;
-import ij.util.Tools;
-
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Hashtable;
-import java.util.Locale;
-import java.util.Vector;
+import java.util.*;
+import ij.*;
+import ij.plugin.frame.Recorder;
+import ij.plugin.ScreenGrabber;
+import ij.plugin.filter.PlugInFilter;
+import ij.plugin.filter.PlugInFilterRunner;
+import ij.util.Tools;
+import ij.macro.*;
 
 
 /**
@@ -45,9 +41,9 @@ public class GenericDialog extends Dialog implements ActionListener, TextListene
 FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 
 	public static final int MAX_SLIDERS = 25;
-	protected Vector numberField, stringField, checkbox, choice, slider, radioButtonGroup;
+	protected Vector numberField, stringField, checkbox, choice, slider, radioButtonGroups;
 	protected TextArea textArea1, textArea2;
-	protected Vector defaultValues,defaultText;
+	protected Vector defaultValues,defaultText,defaultStrings;
 	protected Component theLabel;
 	private Button cancel, okay, no, help;
 	private String okLabel = "  OK  ";
@@ -82,6 +78,7 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
     private boolean centerDialog = true;
     private String helpURL;
     private String yesLabel, noLabel;
+    private boolean smartRecording;
 
     /** Creates a new GenericDialog with the specified title. Uses the current image
     	image window as the parent frame or the ImageJ frame if no image windows
@@ -227,6 +224,7 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 		boolean custom = customInsets;
 		if (stringField==null) {
 			stringField = new Vector(4);
+			defaultStrings = new Vector(4);
 			c.insets = getInsets(5, 0, 5, 0);
 		} else
 			c.insets = getInsets(0, 0, 5, 0);
@@ -252,6 +250,7 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 		tf.setEditable(true);
 		add(tf);
 		stringField.addElement(tf);
+		defaultStrings.addElement(defaultText);
 		if (Recorder.record || macro)
 			saveLabel(tf, label);
 		y++;
@@ -321,7 +320,7 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
         if (previewCheckbox != null)
         	return;
     	ImagePlus imp = WindowManager.getCurrentImage();
-		if (imp!=null && imp.isComposite() && ((CompositeImage)imp).getMode()==CompositeImage.COMPOSITE)
+		if (imp!=null && imp.isComposite() && ((CompositeImage)imp).getMode()==IJ.COMPOSITE)
 			return;
         this.pfr = pfr;
         addCheckbox(previewLabel, false, true);
@@ -337,7 +336,7 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
         if (previewCheckbox!=null)
         	return;
     	//ImagePlus imp = WindowManager.getCurrentImage();
-		//if (imp!=null && imp.isComposite() && ((CompositeImage)imp).getMode()==CompositeImage.COMPOSITE)
+		//if (imp!=null && imp.isComposite() && ((CompositeImage)imp).getMode()==IJ.COMPOSITE)
 		//	return;
         previewLabel = label;
         this.pfr = pfr;
@@ -434,14 +433,17 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
     	int n = items.length;
      	panel.setLayout(new GridLayout(rows, columns, 0, 0));
 		CheckboxGroup cg = new CheckboxGroup();
-		for (int i=0; i<n; i++)
-			panel.add(new Checkbox(items[i],cg,items[i].equals(defaultItem)));
-		if (radioButtonGroup==null)
-			radioButtonGroup = new Vector();
-		radioButtonGroup.addElement(cg);
+		for (int i=0; i<n; i++) {
+			Checkbox cb = new Checkbox(items[i],cg,items[i].equals(defaultItem));
+			cb.addItemListener(this);
+			panel.add(cb);
+		}
+		if (radioButtonGroups==null)
+			radioButtonGroups = new Vector();
+		radioButtonGroups.addElement(cg);
 		Insets insets = getInsets(5, 10, 0, 0);
 		if (label==null || label.equals("")) {
-			label = "rbg"+radioButtonGroup.size();
+			label = "rbg"+radioButtonGroups.size();
 			insets.top += 5;
 		} else {
 			setInsets(10, insets.left, 0);
@@ -485,7 +487,10 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 		thisChoice.addItemListener(this);
 		for (int i=0; i<items.length; i++)
 			thisChoice.addItem(items[i]);
-		thisChoice.select(defaultItem);
+		if (defaultItem!=null)
+			thisChoice.select(defaultItem);
+		else
+			thisChoice.select(0);
 		c.gridx = 1; c.gridy = y;
 		c.anchor = GridBagConstraints.WEST;
 		grid.setConstraints(thisChoice, c);
@@ -636,7 +641,7 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 		// slider
 		pc.gridx = 0; pc.gridy = 0;
 		pc.gridwidth = 1;
-		pc.ipadx = 75;
+		pc.ipadx = 85;
 		pc.anchor = GridBagConstraints.WEST;
 		pgrid.setConstraints(s, pc);
 		panel.add(s);
@@ -711,6 +716,11 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
     /** Sets a replacement label for the "Help" button. */
     public void setHelpLabel(String label) {
     	helpLabel = label;
+    }
+
+    /** Unchanged parameters are not recorder in 'smart recording' mode. */
+    public void setSmartRecording(boolean smartRecording) {
+    	this.smartRecording = smartRecording;
     }
 
     /** Make this a "Yes No Cancel" dialog. */
@@ -795,9 +805,11 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 		String originalText = (String)defaultText.elementAt(nfIndex);
 		double defaultValue = ((Double)(defaultValues.elementAt(nfIndex))).doubleValue();
 		double value;
-		if (theText.equals(originalText))
+		boolean skipRecording = false;
+		if (theText.equals(originalText)) {
 			value = defaultValue;
-		else {
+			if (smartRecording) skipRecording=true;
+		} else {
 			Double d = getValue(theText);
 			if (d!=null)
 				value = d.doubleValue();
@@ -819,8 +831,9 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
                 }
 			}
 		}
-		if (recorderOn)
+		if (recorderOn && !skipRecording) {
 			recordOption(tf, trim(theText));
+		}
 		nfIndex++;
 		return value;
     }
@@ -905,7 +918,8 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 			String s = theText;
 			if (s!=null&&s.length()>=3&&Character.isLetter(s.charAt(0))&&s.charAt(1)==':'&&s.charAt(2)=='\\')
 				s = s.replaceAll("\\\\", "\\\\\\\\");  // replace "\" with "\\" in Windows file paths
-			recordOption(tf, s);
+			if (!smartRecording || !s.equals((String)defaultStrings.elementAt(sfIndex)))
+				recordOption(tf, s);
 		}
 		sfIndex++;
 		return theText;
@@ -998,7 +1012,7 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 					item = s;
 			}
 		}	
-		if (recorderOn) {
+		if (recorderOn && !(smartRecording&&index==0)) {
 			String item = thisChoice.getSelectedItem();
 			if (!(item.equals("*None*")&&getTitle().equals("Merge Channels")))
 				recordOption(thisChoice, thisChoice.getSelectedItem());
@@ -1009,9 +1023,9 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
     
   	/** Returns the selected item in the next radio button group. */
     public String getNextRadioButton() {
-		if (radioButtonGroup==null)
+		if (radioButtonGroups==null)
 			return null;
-		CheckboxGroup cg = (CheckboxGroup)(radioButtonGroup.elementAt(radioButtonIndex));
+		CheckboxGroup cg = (CheckboxGroup)(radioButtonGroups.elementAt(radioButtonIndex));
 		radioButtonIndex++;
 		Checkbox checkbox = cg.getSelectedCheckbox();
 		String item = "null";
@@ -1141,16 +1155,17 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
 	}
 	
     /** Reset the counters before reading the dialog parameters */
-    private void resetCounters() {
-        nfIndex = 0;        // prepare for readout
+	private void resetCounters() {
+		nfIndex = 0;        // prepare for readout
 		sfIndex = 0;
 		cbIndex = 0;
 		choiceIndex = 0;
 		textAreaIndex = 0;
-        invalidNumber = false;
-}
+		radioButtonIndex = 0;
+		invalidNumber = false;
+	}
 
-/** Returns the Vector containing the numeric TextFields. */
+	/** Returns the Vector containing the numeric TextFields. */
   	public Vector getNumericFields() {
   		return numberField;
   	}
@@ -1173,6 +1188,11 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
   	/** Returns the Vector containing the sliders (Scrollbars). */
   	public Vector getSliders() {
   		return slider;
+  	}
+
+  	/** Returns the Vector that contains the RadioButtonGroups. */
+  	public Vector getRadioButtonGroups() {
+  		return radioButtonGroups;
   	}
 
   	/** Returns a reference to textArea1. */
@@ -1216,9 +1236,15 @@ FocusListener, ItemListener, KeyListener, AdjustmentListener, WindowListener {
         }
     }
     
-    /** Display dialog centered on the primary screen? */
+    /** Display dialog centered on the primary screen. */
     public void centerDialog(boolean b) {
     	centerDialog = b;
+    }
+
+    /* Display the dialog at the specified location. */
+    public void setLocation(int x, int y) {
+    	super.setLocation(x, y);
+    	centerDialog = false;
     }
 
     protected void setup() {

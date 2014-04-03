@@ -1,15 +1,8 @@
 package ij.plugin;
 
-import ij.IJ;
-import ij.ImagePlus;
-import ij.ImageStack;
-import ij.io.FileInfo;
-import ij.io.OpenDialog;
-import ij.process.ByteProcessor;
-import ij.process.ColorProcessor;
-import ij.process.ImageProcessor;
-import ij.process.ShortProcessor;
-
+import ij.*;
+import ij.io.*;
+import ij.process.*;
 import java.io.*;
 
 /**

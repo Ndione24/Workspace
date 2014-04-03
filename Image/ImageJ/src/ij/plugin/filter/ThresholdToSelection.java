@@ -4,14 +4,15 @@
  * Written and public domained in June 2006 by Johannes E. Schindelin
  */
 package ij.plugin.filter;
-
 import ij.IJ;
 import ij.ImagePlus;
 import ij.gui.Roi;
 import ij.gui.ShapeRoi;
-import ij.process.ImageProcessor;
+import ij.process.*;
 
-import java.awt.*;
+import java.awt.Polygon;
+import java.awt.Rectangle;
+import java.awt.geom.Area;
 import java.awt.geom.GeneralPath;
 import java.util.ArrayList;
 

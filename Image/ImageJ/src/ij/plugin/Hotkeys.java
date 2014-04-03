@@ -1,15 +1,10 @@
 package ij.plugin;
-
-import ij.Executer;
-import ij.IJ;
-import ij.Menus;
-import ij.gui.GenericDialog;
-import ij.util.StringSorter;
-
-import java.io.File;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
+import ij.*;
+import ij.gui.*;
+import ij.util.*;
+import java.awt.*;
+import java.io.*;
+import java.util.*;
 
 /** Implements the Plugins/Hotkeys/Create Shortcut and Remove commands. */
 public class Hotkeys implements PlugIn {

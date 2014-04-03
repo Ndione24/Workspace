@@ -1,10 +1,9 @@
 package ij.plugin;
-
-import ij.IJ;
-import ij.gui.GenericDialog;
-import ij.measure.ResultsTable;
-
-import java.util.StringTokenizer;
+import ij.*;
+import ij.gui.*;
+import ij.process.*;
+import ij.measure.*;
+import java.util.*;
 
 /** This plugin implements the Results Table's Sort command. */
 public class ResultsSorter implements PlugIn {

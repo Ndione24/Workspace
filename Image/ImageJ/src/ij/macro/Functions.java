@@ -1,37 +1,24 @@
 package ij.macro;
-
 import ij.*;
-import ij.gui.*;
-import ij.io.*;
-import ij.measure.Calibration;
-import ij.measure.CurveFitter;
-import ij.measure.Measurements;
-import ij.measure.ResultsTable;
-import ij.plugin.*;
-import ij.plugin.filter.Analyzer;
-import ij.plugin.filter.Info;
-import ij.plugin.filter.MaximumFinder;
-import ij.plugin.frame.*;
 import ij.process.*;
-import ij.text.TextPanel;
-import ij.text.TextWindow;
-import ij.util.Tools;
-import ij.util.WildcardMatch;
-
+import ij.gui.*;
+import ij.measure.*;
+import ij.plugin.*;
+import ij.plugin.filter.*;
+import ij.plugin.frame.*;
+import ij.text.*;
+import ij.io.*;
+import ij.util.*;
 import java.awt.*;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.StringSelection;
-import java.awt.datatransfer.Transferable;
-import java.awt.event.KeyEvent;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.GeneralPath;
-import java.awt.geom.Rectangle2D;
-import java.awt.image.IndexColorModel;
-import java.io.*;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.nio.channels.FileChannel;
+import java.awt.image.*;
 import java.util.*;
+import java.io.*;
+import java.awt.event.KeyEvent;
+import java.lang.reflect.*;
+import java.net.URL;
+import java.awt.datatransfer.*;
+import java.awt.geom.*;
+import java.nio.channels.FileChannel;
 
 
 /** This class implements the built-in macro functions. */
@@ -768,6 +755,7 @@ public class Functions implements MacroConstants, Measurements {
 		if (previousRoi!=null && roi!=null)
 			updateRoi(roi);
 		resetImage();
+		IJ.setKeyUp(IJ.ALL_KEYS);
 	}
 	
 	ImagePlus getImage() {
@@ -2440,11 +2428,9 @@ public class Functions implements MacroConstants, Measurements {
 			} else
 				IJ.open(path);
 			if (path!=null&&!path.equals("")) {
-				int index = path.lastIndexOf('/');
-				if (index==-1)
-					index = path.lastIndexOf('\\');
-				String name = index>=0&&index<path.length()?path.substring(index+1):path;
-				OpenDialog.setLastName(name);
+				File f = new File(path);
+				OpenDialog.setLastDirectory(f.getParent()+File.separator);
+				OpenDialog.setLastName(f.getName());
 			}
 		}
 		resetImage();
@@ -2663,6 +2649,7 @@ public class Functions implements MacroConstants, Measurements {
 				resetImage();
 				return;
 			}
+			boolean currentImpClosed = false;
 			for (int img = ids.length-1; img >=0; img--) {
 				int id = ids[img];              
 				ImagePlus imp = WindowManager.getImage(id);
@@ -2681,11 +2668,13 @@ public class Functions implements MacroConstants, Measurements {
 						}
 						imp.changes = false;
 						imp.close();
+						if (imp==currentImp)
+							currentImpClosed = true;
 					}
 				}
 			}
-			if (currentImp!=null)
-				WindowManager.setCurrentWindow(currentImp.getWindow());
+			if (!currentImpClosed && currentImp!=null)
+				IJ.selectWindow(currentImp.getID());
 			resetImage();
 		} else {//Wayne
 			ImagePlus imp = getImage();
@@ -4451,11 +4440,11 @@ public class Functions implements MacroConstants, Measurements {
 			interp.error("Composite image required");
 		int m = -1;
 		if (mode.equals("composite"))
-			m = CompositeImage.COMPOSITE;
+			m = IJ.COMPOSITE;
 		else if (mode.equals("color"))
-			m = CompositeImage.COLOR;
+			m = IJ.COLOR;
 		else if (mode.startsWith("gray"))
-			m = CompositeImage.GRAYSCALE;
+			m = IJ.GRAYSCALE;
 		if (m==-1) 
 			interp.error("Invalid mode");
 		((CompositeImage)imp).setMode(m);
@@ -4478,7 +4467,7 @@ public class Functions implements MacroConstants, Measurements {
 		int current = imp.getCurrentSlice();
 		if (imp.isComposite()) {
 			CompositeImage ci = (CompositeImage)imp;
-			if (ci.getMode()==CompositeImage.COMPOSITE) {
+			if (ci.getMode()==IJ.COMPOSITE) {
 				ci.reset();
 				imp.updateAndDraw();
 				imp.repaintWindow();
@@ -5403,6 +5392,8 @@ public class Functions implements MacroConstants, Measurements {
 			return overlayAddSelection(imp, overlay);
 		else if (name.equals("setPosition"))
 			return overlaySetPosition(overlay);
+		else if (name.equals("setFillColor"))
+			return overlaySetFillColor(overlay);
 		if (overlay==null)
 			interp.error("No overlay");
 		int size = overlay.size();
@@ -5514,6 +5505,20 @@ public class Functions implements MacroConstants, Measurements {
 		return Double.NaN;
 	}
 
+	double overlaySetFillColor(Overlay overlay) {
+		interp.getLeftParen();
+		Color color = getColor();
+		interp.getRightParen();
+		if (overlay==null)
+			overlay = offscreenOverlay;
+		if (overlay==null)
+			interp.error("No overlay");
+		int size = overlay.size();
+		if (size>0)
+			overlay.get(size-1).setFillColor(color);
+		return Double.NaN;
+	}
+
 	double overlayMoveTo() {
 		if (overlayPath==null) overlayPath = new GeneralPath();
 		interp.getLeftParen();
@@ -5572,16 +5577,20 @@ public class Functions implements MacroConstants, Measurements {
 		addDrawingToOverlay(imp);
 		String text = getFirstString();
 		int x = (int)getNextArg();
-		int y = (int)getLastArg();
+		int y = (int)getNextArg();
+		double angle = 0.0;
+		if (interp.nextToken()==',')
+			angle = getLastArg();
+		else
+			interp.getRightParen();
 		Font font = this.font;
 		boolean nullFont = font==null;
 		if (nullFont)
 			font = imp.getProcessor().getFont();
-		FontMetrics metrics = imp.getProcessor().getFontMetrics();
-		int fontHeight = metrics.getHeight();
-		TextRoi roi = new TextRoi(x, y-fontHeight, text, font);
-		if (!nullFont)
-			roi.setAntialiased(antialiasedText);
+		TextRoi roi = new TextRoi(text, x, y, font);
+		if (!nullFont && !antialiasedText)
+			roi.setAntialiased(false);
+		roi.setAngle(angle);
 		addRoi(imp, roi);
 		return Double.NaN;
 	}

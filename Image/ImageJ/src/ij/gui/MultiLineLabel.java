@@ -1,7 +1,6 @@
 package ij.gui;
-
 import java.awt.*;
-import java.util.StringTokenizer;
+import java.util.*;
 
 /**Custom component for displaying multiple lines. Based on 
    MultiLineLabel class from "Java in a Nutshell" by David Flanagan.*/

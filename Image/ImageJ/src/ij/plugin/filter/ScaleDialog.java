@@ -1,19 +1,12 @@
 package ij.plugin.filter;
-
-import ij.IJ;
-import ij.ImagePlus;
-import ij.WindowManager;
-import ij.gui.GenericDialog;
-import ij.gui.Line;
-import ij.gui.Roi;
-import ij.io.FileOpener;
-import ij.measure.Calibration;
-import ij.process.ImageProcessor;
+import ij.*;
+import ij.gui.*;
+import ij.process.*;
+import ij.measure.*;
 import ij.util.Tools;
-
+import ij.io.FileOpener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.TextEvent;
+import java.awt.event.*;
 
 /** Implements the Analyze/Set Scale command. */
 public class ScaleDialog implements PlugInFilter {
@@ -97,7 +90,8 @@ public class ScaleDialog implements PlugInFilter {
 		} else {
 			if (gd.scaleChanged || IJ.macroRunning()) {
 				cal.pixelWidth = known/measured;
-				cal.pixelDepth = cal.pixelWidth;
+				if (cal.pixelDepth==1.0)
+					cal.pixelDepth = cal.pixelWidth;
 			}
 			if (aspectRatio!=0.0)
 				cal.pixelHeight = cal.pixelWidth*aspectRatio;

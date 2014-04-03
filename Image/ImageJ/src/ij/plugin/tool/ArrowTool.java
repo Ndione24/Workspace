@@ -1,12 +1,10 @@
 package ij.plugin.tool;
-
-import ij.IJ;
-import ij.ImagePlus;
-import ij.gui.Arrow;
-import ij.gui.ImageCanvas;
-import ij.gui.Roi;
-
-import java.awt.event.MouseEvent;
+import ij.*;
+import ij.process.*;
+import ij.gui.*;
+import ij.plugin.*;
+import java.awt.*;
+import java.awt.event.*;
 
 public class ArrowTool extends PlugInTool {
 	Roi arrow;

@@ -1,15 +1,10 @@
 package ij.plugin;
-
-import ij.IJ;
-import ij.Prefs;
-import ij.WindowManager;
-import ij.io.SaveDialog;
+import ij.*;
+import ij.text.*;
 import ij.measure.ResultsTable;
-import ij.text.TextPanel;
-import ij.text.TextWindow;
-
-import java.awt.*;
-import java.io.IOException;
+import ij.io.*;
+import java.io.*;
+import java.awt.Frame;
 
 /** Writes measurements to a csv or tab-delimited text file. */
 public class MeasurementsWriter implements PlugIn {

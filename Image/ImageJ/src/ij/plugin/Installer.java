@@ -1,14 +1,12 @@
 package ij.plugin;
-
-import ij.IJ;
-import ij.Menus;
-import ij.gui.GenericDialog;
-import ij.io.PluginClassLoader;
-import ij.util.StringSorter;
-
-import java.io.File;
-import java.lang.reflect.Method;
-import java.util.Vector;
+import ij.*;
+import ij.gui.*;
+import ij.io.*;
+import ij.util.*;
+import java.awt.*;
+import java.io.*;
+import java.util.*;
+import java.lang.reflect.*;
 
 /** Implements the Plugins/Shortcuts/Install... command. */
 public class Installer implements PlugIn {

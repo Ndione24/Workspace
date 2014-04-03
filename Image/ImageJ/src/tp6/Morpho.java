@@ -160,7 +160,7 @@ public class Morpho {
                 for (int v = es.getYmin(); v <= es.getYmax() && !abord; v++) {
                     for (int u = es.getXmin(); u <= es.getXmax(); u++) {
                         // Si un pixel est noir de l'image d'entrée et qu'il l'est aussi dans l'es
-                        if (es.get(u,v) == NOIR && in.getPixel(x - u, y - v) == NOIR) {
+                        if (es.get(u, v) == NOIR && in.getPixel(x - u, y - v) == NOIR) {
                             // La condition est vérifié
                             abord = true;
                             break;

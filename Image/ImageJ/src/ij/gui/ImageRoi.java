@@ -1,13 +1,9 @@
 package ij.gui;
-
 import ij.ImagePlus;
+import ij.process.*;
 import ij.io.FileSaver;
-import ij.process.ColorProcessor;
-import ij.process.ImageProcessor;
-
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.awt.image.DirectColorModel;
+import java.awt.image.*;
 
 /** An ImageRoi is an Roi that displays an image as an overlay. 
 * @see ij.ImagePlus#setOverlay(ij.gui.Overlay)
@@ -123,6 +119,7 @@ public class ImageRoi extends Roi {
 		ImagePlus imp = new ImagePlus("", img);
 		ImageRoi roi2 = new ImageRoi(x, y, imp.getProcessor());
 		roi2.setOpacity(getOpacity());
+		roi2.setZeroTransparent(zeroTransparent);
 		return roi2;
 	}
 

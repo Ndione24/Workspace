@@ -169,7 +169,7 @@ public class Image {
     /**
      * Récupère l'histogramme d'une image sous forme d'un tableau d'entier
      */
-    public static int[] getHistogram(ImagePlus imp) {
+    private static int[] getHistogram(ImagePlus imp) {
         ImageProcessor ip = imp.getProcessor();
         final int hauteur = imp.getHeight(), largeur = imp.getWidth();
         int[] histo = new int[256];
@@ -190,7 +190,7 @@ public class Image {
     /**
      * Récupére l'histogramme cumulé d'une image
      */
-    public static int[] getHistogramCumul(ImagePlus imp) {
+    private static int[] getHistogramCumul(ImagePlus imp) {
         int[] histoCumul = getHistogram(imp);
         for (int i = 1, size = histoCumul.length; i < size; ++i)
             histoCumul[i] = histoCumul[i] + histoCumul[i - 1];
@@ -201,7 +201,7 @@ public class Image {
     /**
      * Récupére le seuil d'une image
      */
-    public static int getThreshold(ImagePlus imp) {
+    private static int getThreshold(ImagePlus imp) {
         ImageProcessor ip = imp.getProcessor();
         int[] histo = getHistogram(createGrayImage(imp));
         int total = ip.getPixelCount();
@@ -240,14 +240,14 @@ public class Image {
     /**
      * Récupére la couleur grise d'un pixel de couleur
      */
-    public static int getGray(int[] rgb) {
+    private static int getGray(int[] rgb) {
         return (rgb[0] + rgb[1] + rgb[2]) / 3;
     }
 
     /**
      * Récupére le dernier nvg ayant une occurrence supérieur à 0
      */
-    public static int getMax(int[] tab) {
+    private static int getMax(int[] tab) {
         int i = tab.length - 1;
         while (tab[i] == 0) --i;
         return i;
@@ -256,7 +256,7 @@ public class Image {
     /**
      * Récupére le premier nvg ayant une occurrence supérieur à 0
      */
-    public static int getMin(int[] tab) {
+    private static int getMin(int[] tab) {
         int i = 0;
         while (tab[i] == 0) ++i;
         return i;

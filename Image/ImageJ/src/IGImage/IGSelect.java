@@ -5,12 +5,14 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
-public class IGSelect extends JFrame {
+class IGSelect extends JFrame {
     public IGSelect() {
         super("Projet Image");
-        add(new PanelSelectTrans(), BorderLayout.NORTH);
-        add(new PanelSelectFiltre(), BorderLayout.CENTER);
-        add(new PanelEval(), BorderLayout.SOUTH);
+        setLayout(new GridLayout(4, 1));
+        add(new PanelSelectTrans());
+        add(new PanelSelectFiltre());
+        add(new PanelSelectEval());
+        add(new PanelSelectMorpho());
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         KeyStroke escapeKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, false);

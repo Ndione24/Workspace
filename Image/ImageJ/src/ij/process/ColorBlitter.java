@@ -1,7 +1,6 @@
 package ij.process;
-
 import java.awt.*;
-import java.awt.image.ColorModel;
+import java.awt.image.*;
 
 /** This class does bit blitting of RGB images. */
 public class ColorBlitter implements Blitter {

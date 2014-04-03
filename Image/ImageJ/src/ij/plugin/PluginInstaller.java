@@ -1,14 +1,11 @@
 package ij.plugin;
-
-import ij.IJ;
-import ij.Menus;
-import ij.io.OpenDialog;
-import ij.io.SaveDialog;
-
+import ij.*;
+import ij.gui.*;
+import ij.io.*;
 import java.io.*;
 import java.net.URL;
-import java.net.URLConnection;
-import java.util.Locale;
+import java.net.*;
+import java.util.*;
 
 /** Installs plugins dragged and dropped on the "ImageJ" window, or plugins,
 	macros or scripts opened using the Plugins/Install command. */

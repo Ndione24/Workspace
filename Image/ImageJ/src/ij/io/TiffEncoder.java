@@ -1,8 +1,5 @@
 package ij.io;
-
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 
 /**Saves an image described by a FileInfo object as an uncompressed, big-endian TIFF file.*/
 public class TiffEncoder {
@@ -327,7 +324,8 @@ public class TiffEncoder {
 		double xscale = 1.0/fi.pixelWidth;
 		double yscale = 1.0/fi.pixelHeight;
 		double scale = 1000000.0;
-		if (xscale>1000.0) scale = 1000.0;
+		if (xscale*scale>Integer.MAX_VALUE||yscale*scale>Integer.MAX_VALUE)
+			scale = (int)(Integer.MAX_VALUE/Math.max(xscale,yscale));
 		writeInt(out, (int)(xscale*scale));
 		writeInt(out, (int)scale);
 		writeInt(out, (int)(yscale*scale));

@@ -1,7 +1,5 @@
 package ij.process;
-
 import ij.Prefs;
-
 import java.awt.*;
 
 /** This class does bit blitting of 32-bit floating-point images. */

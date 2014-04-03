@@ -1,11 +1,9 @@
 package ij.plugin;
-
-import ij.IJ;
-import ij.ImagePlus;
-import ij.ImageStack;
-import ij.WindowManager;
-import ij.gui.GenericDialog;
-import ij.process.ImageProcessor;
+import java.awt.*;
+import java.io.*;
+import ij.*;
+import ij.gui.*;
+import ij.process.*;
 
 /** This plugin, which implements the Image/Stacks/Tools/Insert 
 	command, inserts an image or stack into another image or stack. */

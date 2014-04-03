@@ -1,12 +1,9 @@
 package ij.measure;
-
-import ij.IJ;
-import ij.Macro;
-import ij.gui.GenericDialog;
-import ij.macro.Interpreter;
-import ij.macro.Program;
-import ij.macro.Tokenizer;
-
+import ij.*;
+import ij.gui.*;
+import ij.macro.*;
+import ij.util.Tools;
+import java.util.Arrays;
 import java.util.Hashtable;
 
 /** Curve fitting class based on the Simplex method in the Minimizer class

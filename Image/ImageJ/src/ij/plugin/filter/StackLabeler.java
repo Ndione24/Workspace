@@ -1,15 +1,9 @@
 package ij.plugin.filter;
-
-import ij.IJ;
-import ij.ImagePlus;
-import ij.Macro;
-import ij.Prefs;
+import ij.*;
+import ij.process.*;
 import ij.gui.*;
-import ij.measure.Measurements;
-import ij.process.ImageProcessor;
-import ij.process.ImageStatistics;
 import ij.util.Tools;
-
+import ij.measure.Measurements;
 import java.awt.*;
 
 

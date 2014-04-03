@@ -1,13 +1,13 @@
 package ij.plugin.filter;
-
 import ij.*;
+import ij.process.*;
 import ij.gui.*;
-import ij.process.FloatProcessor;
-import ij.process.ImageProcessor;
-
+import ij.plugin.filter.PlugInFilter.*;
+import ij.plugin.filter.*;
+import ij.measure.Calibration;
+import ij.macro.Interpreter;
 import java.awt.*;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.*;
 
 public class PlugInFilterRunner implements Runnable, DialogListener {
 	private String command;					// the command, can be but need not be the name of the PlugInFilter

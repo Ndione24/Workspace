@@ -1,18 +1,17 @@
 package ij.gui;
-
-import ij.*;
-import ij.macro.Program;
-import ij.plugin.MacroInstaller;
-import ij.plugin.frame.Editor;
-import ij.plugin.frame.Recorder;
-import ij.plugin.tool.MacroToolRunner;
-import ij.plugin.tool.PlugInTool;
-
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.awt.event.*;
 import java.io.File;
-import java.util.Hashtable;
-import java.util.Locale;
+import java.util.*;
+import ij.*;
+import ij.plugin.frame.Recorder; 
+import ij.plugin.frame.Editor; 
+import ij.plugin.MacroInstaller;
+import ij.plugin.RectToolOptions;
+import ij.plugin.tool.PlugInTool;
+import ij.plugin.tool.MacroToolRunner;
+import ij.macro.Program;
 
 /** The ImageJ toolbar. */
 public class Toolbar extends Canvas implements MouseListener, MouseMotionListener, ItemListener, ActionListener {
@@ -257,7 +256,7 @@ public class Toolbar extends Canvas implements MouseListener, MouseMotionListene
 			if ((tool==POLYLINE && lineType!=POLYLINE) || (tool==FREELINE && lineType!=FREELINE))
 				return;
 		}
-		if (IJ.debugMode) IJ.log("Toolbar.drawButton: "+tool);
+		//if (IJ.debugMode) IJ.log("Toolbar.drawButton: "+tool);
         int index = toolIndex(tool);
         int x = index*SIZE + 1;
         if (tool>=CUSTOM1)
@@ -512,6 +511,7 @@ public class Toolbar extends Canvas implements MouseListener, MouseMotionListene
 			return;
 		}
 		String hint = " (right click to switch)";
+		String hint2 = " (right click to switch; double click to configure)";
 		switch (tool) {
 			case RECTANGLE:
 				if (roundRectMode)
@@ -547,16 +547,15 @@ public class Toolbar extends Canvas implements MouseListener, MouseMotionListene
 				return;
 			case POINT:
 				if (multiPointMode)
-					IJ.showStatus("Point or *multi-point* selections"+hint);
+					IJ.showStatus("*Multi-point* or point"+hint2);
 				else
-					IJ.showStatus("*Point* or multi-point selections"+hint);
+					IJ.showStatus("*Point* or multi-point"+hint2);
 				return;
 			case WAND:
 				IJ.showStatus("Wand (tracing) tool");
 				return;
 			case TEXT:
-				IJ.showStatus("Text tool");
-				TextRoi.recordSetFont();
+				IJ.showStatus("Text tool (double-click to configure)");
 				return;
 			case MAGNIFIER:
 				IJ.showStatus("Magnifying glass (or use \"+\" and \"-\" keys)");
@@ -1053,17 +1052,13 @@ public class Toolbar extends Canvas implements MouseListener, MouseMotionListene
 					showAngleDialog();
 					break;
 				case POINT:
-					if (multiPointMode) {
-						if (imp!=null && imp.getRoi()!=null)
-							IJ.doCommand("Add Selection...");
-					} else
-						IJ.doCommand("Point Tool...");
+					IJ.doCommand("Point Tool...");
 					break;
 				case WAND:
 					IJ.doCommand("Wand Tool...");
 					break;
 				case TEXT:
-					IJ.doCommand("Fonts...");
+					IJ.run("Fonts...");
 					break;
 				case DROPPER:
 					IJ.doCommand("Color Picker...");

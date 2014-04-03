@@ -1,11 +1,8 @@
 package ij.plugin;
-
-import ij.IJ;
-import ij.Prefs;
-import ij.gui.GenericDialog;
+import ij.*;
+import ij.gui.*;
 import ij.util.Tools;
-
-import java.util.Properties;
+import java.util.*;
 
 /** This plugin implements the Plugins/Utilities/Proxy Settings command. It sets
 * 	the JVM proxy properties to allow the Help/Update ImageJ command

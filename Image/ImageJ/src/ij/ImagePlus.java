@@ -1,26 +1,23 @@
 package ij;
-
-import ij.gui.*;
-import ij.io.FileInfo;
-import ij.io.FileOpener;
-import ij.io.Opener;
-import ij.macro.Interpreter;
-import ij.measure.Calibration;
-import ij.measure.Measurements;
-import ij.plugin.ContrastEnhancer;
-import ij.plugin.Duplicator;
-import ij.plugin.frame.ContrastAdjuster;
-import ij.plugin.frame.Recorder;
-import ij.process.*;
-import ij.util.DicomTools;
-
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.awt.image.ColorModel;
-import java.awt.image.ImageObserver;
-import java.awt.image.PixelGrabber;
-import java.util.Properties;
-import java.util.Vector;
+import java.awt.image.*;
+import java.net.URL;
+import java.util.*;
+import ij.process.*;
+import ij.io.*;
+import ij.gui.*;
+import ij.measure.*;
+import ij.plugin.filter.Analyzer;
+import ij.util.*;
+import ij.macro.Interpreter;
+import ij.plugin.frame.ContrastAdjuster;
+import ij.plugin.frame.RoiManager;
+import ij.plugin.frame.Recorder;
+import ij.plugin.Converter;
+import ij.plugin.Duplicator;
+import ij.plugin.RectToolOptions;
+import ij.plugin.Colors;
+import ij.plugin.ContrastEnhancer;
 
 
 /**
@@ -68,6 +65,7 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	protected int nChannels = 1;
 	protected int nSlices = 1;
 	protected int nFrames = 1;
+	protected boolean dimensionsSet;
 
 	private ImageJ ij = IJ.getInstance();
 	private String title;
@@ -334,9 +332,11 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 			return;
 		}
 		boolean unlocked = lockSilently();
+		Overlay overlay2 = getOverlay();
 		changes = false;
 		win.close();
 		win = null;
+		setOverlay(overlay2);
 		if (unlocked) unlock();
 	}
 
@@ -960,6 +960,7 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 			if (isComposite()) ((CompositeImage)this).reset();
 			new StackWindow(this);
 		}
+		dimensionsSet = true;
 		//IJ.log("setDimensions: "+ nChannels+"  "+nSlices+"  "+nFrames);
 	}
 	
@@ -1075,34 +1076,11 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 			getLocalCalibration().setImage(this);
 		}
     }
-
-	/** Adds a key-value pair to this image's properties. The key
-		is removed from the properties table if value is null. */
-	public void setProperty(String key, Object value) {
-		if (properties==null)
-			properties = new Properties();
-		if (value==null)
-			properties.remove(key);
-		else
-			properties.put(key, value);
-	}
 		
-	/** Returns the property associated with 'key'. May return null. */
-	public Object getProperty(String key) {
-		if (properties==null)
-			return null;
-		else
-			return properties.get(key);
-	}
-	
-	/** Returns this image's Properties. May return null. */
-	public Properties getProperties() {
-			return properties;
-	}
-		
-	/** Returns the value from the "Info" property string associated 
-		with 'key', or null if the key is not found. Works with
-		DICOM tags and Bio-Formats metadata. */
+	/** Returns the string value from the "Info" property string  
+	* associated with 'key', or null if the key is not found. 
+	* Works with DICOM tags and Bio-Formats metadata.
+	*/
 	public String getProp(String key) {
 		if (key==null)
 			return null;
@@ -1123,6 +1101,10 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 		String info = (String)obj;
 		return getProp(key, info);
 	}
+	
+	//public double getValue(String key) {
+	//	return Tools.parseDouble(getProp(key));
+	//}
 	
 	private String getProp(String key, String info) {
 		int index1 = -1;
@@ -1167,6 +1149,31 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 		return info;
 	}
 
+	/** Returns the property associated with 'key', or null if it is not found.
+	* @see #getProp
+	*/
+	public Object getProperty(String key) {
+		if (properties==null)
+			return null;
+		else
+			return properties.get(key);
+	}
+	
+	/** Adds a key-value pair to this image's properties. The key
+		is removed from the properties table if value is null. */
+	public void setProperty(String key, Object value) {
+		if (properties==null)
+			properties = new Properties();
+		if (value==null)
+			properties.remove(key);
+		else
+			properties.put(key, value);
+	}
+		
+	/** Returns this image's Properties. May return null. */
+	public Properties getProperties() {
+			return properties;
+	}
 	/** Creates a LookUpTable object that corresponds to this image. */
     public LookUpTable createLut() {
 		ImageProcessor ip2 = getProcessor();
@@ -2266,8 +2273,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 		return compositeImage && nChannels>=1 && imageType!=COLOR_RGB && (this instanceof CompositeImage);
 	}
 
-	/** Returns the composite display mode (CompositeImage.COMPOSITE, CompositeImage.COLOR
-		or CompositeImage.GRAYSCALE) if this is a CompositeImage, otherwise returns -1. */
+	/** Returns the display mode (IJ.COMPOSITE, IJ.COLOR
+		or IJ.GRAYSCALE) if this is a CompositeImage, otherwise returns -1. */
 	public int getCompositeMode() {
 		if (isComposite())
 			return ((CompositeImage)this).getMode();
@@ -2330,8 +2337,8 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 	
 	/** Returns a "flattened" version of this image, in RGB format. */
 	public ImagePlus flatten() {
+		if (IJ.debugMode) IJ.log("flatten");
 		ImagePlus imp2 = createImagePlus();
-		String title = "Flat_"+getTitle();
 		ImageCanvas ic2 = new ImageCanvas(imp2);
 		imp2.flatteningCanvas = ic2;
 		imp2.setRoi(getRoi());
@@ -2351,15 +2358,104 @@ public class ImagePlus implements ImageObserver, Measurements, Cloneable {
 			ic2.setShowAllList(ic.getShowAllList());
 		BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = (Graphics2D)bi.getGraphics();
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 			antialiasRendering?RenderingHints.VALUE_ANTIALIAS_ON:RenderingHints.VALUE_ANTIALIAS_OFF);
 		g.drawImage(getImage(), 0, 0, null);
 		ic2.paint(g);
 		imp2.flatteningCanvas = null;
-		if (Recorder.record) Recorder.recordCall("imp = IJ.getImage().flatten();");
-		return new ImagePlus(title, new ColorProcessor(bi));
+		return new ImagePlus("Flat_"+getTitle(), new ColorProcessor(bi));
 	}
 	
+	/** Flattens all slices of this stack or HyperStack.<br>
+	 * @throws UnsupportedOperationException if this image<br>
+	 * does not have an overlay and the RoiManager overlay is null<br>
+	 * or Java version is less than 1.6.
+	 * Copied from OverlayCommands and modified by Marcel Boeglin 
+	 * on 2014.01.08 to work with HyperStacks.
+	 */
+	public void flattenStack() {
+		if (IJ.debugMode) IJ.log("flattenStack");
+		if (getStackSize()==1 || !IJ.isJava16())
+			throw new UnsupportedOperationException("Image stack and Java 1.6 required");
+		boolean composite = isComposite();
+		if (getBitDepth()!=24)
+			new ImageConverter(this).convertToRGB();
+		Overlay overlay1 = getOverlay();
+		Overlay roiManagerOverlay = null;
+		boolean roiManagerShowAllMode = !Prefs.showAllSliceOnly;
+		ImageCanvas ic = getCanvas();
+		if (ic!=null)
+			roiManagerOverlay = ic.getShowAllList();
+		setOverlay(null);
+		if (roiManagerOverlay!=null) {
+			RoiManager rm = RoiManager.getInstance();
+			if (rm!=null)
+				rm.runCommand("show none");
+		}
+		Overlay overlay2 = overlay1!=null?overlay1:roiManagerOverlay;
+		if (composite && overlay2==null)
+				return;
+		if (overlay2==null||overlay2.size()==0)
+			throw new UnsupportedOperationException("A non-empty overlay is required");
+		ImageStack stack2 = getStack();
+		boolean showAll = overlay1!=null?false:roiManagerShowAllMode;
+		if (isHyperStack()) {
+			int Z = getNSlices();
+			for (int z=1; z<=Z; z++) {
+				for (int t=1; t<=getNFrames(); t++) {
+					int s = z + (t-1)*Z;
+					flattenImage(stack2, s, overlay2.duplicate(), showAll, z, t);
+				}
+			}
+		} else {
+			for (int s=1; s<=stack2.getSize(); s++) {
+				flattenImage(stack2, s, overlay2.duplicate(), showAll);
+			}
+		}
+		setStack(stack2);
+	}
+	
+	/** Flattens Overlay 'overlay' on slice 'slice' of ImageStack 'stack'.
+	 * Copied from OverlayCommands by Marcel Boeglin 2014.01.08.
+	 */
+	private void flattenImage(ImageStack stack, int slice, Overlay overlay, boolean showAll) {
+		ImageProcessor ips = stack.getProcessor(slice);
+		ImagePlus imp1 = new ImagePlus("temp", ips);
+		int w = imp1.getWidth();
+		int h = imp1.getHeight();
+		for (int i=0; i<overlay.size(); i++) {
+			Roi r = overlay.get(i);
+			int roiPosition = r.getPosition();
+			//IJ.log(slice+" "+i+" "+roiPosition+" "+showAll+" "+overlay.size());
+			if (!(roiPosition==0 || roiPosition==slice || showAll))
+				r.setLocation(w, h);
+		}
+		imp1.setOverlay(overlay);
+		ImagePlus imp2 = imp1.flatten();
+		stack.setPixels(imp2.getProcessor().getPixels(), slice);
+	}
+
+	/** Flattens Overlay 'overlay' on slice 'slice' corresponding to
+	 * coordinates 'z' and 't' in RGB-HyperStack 'stack'
+	 */
+	private void flattenImage(ImageStack stack, int slice, Overlay overlay, boolean showAll, int z, int t) {
+		ImageProcessor ips = stack.getProcessor(slice);
+		ImagePlus imp1 = new ImagePlus("temp", ips);
+		int w = imp1.getWidth();
+		int h = imp1.getHeight();
+		for (int i=0; i<overlay.size(); i++) {
+			Roi r = overlay.get(i);
+			int cPos = r.getCPosition();// 0 or 1 (RGB-HyperStack)
+			int zPos = r.getZPosition();
+			int tPos = r.getTPosition();
+			if (!((cPos==1 || cPos==0) && (zPos==z || zPos==0) && (tPos==t || tPos==0) || showAll))
+				r.setLocation(w, h);
+		}
+		imp1.setOverlay(overlay);
+		ImagePlus imp2 = imp1.flatten();
+		stack.setPixels(imp2.getProcessor().getPixels(), slice);
+	}
+
 	/** Installs a list of ROIs that will be drawn on this image as a non-destructive overlay.
 	 * @see ij.gui.Roi#setStrokeColor
 	 * @see ij.gui.Roi#setStrokeWidth

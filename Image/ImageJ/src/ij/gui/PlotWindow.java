@@ -1,28 +1,17 @@
 package ij.gui;
 
-import ij.IJ;
-import ij.ImageListener;
-import ij.ImagePlus;
-import ij.Prefs;
-import ij.io.SaveDialog;
-import ij.measure.Measurements;
-import ij.measure.ResultsTable;
-import ij.plugin.filter.Analyzer;
-import ij.process.ByteProcessor;
-import ij.process.ColorProcessor;
-import ij.process.ImageProcessor;
-import ij.text.TextWindow;
-import ij.util.Tools;
-
 import java.awt.*;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.ClipboardOwner;
-import java.awt.datatransfer.StringSelection;
-import java.awt.datatransfer.Transferable;
 import java.awt.event.*;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Properties;
+import java.awt.datatransfer.*;
+import java.util.*;
+import ij.*;
+import ij.process.*;
+import ij.util.*;
+import ij.text.TextWindow;
+import ij.plugin.filter.Analyzer;
+import ij.measure.*;
+import ij.io.SaveDialog;
 
 /** This class implements the Analyze/Plot Profile command.
 * @author Michael Schmid

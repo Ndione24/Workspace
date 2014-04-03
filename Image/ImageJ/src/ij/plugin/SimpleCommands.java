@@ -1,13 +1,11 @@
 package ij.plugin;
-
-import ij.IJ;
-import ij.ImagePlus;
-import ij.ImageStack;
-import ij.Undo;
-import ij.gui.GenericDialog;
+import ij.*;
+import ij.process.*;
+import ij.gui.*;
 import ij.io.Opener;
+import ij.text.TextWindow;
 import ij.measure.ResultsTable;
-import ij.process.ImageProcessor;
+import java.awt.Frame;
 
 /** This plugin implements the Plugins/Utilities/Unlock, Image/Rename
 	and Plugins/Utilities/Search commands. */
@@ -41,6 +39,12 @@ public class SimpleCommands implements PlugIn {
 			resultsToImage();
 		else if (arg.equals("display"))
 			IJ.runMacroFile("ij.jar:ShowAllLuts", null);
+		else if (arg.equals("fonts")) {
+			Thread t = new Thread(new Runnable() {
+				public void run() {IJ.runPlugIn("ij.plugin.Text", "");}
+			});
+			t.start();
+		}
 	}
 
 	private void reset() {

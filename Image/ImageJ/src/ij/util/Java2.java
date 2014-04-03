@@ -1,9 +1,8 @@
 package ij.util;
-
-import ij.IJ;
-
-import javax.swing.*;
+import ij.*;
+import ij.Prefs;
 import java.awt.*;
+import javax.swing.*;
 
 /**
 This class contains static methods that use the Java 2 API. They are isolated 

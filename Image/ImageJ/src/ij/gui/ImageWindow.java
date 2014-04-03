@@ -1,20 +1,22 @@
 package ij.gui;
-
-import ij.*;
-import ij.io.FileSaver;
-import ij.macro.Interpreter;
-import ij.measure.Calibration;
-import ij.plugin.frame.Channels;
-import ij.util.Java2;
-
 import java.awt.*;
+import java.awt.image.*;
+import java.util.Properties;
 import java.awt.event.*;
+import ij.*;
+import ij.process.*;
+import ij.io.*;
+import ij.measure.*;
+import ij.plugin.frame.*;
+import ij.macro.Interpreter;
+import ij.util.Java2;
 
 /** A frame for displaying images. */
 public class ImageWindow extends Frame implements FocusListener, WindowListener, WindowStateListener, MouseWheelListener {
 
 	public static final int MIN_WIDTH = 128;
 	public static final int MIN_HEIGHT = 32;
+	private static final String LOC_KEY = "image.loc";
 	
 	protected ImagePlus imp;
 	protected ImageJ ij;
@@ -27,6 +29,7 @@ public class ImageWindow extends Frame implements FocusListener, WindowListener,
 	Rectangle maxWindowBounds; // largest possible window on this screen
 	Rectangle maxBounds; // Size of this window after it is maximized
 	long setMaxBoundsTime;
+	private boolean firstSmallWindow;
 
 	private static final int XINC = 8;
 	private static final int YINC = 12;
@@ -137,19 +140,27 @@ public class ImageWindow extends Frame implements FocusListener, WindowListener,
 	private void setLocationAndSize(boolean updating) {
 		int width = imp.getWidth();
 		int height = imp.getHeight();
-		Rectangle maxWindow = getMaxWindow(0,0);
-		//if (maxWindow.x==maxWindow.width)  // work around for Linux bug
-		//	maxWindow = new Rectangle(0, maxWindow.y, maxWindow.width, maxWindow.height);
+		Rectangle maxWindow = getMaxWindow(0, 0);
 		if (WindowManager.getWindowCount()<=1)
 			xbase = -1;
 		if (width>maxWindow.width/2 && xbase>maxWindow.x+5+XINC*6)
 			xbase = -1;
 		if (xbase==-1) {
 			count = 0;
-			xbase = maxWindow.x + 5;
-			if (width*2<=maxWindow.width)
-				xbase = maxWindow.x+maxWindow.width/2-width/2;
-			ybase = maxWindow.y;
+			xbase = maxWindow.x + (maxWindow.width>1800?24:12);
+			if (width*2<=maxWindow.width) {
+				Point loc = Prefs.getLocation(LOC_KEY);
+				if (loc!=null) {
+					xbase = loc.x;
+					ybase = loc.y;
+				} else {
+					xbase = maxWindow.x+maxWindow.width/2-width/2;
+					ybase = maxWindow.y;
+				}
+				firstSmallWindow = true;
+				if (IJ.debugMode) IJ.log("ImageWindow.xbase: "+xbase+" "+loc);
+			} else
+				ybase = maxWindow.y;
 			xloc = xbase;
 			yloc = ybase;
 		}
@@ -166,7 +177,7 @@ public class ImageWindow extends Frame implements FocusListener, WindowListener,
 		int sliderHeight = (this instanceof StackWindow)?20:0;
 		int screenHeight = maxWindow.y+maxWindow.height-sliderHeight;
 		double mag = 1;
-		while (xbase+XINC*4+width*mag>maxWindow.x+maxWindow.width || ybase+height*mag>=screenHeight) {
+		while (xbase+width*mag>maxWindow.x+maxWindow.width || ybase+height*mag>=screenHeight) {
 			//IJ.log(mag+"  "+xbase+"  "+width*mag+"  "+maxWindow.width);
 			double mag2 = ImageCanvas.getLowerZoomLevel(mag);
 			if (mag2==mag) break;
@@ -189,14 +200,11 @@ public class ImageWindow extends Frame implements FocusListener, WindowListener,
 		} else 
 			pack();
 	}
-				
+					
 	Rectangle getMaxWindow(int xloc, int yloc) {
-		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		Rectangle bounds = ge.getMaximumWindowBounds();
-		//bounds.x=960; bounds.y=0; bounds.width=960; bounds.height=1200;
-		if (IJ.debugMode) IJ.log("getMaxWindow: "+bounds+"  "+xloc+","+yloc);
+		Rectangle bounds = GUI.getMaxWindowBounds();
 		if (xloc>bounds.x+bounds.width || yloc>bounds.y+bounds.height) {
-			Rectangle bounds2 = getSecondaryMonitorBounds(ge, xloc, yloc);
+			Rectangle bounds2 = getSecondaryMonitorBounds(xloc, yloc);
 			if (bounds2!=null) return bounds2;
 		}
 		Dimension ijSize = ij!=null?ij.getSize():new Dimension(0,0);
@@ -207,20 +215,23 @@ public class ImageWindow extends Frame implements FocusListener, WindowListener,
 		return bounds;
 	}
 	
-	private Rectangle getSecondaryMonitorBounds(GraphicsEnvironment ge, int xloc, int yloc) {
-		//IJ.log("getSecondaryMonitorBounds "+wb);
+	private Rectangle getSecondaryMonitorBounds(int xloc, int yloc) {
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		GraphicsDevice[] gs = ge.getScreenDevices();
+		Rectangle bounds = null;
 		for (int j=0; j<gs.length; j++) {
 			GraphicsDevice gd = gs[j];
 			GraphicsConfiguration[] gc = gd.getConfigurations();
 			for (int i=0; i<gc.length; i++) {
-				Rectangle bounds = gc[i].getBounds();
-				//IJ.log(j+" "+i+" "+bounds+"  "+bounds.contains(wb.x, wb.y));
-				if (bounds!=null && bounds.contains(xloc, yloc))
-					return bounds;
+				Rectangle bounds2 = gc[i].getBounds();
+				if (bounds2!=null && bounds2.contains(xloc, yloc)) {
+					bounds = bounds2;
+					break;
+				}
 			}
 		}		
-		return null;
+		if (IJ.debugMode) IJ.log("getSecondaryMonitorBounds: "+bounds);
+		return bounds;
 	}
 	
 	public double getInitialMagnification() {
@@ -245,7 +256,7 @@ public class ImageWindow extends Frame implements FocusListener, WindowListener,
 			Insets insets = super.getInsets();
 			if (imp.isComposite()) {
 				CompositeImage ci = (CompositeImage)imp;
-				if (ci.getMode()==CompositeImage.COMPOSITE) {
+				if (ci.getMode()==IJ.COMPOSITE) {
 					Color c = ci.getChannelColor();
 					if (Color.green.equals(c))
 						c = new Color(0,180,0);
@@ -366,6 +377,8 @@ public class ImageWindow extends Frame implements FocusListener, WindowListener,
 		closed = true;
 		if (WindowManager.getWindowCount()==0)
 			{xloc = 0; yloc = 0;}
+		if (firstSmallWindow)
+			Prefs.saveLocation(LOC_KEY, getLocation());
 		WindowManager.removeWindow(this);
 		//setVisible(false);
 		if (ij!=null && ij.quitting())  // this may help avoid thread deadlocks
@@ -428,8 +441,7 @@ public class ImageWindow extends Frame implements FocusListener, WindowListener,
 		double width = imp.getWidth();
 		double height = imp.getHeight();
 		double iAspectRatio = width/height;
-		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		Rectangle maxWindow = ge.getMaximumWindowBounds();
+		Rectangle maxWindow = GUI.getMaxWindowBounds();
 		maxWindowBounds = maxWindow;
 		if (iAspectRatio/((double)maxWindow.width/maxWindow.height)>0.75) {
 			maxWindow.y += 22;  // uncover ImageJ menu bar

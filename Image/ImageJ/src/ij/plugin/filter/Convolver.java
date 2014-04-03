@@ -1,28 +1,15 @@
 package ij.plugin.filter;
-
-import ij.IJ;
-import ij.ImagePlus;
-import ij.Macro;
-import ij.gui.DialogListener;
-import ij.gui.GenericDialog;
-import ij.gui.Roi;
-import ij.io.OpenDialog;
-import ij.io.SaveDialog;
+import ij.*;
+import ij.process.*;
+import ij.gui.*;
+import ij.io.*;
 import ij.plugin.TextReader;
 import ij.plugin.frame.Recorder;
-import ij.process.ByteProcessor;
-import ij.process.ColorProcessor;
-import ij.process.FloatProcessor;
-import ij.process.ImageProcessor;
 import ij.util.Tools;
-
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.*;
+import java.awt.event.*;
+import java.io.*;
 
 /** This plugin convolves images using user user defined kernels. */
 public class Convolver implements ExtendedPlugInFilter, DialogListener, ActionListener {
@@ -98,7 +85,7 @@ public class Convolver implements ExtendedPlugInFilter, DialogListener, ActionLi
 			IJ.showStatus("Convolve: "+kw+"x"+kh+" kernel");
 			return true;
 		} else
-			return !gd.getPreviewCheckbox().getState();
+			return !(gd.getPreviewCheckbox()!=null && gd.getPreviewCheckbox().getState());
     }
     
     boolean decodeKernel(String text) {

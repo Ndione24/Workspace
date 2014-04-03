@@ -17,19 +17,17 @@
  */
 
 package ij.plugin;
-
 import ij.*;
+import ij.text.*;
 import ij.plugin.frame.Editor;
-
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
 import java.util.*;
+import java.io.File;
+import javax.swing.*;
+import javax.swing.table.*;
+import javax.swing.event.*;
+import javax.swing.event.DocumentEvent;
 
 
 public class CommandFinder implements PlugIn, ActionListener, WindowListener, KeyListener, ItemListener, MouseListener {
@@ -439,7 +437,7 @@ public class CommandFinder implements PlugIn, ActionListener, WindowListener, Ke
 
 		contentPane.add(southPanel, BorderLayout.SOUTH);
 
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		Dimension screenSize = IJ.getScreenSize();
 
 		frame.pack();
 
@@ -482,7 +480,13 @@ public class CommandFinder implements PlugIn, ActionListener, WindowListener, Ke
 		frame.dispose();
 	}
 
-	public void windowActivated(WindowEvent e) { }
+	public void windowActivated(WindowEvent e) {
+		if (IJ.isMacintosh() && frame!=null) {
+			IJ.wait(10);
+			frame.setMenuBar(Menus.getMenuBar());
+		}
+	}
+	
 	public void windowDeactivated(WindowEvent e) { }
 	public void windowClosed(WindowEvent e) { }
 	public void windowOpened(WindowEvent e) { }

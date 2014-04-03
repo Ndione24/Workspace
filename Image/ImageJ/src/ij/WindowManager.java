@@ -1,19 +1,14 @@
 package ij;
-
-import ij.gui.HistogramWindow;
-import ij.gui.ImageWindow;
-import ij.gui.PlotWindow;
-import ij.macro.Interpreter;
-import ij.plugin.frame.Editor;
-import ij.plugin.frame.PlugInFrame;
+import ij.plugin.Converter;
 import ij.plugin.frame.Recorder;
+import ij.plugin.frame.Editor; 
+import ij.macro.Interpreter;
 import ij.text.TextWindow;
+import ij.plugin.frame.PlugInFrame;
 import ij.util.Tools;
-
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Vector;
+import java.util.*;
+import ij.gui.*;
 
 /** This class consists of static methods used to manage ImageJ's windows. */
 public class WindowManager {
@@ -452,7 +447,13 @@ public class WindowManager {
 			if (title.equals(winTitle))
 				return (Frame)win;
 		}
-		return getImageWindow(title);
+		Frame frame = getImageWindow(title);
+		if (frame==null) {
+			Window win = getWindow(title);
+			if (win!=null)
+				frame = new Frame("Proxy");
+		}
+		return frame;
     }
     
     private static Frame getImageWindow(String title) {

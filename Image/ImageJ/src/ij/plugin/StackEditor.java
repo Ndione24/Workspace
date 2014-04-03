@@ -1,13 +1,10 @@
 package ij.plugin;
-
 import ij.*;
-import ij.gui.GenericDialog;
-import ij.gui.ImageWindow;
-import ij.macro.Interpreter;
+import ij.gui.*;
+import ij.process.*;
 import ij.measure.Calibration;
-import ij.process.ImageProcessor;
-import ij.process.LUT;
-
+import ij.macro.Interpreter;
+import ij.io.FileInfo;
 import java.awt.*;
 import java.util.ArrayList;
 

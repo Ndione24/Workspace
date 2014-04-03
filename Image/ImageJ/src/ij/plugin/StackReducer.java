@@ -1,12 +1,9 @@
 package ij.plugin;
-
-import ij.IJ;
-import ij.ImagePlus;
-import ij.ImageStack;
-import ij.WindowManager;
-import ij.gui.GenericDialog;
+import ij.*;
+import ij.process.*;
+import ij.gui.*;
 import ij.measure.Calibration;
-import ij.process.ImageProcessor;
+import java.awt.*;
 
 /** This plugin implements the Image/Stacks/Misc/Reduce command. */
 public class StackReducer implements PlugIn {

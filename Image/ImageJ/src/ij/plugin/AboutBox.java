@@ -1,15 +1,11 @@
 package ij.plugin;
-
-import ij.IJ;
-import ij.ImageJ;
-import ij.ImagePlus;
-import ij.gui.ImageWindow;
-import ij.process.ColorProcessor;
-import ij.process.ImageProcessor;
-
+import ij.*;
+import ij.process.*;
+import ij.gui.*;
 import java.awt.*;
-import java.awt.image.ImageProducer;
+import ij.io.*;
 import java.net.URL;
+import java.awt.image.*;
 
 /** This plugin implements the Help/About ImageJ command by opening
 	the about.jpg in ij.jar, scaling it 400% and adding some text. */

@@ -1,19 +1,21 @@
 package ij.plugin;
-
 import ij.*;
+import ij.process.*;
 import ij.gui.*;
-import ij.macro.Interpreter;
-import ij.plugin.filter.PlugInFilter;
 import ij.plugin.frame.RoiManager;
-import ij.process.ImageProcessor;
+import ij.plugin.frame.Recorder;
+import ij.macro.Interpreter;
+import ij.io.RoiDecoder;
+import ij.plugin.filter.PlugInFilter;
 import ij.text.TextWindow;
-
+import ij.measure.ResultsTable;
 import java.awt.*;
 
 /** This plugin implements the commands in the Image/Overlay menu. */
 public class OverlayCommands implements PlugIn {
 	private static int opacity = 100;
 	private static Roi defaultRoi;
+	private static boolean zeroTransparent;
 	
 	static {
 		defaultRoi = new Roi(0, 0, 1, 1);
@@ -82,7 +84,7 @@ public class OverlayCommands implements PlugIn {
 		int stackSize = imp.getStackSize();
 		if (setPos && stackSize>1) {
 			if (imp.isHyperStack()||imp.isComposite()) {
-				boolean compositeMode = imp.isComposite() && ((CompositeImage)imp).getMode()==CompositeImage.COMPOSITE;
+				boolean compositeMode = imp.isComposite() && ((CompositeImage)imp).getMode()==IJ.COMPOSITE;
 				int channel = !compositeMode||imp.getNChannels()==stackSize?imp.getChannel():0;
 				if (imp.getNSlices()>1)
 					roi.setPosition(channel, imp.getSlice(), 0);
@@ -145,6 +147,10 @@ public class OverlayCommands implements PlugIn {
 			index = 1;
 
 		String title = createImageRoi?"Create Image ROI":"Add Image...";
+		if (IJ.isMacro()) {
+			opacity = 100;
+			zeroTransparent = false;
+		}
 		GenericDialog gd = new GenericDialog(title);
 		if (createImageRoi)
 			gd.addChoice("Image:", titles, titles[index]);
@@ -154,6 +160,7 @@ public class OverlayCommands implements PlugIn {
 			gd.addNumericField("Y location:", y, 0);
 		}
 		gd.addNumericField("Opacity (0-100%):", opacity, 0);
+		gd.addCheckbox("Zero transparent", zeroTransparent);
 		//gd.addCheckbox("Create image selection", createImageRoi);
 		gd.showDialog();
 		if (gd.wasCanceled())
@@ -164,6 +171,7 @@ public class OverlayCommands implements PlugIn {
 			y = (int)gd.getNextNumber();
 		}
 		opacity = (int)gd.getNextNumber();
+		zeroTransparent = gd.getNextBoolean();
 		//createImageRoi = gd.getNextBoolean();
 		ImagePlus overlay = WindowManager.getImage(wList[index]);
 		if (wList.length==2) {
@@ -188,7 +196,9 @@ public class OverlayCommands implements PlugIn {
 		}	
 		roi = new ImageRoi(x, y, overlay.getProcessor());
 		roi.setName(overlay.getShortTitle());
-		if (opacity!=100) ((ImageRoi)roi).setOpacity(opacity/100.0);
+		if (opacity!=100)
+			((ImageRoi)roi).setOpacity(opacity/100.0);
+		((ImageRoi)roi).setZeroTransparent(zeroTransparent);
 		if (createImageRoi)
 			imp.setRoi(roi);
 		else {
@@ -231,63 +241,45 @@ public class OverlayCommands implements PlugIn {
 
 	void flatten() {
 		ImagePlus imp = IJ.getImage();
-		int flags = imp.isComposite()?0:IJ.setupDialog(imp, 0);
+		if (imp.getStackSize()>1 || imp.getBitDepth()==24) {
+			Overlay overlay = imp.getOverlay();
+			Overlay roiManagerOverlay = null;
+			ImageCanvas ic = imp.getCanvas();
+			if (ic!=null)
+				roiManagerOverlay = ic.getShowAllList();
+			if (overlay==null && roiManagerOverlay==null && !imp.isComposite()) {
+				IJ.error("Flatten", "Overlay or multi-channel image required");
+				return;
+			}
+		}
+		int flags = IJ.setupDialog(imp, 0);
 		if (flags==PlugInFilter.DONE)
 			return;
-		else if (flags==PlugInFilter.DOES_STACKS)
+		else if (flags==PlugInFilter.DOES_STACKS) {
+			//Added by Marcel Boeglin 2014.01.24
+			if (!IJ.isJava16()) {
+				IJ.error("Flatten Stack", "Java 1.6 required to flatten a stack");
+				return;
+			}
 			flattenStack(imp);
-		else {
+			if (Recorder.record)
+				Recorder.recordCall("imp.flattenStack();");
+		} else {
 			ImagePlus imp2 = imp.flatten();
 			imp2.setTitle(WindowManager.getUniqueName(imp.getTitle()));
 			imp2.show();
+			if (Recorder.record) // Added by Marcel Boeglin 2014.01.12
+				Recorder.recordCall("imp2 = imp.flatten();");
 		}
-	}
-	
-	void flattenStack(ImagePlus imp) {
-		Overlay overlay = imp.getOverlay();
-		Overlay roiManagerOverlay = null;
-		boolean roiManagerShowAllMode = !Prefs.showAllSliceOnly;
-		ImageCanvas ic = imp.getCanvas();
-		if (ic!=null)
-			roiManagerOverlay = ic.getShowAllList();
-		if ((overlay==null&&roiManagerOverlay==null) || !IJ.isJava16() || imp.getBitDepth()!=24) {
-			IJ.error("Flatten Stack", "A stack in RGB format, an overlay and\nJava 1.6 are required to flatten a stack.");
-			return;
-		}
-		imp.setOverlay(null);
-		if (roiManagerOverlay!=null) {
-			RoiManager rm = RoiManager.getInstance();
-			if (rm!=null)
-				rm.runCommand("show none");
-		}
-		ImageStack stack = imp.getStack();
-		int stackSize = stack.getSize();
-		for (int img=1; img<=stack.getSize(); img++) {
-			if (overlay!=null && overlay.size()>0)
-				flattenImage(stack, img, overlay.duplicate(), false);
-			if (roiManagerOverlay!=null && roiManagerOverlay.size()>0)
-				flattenImage(stack, img, roiManagerOverlay.duplicate(), roiManagerShowAllMode);
-		}
-		imp.setStack(stack);
-	}
-	
-	private void flattenImage(ImageStack stack, int img, Overlay overlay, boolean showAll) {
-		ImageProcessor ip = stack.getProcessor(img);
-		ImagePlus imp = new ImagePlus("temp", ip);
-		int width = imp.getWidth();
-		int height = imp.getHeight();
-		for (int i=0; i<overlay.size(); i++) {
-			Roi roi = overlay.get(i);
-			int position = roi.getPosition();
-			//IJ.log(img+" "+i+" "+position+" "+showAll+" "+overlay.size());
-			if (!(position==0 || position==img || showAll))
-				roi.setLocation(width, height);
-		}
-		imp.setOverlay(overlay);
-		ImagePlus imp2 = imp.flatten();
-		stack.setPixels(imp2.getProcessor().getPixels(),img);
 	}
 
+
+	//Marcel Boeglin 2014.01.25
+	void flattenStack(ImagePlus imp) {
+		//IJ.log("imp.getOverlay() = "+imp.getOverlay());
+		imp.flattenStack();
+	}
+	
 	void fromRoiManager() {
 		ImagePlus imp = IJ.getImage();
 		RoiManager rm = RoiManager.getInstance2();
@@ -303,7 +295,7 @@ public class OverlayCommands implements PlugIn {
 		rm.moveRoisToOverlay(imp);
 		imp.deleteRoi();
 	}
-	
+
 	void toRoiManager() {
 		ImagePlus imp = IJ.getImage();
 		Overlay overlay = imp.getOverlay();

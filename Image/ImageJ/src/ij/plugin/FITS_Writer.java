@@ -1,15 +1,9 @@
 package ij.plugin;
-
-import ij.IJ;
-import ij.ImagePlus;
-import ij.ImageStack;
-import ij.io.SaveDialog;
-import ij.process.FloatProcessor;
-import ij.process.ImageProcessor;
-import ij.process.ShortProcessor;
-
 import java.io.*;
-import java.util.Properties;
+import java.util.Properties; 
+import ij.*;
+import ij.io.*;
+import ij.process.*;
 
 /**
  * This plugin saves a 16 or 32 bit image in FITS format. It is a stripped-down version of the SaveAs_FITS 

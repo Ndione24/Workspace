@@ -1,18 +1,15 @@
 package ij.plugin;
-
 import ij.*;
 import ij.gui.*;
-import ij.macro.Interpreter;
-import ij.measure.Calibration;
-import ij.measure.Measurements;
-import ij.plugin.filter.GaussianBlur;
-import ij.plugin.filter.ThresholdToSelection;
-import ij.plugin.frame.LineWidthAdjuster;
-import ij.plugin.frame.RoiManager;
 import ij.process.*;
-
+import ij.measure.*;
+import ij.plugin.frame.*;
+import ij.macro.Interpreter;
+import ij.plugin.filter.*;
+import ij.util.Tools;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.Vector;
 
 
 /** This plugin implements the commands in the Edit/Section submenu. */
@@ -758,7 +755,10 @@ public class Selection implements PlugIn, Measurements {
 		ImagePlus edm = new ImagePlus("mask", mask);
 		boolean saveBlackBackground = Prefs.blackBackground;
 		Prefs.blackBackground = false;
+		int saveType = EDM.getOutputType();
+		EDM.setOutputType(EDM.BYTE_OVERWRITE);
 		IJ.run(edm, "Distance Map", "");
+		EDM.setOutputType(saveType);
 		Prefs.blackBackground = saveBlackBackground;
 		ip = edm.getProcessor();
 		ip.setThreshold(0, n, ImageProcessor.NO_LUT_UPDATE);

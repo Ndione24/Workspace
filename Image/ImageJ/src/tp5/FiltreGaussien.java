@@ -58,7 +58,7 @@ public class FiltreGaussien {
         }
 
 		/*
-		 * On divise tout par le facteur afin que la somme de tous les éléments
+         * On divise tout par le facteur afin que la somme de tous les éléments
 		 * soient égaux à 1
 		 */
         double value;

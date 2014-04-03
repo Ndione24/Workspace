@@ -1,17 +1,14 @@
 package ij.plugin;
-
 import ij.*;
-import ij.gui.GenericDialog;
 import ij.macro.Interpreter;
-import ij.measure.Calibration;
-import ij.process.ImageProcessor;
-
+import ij.process.*;
+import ij.gui.*;
 import java.awt.*;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.util.Enumeration;
-import java.util.Properties;
-import java.util.Vector;
+import ij.measure.*;
+import java.awt.event.*;
+import java.util.*;
+import java.lang.*;
+import ij.plugin.filter.*;
 
 /** This plugin, which concatenates two or more images or stacks,
  *  implements the Image/Stacks/Tools/Concatenate command.
@@ -207,7 +204,7 @@ public class Concatenator implements PlugIn, ItemListener{
             for (int f=1; f<=frames; f++) {
                 for (int s=1; s<=slices; s++) {
                     for (int c=1; c<=channels; c++) {
-                        int index = (f-1)*channels*s + (s-1)*channels + c;
+                        int index = (f-1)*channels*slices + (s-1)*channels + c;
                         ImageProcessor ip = stack.getProcessor(index);
                         if (keep)
                             ip = ip.duplicate();

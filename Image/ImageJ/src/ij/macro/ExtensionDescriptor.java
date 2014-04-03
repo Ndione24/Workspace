@@ -1,4 +1,6 @@
 package ij.macro;
+import ij.IJ;
+import java.util.ArrayList;
 
 public class ExtensionDescriptor {
   public String name;

@@ -1,13 +1,8 @@
 package ij.gui;
-
-import ij.ImagePlus;
-import ij.Prefs;
-import ij.process.ImageProcessor;
-
+import ij.*;
+import ij.process.*;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Area;
-import java.awt.geom.GeneralPath;
+import java.awt.geom.*;
 
 
 /** This is an Roi subclass for creating and displaying arrows. */

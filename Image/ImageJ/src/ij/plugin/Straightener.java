@@ -1,13 +1,8 @@
 package ij.plugin;
-
 import ij.*;
-import ij.gui.GenericDialog;
-import ij.gui.Line;
-import ij.gui.PolygonRoi;
-import ij.gui.Roi;
-import ij.measure.Calibration;
+import ij.gui.*;
 import ij.process.*;
-
+import ij.measure.Calibration;
 import java.awt.*;
 
 /** This plugin implements the Edit/Selection/Straighten command. */
@@ -70,7 +65,7 @@ public class Straightener implements PlugIn {
 		ImageProcessor ip2;
 		if (imp.getBitDepth()==24 && roi.getType()!=Roi.LINE)
 			ip2 = straightenRGB(imp, width);
-		else if (imp.isComposite() && ((CompositeImage)imp).getMode()==CompositeImage.COMPOSITE) {
+		else if (imp.isComposite() && ((CompositeImage)imp).getMode()==IJ.COMPOSITE) {
 			if (roi.getType()==Roi.LINE)
 				ip2 = rotateCompositeLine(imp, width);
 			else

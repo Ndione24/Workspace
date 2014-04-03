@@ -10,15 +10,9 @@ This code was modified from Image_Browser by Albert Cardona
 */
 
 package ij.plugin;
-
-import ij.IJ;
-import ij.ImagePlus;
-import ij.gui.ImageWindow;
-import ij.gui.YesNoCancelDialog;
-import ij.io.FileInfo;
-import ij.io.FileSaver;
-import ij.io.Opener;
-
+import ij.*;
+import ij.io.*;
+import ij.gui.*;
 import java.io.File;
 
 public class NextImageOpener implements PlugIn {
@@ -111,6 +105,7 @@ public class NextImageOpener implements PlugIn {
 			imp0.setCalibration(imp2.getCalibration());
 			imp0.setFileInfo(imp2.getOriginalFileInfo());
 			imp0.setProperty ("Info", imp2.getProperty ("Info"));
+			imp0.setOverlay(imp2.getOverlay());
 			ImageWindow win = imp0.getWindow();
 			if (win!=null) win.repaint();
 		}

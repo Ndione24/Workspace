@@ -1,17 +1,10 @@
 package ij.plugin;
-
-import ij.IJ;
-import ij.ImagePlus;
-import ij.ImageStack;
+import ij.*;
+import ij.process.*;
 import ij.gui.*;
-import ij.measure.Calibration;
-import ij.measure.Measurements;
-import ij.measure.ResultsTable;
+import ij.measure.*;
 import ij.plugin.filter.Analyzer;
-import ij.process.ImageProcessor;
-import ij.process.ImageStatistics;
 import ij.util.Tools;
-
 import java.awt.*;
 
 /** Implements the Image/Stack/Plot Z-axis Profile command. */
@@ -50,22 +43,39 @@ public class ZAxisProfiler implements PlugIn, Measurements, PlotMaker  {
 		double minThreshold = ip.getMinThreshold();
 		double maxThreshold = ip.getMaxThreshold();
 		float[] y;
-		if (imp.isHyperStack())
+		boolean hyperstack = imp.isHyperStack();
+		if (hyperstack)
 			y = getHyperstackProfile(roi, minThreshold, maxThreshold);
 		else
 			y = getZAxisProfile(roi, minThreshold, maxThreshold);
 		if (y==null)
 			return null;
 		float[] x = new float[y.length];
-		for (int i=0; i<x.length; i++)
-			x[i] = i+1;
+		
+		String xAxisLabel = showingDialog&&choice.equals(choices[0])?"Frame":"Slice";
+		Calibration cal = imp.getCalibration();
+		if (cal.scaled()) {
+			float c=1.0f;
+			if (timeProfile) {
+				c = (float) cal.frameInterval;
+				xAxisLabel = "["+cal.getTimeUnit()+"]";
+			} else {
+				c = (float) cal.pixelDepth;
+				xAxisLabel = "["+cal.getZUnit()+"]";
+			}
+			for (int i=0; i<x.length; i++)
+				x[i] = i*c;
+		} else {
+			for (int i=0; i<x.length; i++)
+				x[i] = i+1;
+		}
 		String title;
 		if (roi!=null) {
 			Rectangle r = roi.getBounds();
 			title = imp.getTitle()+"-"+r.x+"-"+r.y;
 		} else
 			title = imp.getTitle()+"-0-0";
-		String xAxisLabel = showingDialog&&choice.equals(choices[0])?"Frame":"Slice";
+		//String xAxisLabel = showingDialog&&choice.equals(choices[0])?"Frame":"Slice";
 		Plot plot = new Plot(title, xAxisLabel, "Mean", x, y);
 		if (x.length<=60) {
 			plot.setColor(Color.red);
@@ -79,6 +89,27 @@ public class ZAxisProfiler implements PlugIn, Measurements, PlotMaker  {
 			double xmin=a[0]; double xmax=a[1];
 			plot.setLimits(xmin, xmax, ymin, ymax);
 		}
+		if (!firstTime) {
+			int pos = imp.getCurrentSlice();
+			int size = imp.getStackSize();
+			if (hyperstack) {
+				if (timeProfile) {
+					pos = imp.getT();
+					size = imp.getNFrames();
+				} else {
+					pos = imp.getZ();
+					size = imp.getNSlices();
+				}
+			}
+			double xx = (pos-1.0)/(size-1.0);
+			if (xx==0.0)
+				plot.setLineWidth(2);
+			plot.setColor(Color.blue);
+			plot.drawNormalizedLine(xx, 0, xx, 1.0);
+			plot.setColor(Color.black);
+			plot.setLineWidth(1);
+		}
+		firstTime = false;
 		return plot;
 	}
 	
@@ -87,7 +118,6 @@ public class ZAxisProfiler implements PlugIn, Measurements, PlotMaker  {
 	}
 
 	private float[] getHyperstackProfile(Roi roi, double minThreshold, double maxThreshold) {
-		int channels = imp.getNChannels();
 		int slices = imp.getNSlices();
 		int frames = imp.getNFrames();
 		int c = imp.getC();
@@ -97,7 +127,6 @@ public class ZAxisProfiler implements PlugIn, Measurements, PlotMaker  {
 		if (firstTime)
 			timeProfile = slices==1 && frames>1;
 		if (slices>1 && frames>1 && (!isPlotMaker ||firstTime)) {
-			firstTime = false;
 			showingDialog = true;
 			GenericDialog gd = new GenericDialog("Profiler");
 			gd.addChoice("Profile", choices, choice);
@@ -114,11 +143,11 @@ public class ZAxisProfiler implements PlugIn, Measurements, PlotMaker  {
 		float[] values = new float[size];
 		Calibration cal = imp.getCalibration();
 		Analyzer analyzer = new Analyzer(imp);
-		int measurements = analyzer.getMeasurements();
+		int measurements = Analyzer.getMeasurements();
 		boolean showResults = !isPlotMaker && measurements!=0 && measurements!=LIMIT;
 		measurements |= MEAN;
 		if (showResults) {
-			if (!analyzer.resetCounter())
+			if (!Analyzer.resetCounter())
 				return null;
 		}
 		ImageStack stack = imp.getStack();
@@ -145,21 +174,27 @@ public class ZAxisProfiler implements PlugIn, Measurements, PlotMaker  {
 
 	private float[] getZAxisProfile(Roi roi, double minThreshold, double maxThreshold) {
 		ImageStack stack = imp.getStack();
+		if (firstTime) {
+			int slices = imp.getNSlices();
+			int frames = imp.getNFrames();
+			timeProfile = slices==1 && frames>1;
+		}
 		int size = stack.getSize();
 		float[] values = new float[size];
 		Calibration cal = imp.getCalibration();
 		Analyzer analyzer = new Analyzer(imp);
-		int measurements = analyzer.getMeasurements();
+		int measurements = Analyzer.getMeasurements();
 		boolean showResults = !isPlotMaker && measurements!=0 && measurements!=LIMIT;
-		boolean showingLabels = (measurements&LABELS)!=0 || (measurements&SLICE)!=0;
+		boolean showingLabels = firstTime && showResults && ((measurements&LABELS)!=0 || (measurements&SLICE)!=0);
 		measurements |= MEAN;
 		if (showResults) {
-			if (!analyzer.resetCounter())
+			if (!Analyzer.resetCounter())
 				return null;
 		}
 		int current = imp.getCurrentSlice();
 		for (int i=1; i<=size; i++) {
-			if (showingLabels) imp.setSlice(i);
+			if (showingLabels)
+				imp.setSlice(i);
 			ImageProcessor ip = stack.getProcessor(i);
 			if (minThreshold!=ImageProcessor.NO_THRESHOLD)
 				ip.setThreshold(minThreshold,maxThreshold,ImageProcessor.NO_LUT_UPDATE);
@@ -172,7 +207,8 @@ public class ZAxisProfiler implements PlugIn, Measurements, PlotMaker  {
 			ResultsTable rt = Analyzer.getResultsTable();
 			rt.show("Results");
 		}
-		if (showingLabels) imp.setSlice(current);
+		if (showingLabels)
+			imp.setSlice(current);
 		return values;
 	}
 	

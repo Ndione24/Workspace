@@ -1,10 +1,8 @@
 package ij.gui;
+import ij.*;
+import java.awt.event.*;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowEvent;
-
-/** This is an xtension of GenericDialog that is non-model.
+/** This is an extension of GenericDialog that is non-model.
  *	@author Johannes Schindelin
  */
 public class NonBlockingGenericDialog extends GenericDialog {
@@ -15,6 +13,8 @@ public class NonBlockingGenericDialog extends GenericDialog {
 
 	public synchronized void showDialog() {
 		super.showDialog();
+		if (!IJ.macroRunning())
+			WindowManager.addWindow(this);
 		try {
 			wait();
 		} catch (InterruptedException e) { }
@@ -37,5 +37,10 @@ public class NonBlockingGenericDialog extends GenericDialog {
 		if (wasOKed() || wasCanceled())
 			notify();
     }
+    
+	public void dispose() {
+		super.dispose();
+		WindowManager.removeWindow(this);
+	}
 
 }

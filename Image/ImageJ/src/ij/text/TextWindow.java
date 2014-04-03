@@ -1,17 +1,13 @@
 package ij.text;
 
-import ij.*;
-import ij.gui.GUI;
-import ij.gui.YesNoCancelDialog;
-import ij.io.OpenDialog;
-import ij.macro.Interpreter;
-import ij.plugin.filter.Analyzer;
-
 import java.awt.*;
+import java.io.*;
 import java.awt.event.*;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import ij.*;
+import ij.io.*;
+import ij.gui.*;
+import ij.plugin.filter.Analyzer;
+import ij.macro.Interpreter;
 
 /** Uses a TextPanel to displays text in a window.
 	@see TextPanel
@@ -97,7 +93,7 @@ public class TextWindow extends Frame implements ActionListener, FocusListener, 
 			setLocation(loc);
 		} else {
 			setSize(width, height);
-			GUI.center(this);
+			if (!IJ.debugMode) GUI.center(this);
 		}
 		show();
 	}

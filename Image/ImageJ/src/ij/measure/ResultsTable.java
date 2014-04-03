@@ -1,25 +1,15 @@
 package ij.measure;
-
-import ij.IJ;
-import ij.ImagePlus;
-import ij.Prefs;
-import ij.WindowManager;
-import ij.gui.Roi;
-import ij.io.SaveDialog;
+import ij.*;
 import ij.plugin.filter.Analyzer;
+import ij.text.*;
 import ij.process.*;
-import ij.text.TextPanel;
-import ij.text.TextWindow;
+import ij.gui.Roi;
 import ij.util.Tools;
-
+import ij.io.SaveDialog;
 import java.awt.*;
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
+import java.text.*;
 import java.util.*;
+import java.io.*;
 
 
 /** This is a table for storing measurement results and strings as columns of values. 
@@ -456,8 +446,10 @@ public class ResultsTable implements Cloneable {
 			for (int i=size; i<row; i++)
 				stringColumn.add(i, "");
 		}
-		//IJ.log("setStringValue: size="+stringColumn.size()+", row= "+row+", value= "+value);
-		stringColumn.add(row, value);
+		if (row==stringColumn.size())
+			stringColumn.add(row, value);
+		else
+			stringColumn.set(row, value);
 	}
 
 	/** Returns a tab or comma delimited string containing the column headings. */

@@ -1,13 +1,11 @@
 package ij.plugin;
-
-import ij.IJ;
-import ij.ImagePlus;
-import ij.io.OpenDialog;
-import ij.process.FloatProcessor;
-import ij.process.ImageProcessor;
-import ij.util.Tools;
-
+import java.awt.*;
+import java.awt.image.*;
 import java.io.*;
+import ij.*;
+import ij.io.*;
+import ij.process.*;
+import ij.util.Tools;
 
 
 /** This plugin opens a tab or comma delimeted text file as an image.
@@ -17,6 +15,7 @@ public class TextReader implements PlugIn {
     int words = 0, chars = 0, lines = 0, width=1;;
     String directory, name, path;
     boolean hideErrorMessages;
+    String firstTok;
     
     public void run(String arg) {
         if (showDialog()) {
@@ -65,7 +64,7 @@ public class TextReader implements PlugIn {
             	if (i<pixels.length && Float.isNaN(pixels[i]))
             		firstRowNaNCount++;
             }
-            if (firstRowNaNCount==width) { // assume first row is header
+            if (firstRowNaNCount==width && !"NaN".equals(firstTok)) { // assume first row is header
             	ip.setRoi(0, 1, width, lines-1);
             	ip = ip.crop();
             }
@@ -149,6 +148,8 @@ public class TextReader implements PlugIn {
             inc = 1;
         while (tok.nextToken() != StreamTokenizer.TT_EOF) {
             if (tok.ttype==StreamTokenizer.TT_WORD) {
+                if (i==0)
+                	firstTok = tok.sval;
                 pixels[i++] = (float)Tools.parseDouble(tok.sval, Double.NaN);
                 if (i==size)
                     break;

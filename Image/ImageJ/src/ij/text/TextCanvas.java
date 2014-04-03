@@ -1,8 +1,7 @@
 package ij.text;
-
 import ij.util.Java2;
-
 import java.awt.*;
+import java.awt.event.*;
 
 class TextCanvas extends Canvas {
 

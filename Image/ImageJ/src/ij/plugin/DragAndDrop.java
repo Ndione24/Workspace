@@ -1,24 +1,14 @@
 package ij.plugin;
-
-import ij.IJ;
-import ij.ImageJ;
-import ij.Macro;
-import ij.gui.GenericDialog;
-import ij.gui.Toolbar;
-import ij.io.DirectoryChooser;
-import ij.io.OpenDialog;
-import ij.io.Opener;
-
-import java.awt.*;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
+import ij.*;
+import ij.gui.*;
+import ij.io.*;
+import java.io.*;
+import java.awt.Point;
+import java.awt.datatransfer.*;
 import java.awt.dnd.*;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.StringReader;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.Iterator;
-import java.util.List;
+import java.util.ArrayList;
 
 /** This class opens images, roi's, luts and text files dragged and dropped on  the "ImageJ" window.
      It is based on the Draw_And_Drop plugin by Eric Kischell (keesh@ieee.org).

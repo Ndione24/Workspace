@@ -1,15 +1,11 @@
 package ij.gui;
-
+import ij.*;
+import ij.process.*;
+import ij.util.*;
 import ij.plugin.Colors;
-import ij.util.Java2;
-import ij.util.Tools;
-
 import java.awt.*;
-import java.awt.event.AdjustmentEvent;
-import java.awt.event.AdjustmentListener;
-import java.awt.event.TextEvent;
-import java.awt.event.TextListener;
 import java.util.Vector;
+import java.awt.event.*;
 
 
  /** Displays a dialog that allows the user to select a color using three sliders. */

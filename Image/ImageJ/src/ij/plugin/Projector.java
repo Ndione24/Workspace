@@ -1,18 +1,11 @@
 package ij.plugin;
-
 import ij.*;
-import ij.gui.GenericDialog;
-import ij.gui.NewImage;
-import ij.gui.Roi;
-import ij.macro.Interpreter;
+import ij.gui.*;
+import ij.process.*;
 import ij.measure.Calibration;
-import ij.process.ByteProcessor;
-import ij.process.FloatProcessor;
-import ij.process.ImageProcessor;
-import ij.process.ShortProcessor;
-
+import ij.macro.Interpreter;
 import java.awt.*;
-import java.awt.image.ColorModel;
+import java.awt.image.*;
 
 /**
 This plugin creates a sequence of projections of a rotating volume (stack of slices) onto a plane using

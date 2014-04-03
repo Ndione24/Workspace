@@ -1,20 +1,13 @@
 package ij.plugin;
-
-import ij.*;
-import ij.gui.GenericDialog;
-import ij.gui.Overlay;
-import ij.gui.Roi;
-import ij.gui.ShapeRoi;
-import ij.measure.Calibration;
-import ij.plugin.frame.Recorder;
-import ij.process.ImageProcessor;
-import ij.process.LUT;
-import ij.util.Tools;
-
 import java.awt.*;
-import java.awt.event.TextEvent;
-import java.awt.event.TextListener;
+import java.awt.event.*;
 import java.util.Vector;
+import ij.*;
+import ij.process.*;
+import ij.gui.*;
+import ij.util.Tools;
+import ij.plugin.frame.Recorder;
+import ij.measure.Calibration;
 
 /** This plugin implements the Image/Duplicate command.
 <pre>
@@ -65,7 +58,7 @@ public class Duplicator implements PlugIn, TextListener {
 		}
 		imp2.setTitle(newTitle);
 		if (roi!=null && roi.isArea() && roi.getType()!=Roi.RECTANGLE) {
-			Roi roi2 = cropRoi(imp, roi);
+			Roi roi2 = (Roi)cropRoi(imp, roi).clone();
 			roi2.setLocation(0, 0);
 			imp2.setRoi(roi2);
 		}
@@ -289,7 +282,7 @@ public class Duplicator implements PlugIn, TextListener {
 		if (!duplicateStack) {
 			int nChannels = imp.getNChannels();
 			boolean singleComposite = imp.isComposite() && nChannels==imp.getStackSize();
-			if (!singleComposite && nChannels>1 && imp.isComposite() && ((CompositeImage)imp).getMode()==CompositeImage.COMPOSITE) {
+			if (!singleComposite && nChannels>1 && imp.isComposite() && ((CompositeImage)imp).getMode()==IJ.COMPOSITE) {
 				firstC = 1;
 				lastC = nChannels;
 			} else
@@ -305,7 +298,7 @@ public class Duplicator implements PlugIn, TextListener {
 			return;
 		}
 		if (roi!=null && roi.isArea() && roi.getType()!=Roi.RECTANGLE) {
-			Roi roi2 = cropRoi(imp, roi);
+			Roi roi2 = (Roi)cropRoi(imp, roi).clone();
 			roi2.setLocation(0, 0);
 			imp2.setRoi(roi2);
 		}

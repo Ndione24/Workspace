@@ -1,11 +1,7 @@
 package ij.io;
-
-import ij.IJ;
-import ij.VirtualStack;
+import java.io.*;
+import ij.*;  //??
 import ij.process.ImageProcessor;
-
-import java.io.IOException;
-import java.io.OutputStream;
 
 /** Writes a raw image described by a FileInfo object to an OutputStream. */
 public class ImageWriter {

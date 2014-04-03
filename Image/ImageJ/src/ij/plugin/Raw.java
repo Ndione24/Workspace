@@ -1,7 +1,9 @@
 package ij.plugin;
 
-import ij.io.ImportDialog;
-import ij.io.OpenDialog;
+import java.awt.*;
+import java.io.*;
+import ij.*;
+import ij.io.*;
 
 /** This plugin implements the File/Import/Raw command. */
 public class Raw implements PlugIn {

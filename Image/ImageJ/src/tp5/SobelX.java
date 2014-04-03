@@ -10,7 +10,7 @@ import ij.process.ImageProcessor;
  * Sx = |-2  0  2 |
  * |-1  0  1 |
  */
-public class SobelX {
+class SobelX {
     public SobelX(ImageProcessor ip) {
         Masque sobelX = new Masque(1);
 

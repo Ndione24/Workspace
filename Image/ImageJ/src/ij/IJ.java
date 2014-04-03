@@ -1,42 +1,32 @@
 package ij;
-
 import ij.gui.*;
+import ij.process.*;
+import ij.text.*;
 import ij.io.*;
+import ij.plugin.*;
+import ij.plugin.filter.*;
+import ij.util.Tools;
+import ij.plugin.frame.Recorder;
 import ij.macro.Interpreter;
 import ij.measure.Calibration;
-import ij.measure.Measurements;
 import ij.measure.ResultsTable;
-import ij.plugin.HyperStackMaker;
-import ij.plugin.Macro_Runner;
-import ij.plugin.Memory;
-import ij.plugin.PlugIn;
-import ij.plugin.filter.Analyzer;
-import ij.plugin.filter.PlugInFilter;
-import ij.plugin.filter.PlugInFilterRunner;
-import ij.plugin.frame.Recorder;
-import ij.process.*;
-import ij.text.TextPanel;
-import ij.text.TextWindow;
-import ij.util.Tools;
-
+import ij.measure.Measurements;
+import java.awt.event.*;
+import java.text.*;
+import java.util.*;	
+import java.awt.*;	
 import java.applet.Applet;
-import java.awt.*;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
 import java.io.*;
-import java.net.URL;
-import java.net.URLConnection;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Locale;
-import java.util.Vector;
+import java.lang.reflect.*;
+import java.net.*;
 
 
 /** This class consists of static utility methods. */
 public class IJ {
 
+	/** Image display modes */
+	public static final int COMPOSITE=1, COLOR=2, GRAYSCALE=3;
+	
 	public static final String URL = "http://imagej.nih.gov/ij";
 	public static final int ALL_KEYS = -1;
 	
@@ -54,7 +44,7 @@ public class IJ {
 	private static ProgressBar progressBar;
 	private static TextPanel textPanel;
 	private static String osname, osarch;
-	private static boolean isMac, isWin, isJava2, isJava14, isJava15, isJava16, isJava17, isLinux, is64Bit;
+	private static boolean isMac, isWin, isJava2, isJava14, isJava15, isJava16, isJava17, isJava18, isLinux, is64Bit;
 	private static boolean controlDown, altDown, spaceDown, shiftDown;
 	private static boolean macroRunning;
 	private static Thread previousThread;
@@ -82,6 +72,7 @@ public class IJ {
 			isJava15 = version.compareTo("1.4")>0;
 			isJava16 = version.compareTo("1.5")>0;
 			isJava17 = version.compareTo("1.6")>0;
+			isJava18 = version.compareTo("1.7")>0;
 		}
 	}
 			
@@ -127,8 +118,7 @@ public class IJ {
 
 	/** Runs the specified macro or script file in the current thread.
 		The file is assumed to be in the macros folder
- 		unless <code>name</code> is a full path. ".txt"  is
-    	added if <code>name</code> does not have an extension.
+ 		unless <code>name</code> is a full path.
 		The optional string argument (<code>arg</code>) can be retrieved in the called 
 		macro or script (v1.42k or later) using the getArgument() function. 
 		Returns any string value returned by the macro, or null. Scripts always return null.
@@ -958,6 +948,11 @@ public class IJ {
 		return isJava17;
 	}
 
+	/** Returns true if ImageJ is running on a Java 1.8 or greater JVM. */
+	public static boolean isJava18() {
+		return isJava18;
+	}
+
 	/** Returns true if ImageJ is running on Linux. */
 	public static boolean isLinux() {
 		return isLinux;
@@ -990,12 +985,14 @@ public class IJ {
 		if the user selects "Cancel".
 	*/
 	public static int setupDialog(ImagePlus imp, int flags) {
-		if (imp==null || (ij!=null&&ij.hotkey))
+		if (imp==null || (ij!=null&&ij.hotkey)) {
+			if (ij!=null) ij.hotkey=false;
 			return flags;
+		}
 		int stackSize = imp.getStackSize();
 		if (stackSize>1) {
 			String macroOptions = Macro.getOptions();
-			if (imp.isComposite() && ((CompositeImage)imp).getMode()==CompositeImage.COMPOSITE) {
+			if (imp.isComposite() && ((CompositeImage)imp).getMode()==IJ.COMPOSITE) {
 				if (macroOptions==null || !macroOptions.contains("slice"))
 					return flags | PlugInFilter.DOES_STACKS;
 			}
@@ -1882,11 +1879,11 @@ public class IJ {
 	 		type += "black";
 		ImagePlus imp = IJ.createImage(title, type, width, height, channels*slices*frames);
 		imp.setDimensions(channels, slices, frames);
-		int mode = CompositeImage.COLOR;
+		int mode = IJ.COLOR;
 		if (type.contains("composite"))
-			mode = CompositeImage.COMPOSITE;
+			mode = IJ.COMPOSITE;
 		if (type.contains("grayscale"))
-			mode = CompositeImage.GRAYSCALE;
+			mode = IJ.GRAYSCALE;
 		if (channels>1 && imp.getBitDepth()!=24)
 			imp = new CompositeImage(imp, mode);
 		imp.setOpenAsHyperStack(true);
@@ -1908,7 +1905,7 @@ public class IJ {
 		ImagePlus imp = createImage(title, width, height, channels*slices*frames, bitdepth);
 		imp.setDimensions(channels, slices, frames);
 		if (channels>1 && bitdepth!=24)
-			imp = new CompositeImage(imp, CompositeImage.COMPOSITE);
+			imp = new CompositeImage(imp, IJ.COMPOSITE);
 		imp.setOpenAsHyperStack(true);
 		return imp;
 	 }
@@ -1989,6 +1986,9 @@ public class IJ {
 	
 	/** Returns the size, in pixels, of the primary display. */
 	public static Dimension getScreenSize() {
+		Rectangle bounds = GUI.getZeroBasedMaxBounds();
+		if (bounds!=null)
+			return new Dimension(bounds.width, bounds.height);
 		if (isWindows())  // GraphicsEnvironment.getConfigurations is *very* slow on Windows
 			return Toolkit.getDefaultToolkit().getScreenSize();
 		if (GraphicsEnvironment.isHeadless())
@@ -1998,7 +1998,7 @@ public class IJ {
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		GraphicsDevice[] gd = ge.getScreenDevices();
 		GraphicsConfiguration[] gc = gd[0].getConfigurations();
-		Rectangle bounds = gc[0].getBounds();
+		bounds = gc[0].getBounds();
 		if ((bounds.x==0&&bounds.y==0) || (IJ.isLinux()&&gc.length>1))
 			return new Dimension(bounds.width, bounds.height);
 		else

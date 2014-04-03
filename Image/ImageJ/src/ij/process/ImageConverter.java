@@ -1,9 +1,10 @@
 package ij.process;
 
+import java.awt.*;
+import java.awt.image.*;
 import ij.*;
-import ij.measure.Calibration;
-
-import java.awt.image.ColorModel;
+import ij.gui.*;
+import ij.measure.*;
 
 /** This class converts an ImagePlus object to a different type. */
 public class ImageConverter {
@@ -117,7 +118,7 @@ public class ImageConverter {
 		imp.setStack(null, stack);
 		imp.setDimensions(3, 1, 1);
 		if (imp.isComposite())
-			((CompositeImage)imp).setMode(CompositeImage.GRAYSCALE);
+			((CompositeImage)imp).setMode(IJ.GRAYSCALE);
 	}
 
 	/** Converts an RGB image to a HSB (hue, saturation and brightness) stack. */

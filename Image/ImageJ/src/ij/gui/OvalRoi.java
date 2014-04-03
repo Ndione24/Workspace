@@ -1,11 +1,10 @@
 package ij.gui;
 
-import ij.ImagePlus;
-import ij.measure.Calibration;
-import ij.process.ByteProcessor;
-import ij.process.ImageProcessor;
-
 import java.awt.*;
+import java.awt.image.*;
+import ij.*;
+import ij.process.*;
+import ij.measure.Calibration;
 
 /** Oval region of interest */
 public class OvalRoi extends Roi {
@@ -46,10 +45,8 @@ public class OvalRoi extends Roi {
 		if (width > 7 && height > 7) {
 			asp = (double)width/(double)height;
 			asp_bk = asp;
-		} else {
-
+		} else
 			asp = asp_bk;
-		}
 		switch (activeHandle) {
 			case 0: x=ox-w2; y=oy-h2; break;
 			case 1: y=oy; break;
@@ -117,7 +114,7 @@ public class OvalRoi extends Roi {
 
 		}
 
-		if(constrain) {
+		if (constrain) {
 			if(activeHandle==1 || activeHandle==5) width=height;
 			else height=width;
 			
@@ -125,7 +122,7 @@ public class OvalRoi extends Roi {
 				width=1;
 				x=x2=xc;
 			}
-			if(y>=y2) {
+			if (y>=y2) {
 				height=1;
 				y=y2=yc;
 			}
@@ -155,17 +152,17 @@ public class OvalRoi extends Roi {
 					x=x2-width;
 					break;
 			}
-			if(center){
+			if (center){
 				x=xc-width/2;
 				y=yc-height/2;
 			}
 		}
 
-		if(aspect && !constrain) {
+		if (aspect && !constrain) {
 			if(activeHandle==1 || activeHandle==5) width=(int)Math.rint((double)height*asp);
 			else height=(int)Math.rint((double)width/asp);
 
-			switch(activeHandle){
+			switch (activeHandle){
 				case 0:
 					x=x2-width;
 					y=y2-height;
@@ -191,7 +188,7 @@ public class OvalRoi extends Roi {
 					x=x2-width;
 					break;
 			}
-			if(center){
+			if (center){
 				x=xc-width/2;
 				y=yc-height/2;
 			}
@@ -211,6 +208,7 @@ public class OvalRoi extends Roi {
 		oldX=x; oldY=y;
 		oldWidth=width; oldHeight=height;
 		cachedMask = null;
+		bounds = null;
 	}
 
 	public void draw(Graphics g) {
@@ -276,7 +274,7 @@ public class OvalRoi extends Roi {
 			updateFullWindow = true;
 	}		
 
-	/** Returns this OvalRoi as a polygon. */
+	/** Returns this OvalRoi as a Polygon. */
 	public Polygon getPolygon() {
 		ImageProcessor mask = getMask();
 		Wand wand = new Wand(mask);
@@ -287,6 +285,12 @@ public class OvalRoi extends Roi {
         }
 		return new Polygon(wand.xpoints, wand.ypoints, wand.npoints);
 	}		
+
+	/** Returns this OvalRoi as a FloatPolygon. */
+	public FloatPolygon getFloatPolygon() {
+		Polygon p = getPolygon();
+		return new FloatPolygon(toFloat(p.xpoints), toFloat(p.ypoints), p.npoints);
+	}
 
 	/** Tests if the specified point is inside the boundary of this OvalRoi.
 	* Authors: Barry DeZonia and Michael Schmid

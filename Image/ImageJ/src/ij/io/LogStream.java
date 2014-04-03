@@ -1,7 +1,5 @@
 package ij.io;
-
 import ij.IJ;
-
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 

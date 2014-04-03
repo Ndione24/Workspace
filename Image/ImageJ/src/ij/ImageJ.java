@@ -1,26 +1,21 @@
 package ij;
-
 import ij.gui.*;
+import ij.process.*;
+import ij.io.*;
+import ij.plugin.*;
+import ij.plugin.filter.*;
+import ij.plugin.frame.*;
+import ij.text.*;
 import ij.macro.Interpreter;
-import ij.plugin.JavaProperties;
-import ij.plugin.MacroInstaller;
-import ij.plugin.Orthogonal_Views;
-import ij.plugin.filter.PlugInFilterRunner;
-import ij.plugin.frame.ContrastAdjuster;
-import ij.plugin.frame.Editor;
-import ij.plugin.frame.ThresholdAdjuster;
-import ij.text.TextWindow;
-import ij.util.Tools;
-
-import javax.swing.*;
+import ij.io.Opener;
+import ij.util.*;
 import java.awt.*;
+import java.util.*;
 import java.awt.event.*;
-import java.awt.image.ImageProducer;
-import java.io.File;
-import java.net.URL;
-import java.util.Hashtable;
-import java.util.Properties;
-import java.util.Vector;
+import java.io.*;
+import java.net.*;
+import java.awt.image.*;
+import javax.swing.ImageIcon;
 
 /**
 This frame is the main ImageJ class.
@@ -81,7 +76,7 @@ public class ImageJ extends Frame implements ActionListener,
 	MouseListener, KeyListener, WindowListener, ItemListener, Runnable {
 
 	/** Plugins should call IJ.getVersion() or IJ.getFullVersion() to get the version string. */
-	public static final String VERSION = "1.48o";
+	public static final String VERSION = "1.48t";
 	public static final String BUILD = ""; 
 	public static Color backgroundColor = new Color(237,237,237);
 	/** SansSerif, 12-point, plain font. */
@@ -90,13 +85,16 @@ public class ImageJ extends Frame implements ActionListener,
 	public static final int DEFAULT_PORT = 57294;
 	
 	/** Run as normal application. */
-	public static final int STANDALONE=0;
+	public static final int STANDALONE = 0;
 	
 	/** Run embedded in another application. */
-	public static final int EMBEDDED=1;
+	public static final int EMBEDDED = 1;
 	
 	/** Run embedded and invisible in another application. */
-	public static final int NO_SHOW=2;
+	public static final int NO_SHOW = 2;
+	
+	/** Run ImageJ in debug mode. */
+	public static final int DEBUG = 256;
 
 	private static final String IJ_X="ij.x",IJ_Y="ij.y";
 	private static int port = DEFAULT_PORT;
@@ -139,13 +137,13 @@ public class ImageJ extends Frame implements ActionListener,
 		(non-standalone) version of ImageJ. */
 	public ImageJ(java.applet.Applet applet, int mode) {
 		super("ImageJ");
+		if ((mode&DEBUG)!=0)
+			IJ.setDebugMode(true);
+		mode = mode & 255;
+		if (IJ.debugMode) IJ.log("ImageJ starting in debug mode: "+mode);
 		embedded = applet==null && (mode==EMBEDDED||mode==NO_SHOW);
 		this.applet = applet;
 		String err1 = Prefs.load(this, applet);
-		//if (IJ.isLinux()) {
-		//	backgroundColor = new Color(240,240,240);
-		//	setBackground(backgroundColor);
-		//}
 		setBackground(backgroundColor);
 		Menus m = new Menus(this, applet);
 		String err2 = m.addMenuBar();
@@ -255,12 +253,10 @@ public class ImageJ extends Frame implements ActionListener,
 	}
 	
 	public Point getPreferredLocation() {
-		if (!IJ.isJava14()) return new Point(0, 0);
-		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		Rectangle maxBounds = ge.getMaximumWindowBounds();
+		Rectangle maxBounds = GUI.getMaxWindowBounds();
 		int ijX = Prefs.getInt(IJ_X,-99);
 		int ijY = Prefs.getInt(IJ_Y,-99);
-		if (ijX>=0 && ijY>0 && ijX<(maxBounds.x+maxBounds.width-75))
+		if (ijX>=maxBounds.x && ijY>=maxBounds.y && ijX<(maxBounds.x+maxBounds.width-75))
 			return new Point(ijX, ijY);
 		Dimension tbsize = toolbar.getPreferredSize();
 		int ijWidth = tbsize.width+10;
@@ -774,26 +770,29 @@ public class ImageJ extends Frame implements ActionListener,
 	}
 	
 	void saveWindowLocations() {
-		Frame frame = WindowManager.getFrame("B&C");
-		if (frame!=null)
-			Prefs.saveLocation(ContrastAdjuster.LOC_KEY, frame.getLocation());
-		frame = WindowManager.getFrame("Threshold");
-		if (frame!=null)
-			Prefs.saveLocation(ThresholdAdjuster.LOC_KEY, frame.getLocation());
-		frame = WindowManager.getFrame("Results");
-		if (frame!=null) {
-			Prefs.saveLocation(TextWindow.LOC_KEY, frame.getLocation());
-			Dimension d = frame.getSize();
+		Window win = WindowManager.getWindow("B&C");
+		if (win!=null)
+			Prefs.saveLocation(ContrastAdjuster.LOC_KEY, win.getLocation());
+		win = WindowManager.getWindow("Threshold");
+		if (win!=null)
+			Prefs.saveLocation(ThresholdAdjuster.LOC_KEY, win.getLocation());
+		win = WindowManager.getWindow("Results");
+		if (win!=null) {
+			Prefs.saveLocation(TextWindow.LOC_KEY, win.getLocation());
+			Dimension d = win.getSize();
 			Prefs.set(TextWindow.WIDTH_KEY, d.width);
 			Prefs.set(TextWindow.HEIGHT_KEY, d.height);
 		}
-		frame = WindowManager.getFrame("Log");
-		if (frame!=null) {
-			Prefs.saveLocation(TextWindow.LOG_LOC_KEY, frame.getLocation());
-			Dimension d = frame.getSize();
+		win = WindowManager.getWindow("Log");
+		if (win!=null) {
+			Prefs.saveLocation(TextWindow.LOG_LOC_KEY, win.getLocation());
+			Dimension d = win.getSize();
 			Prefs.set(TextWindow.LOG_WIDTH_KEY, d.width);
 			Prefs.set(TextWindow.LOG_HEIGHT_KEY, d.height);
 		}
+		win = WindowManager.getWindow("ROI Manager");
+		if (win!=null)
+			Prefs.saveLocation(RoiManager.LOC_KEY, win.getLocation());
 	}
 	
 	public static String getCommandName() {

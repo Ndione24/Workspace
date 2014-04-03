@@ -1,21 +1,18 @@
 package ij.plugin.filter;
-
-import ij.*;
-import ij.gui.*;
-import ij.macro.Interpreter;
-import ij.measure.Calibration;
-import ij.measure.Measurements;
-import ij.measure.ResultsTable;
-import ij.plugin.Colors;
-import ij.plugin.frame.RoiManager;
-import ij.process.*;
-import ij.text.TextPanel;
-import ij.text.TextWindow;
-import ij.util.Tools;
-
 import java.awt.*;
 import java.awt.image.IndexColorModel;
 import java.util.Properties;
+import ij.*;
+import ij.gui.*;
+import ij.process.*;
+import ij.measure.*;
+import ij.text.*;
+import ij.plugin.filter.Analyzer;
+import ij.plugin.frame.Recorder;
+import ij.plugin.frame.RoiManager;
+import ij.plugin.Colors;
+import ij.macro.Interpreter;
+import ij.util.Tools;
 
 /** Implements ImageJ's Analyze Particles command.
 	<p>
@@ -332,6 +329,7 @@ public class ParticleAnalyzer implements PlugInFilter, Measurements {
 		if (gd.wasCanceled())
 			return false;
 			
+		gd.setSmartRecording(minSize==0.0&&maxSize==Double.POSITIVE_INFINITY);
 		String size = gd.getNextString(); // min-max size
 		if (scaled)
 			pixelUnits = gd.getNextBoolean();
@@ -349,6 +347,7 @@ public class ParticleAnalyzer implements PlugInFilter, Measurements {
 		staticMinSize = minSize;
 		staticMaxSize = maxSize;
 		
+		gd.setSmartRecording(minCircularity==0.0&&maxCircularity==1.0);
 		minAndMax = Tools.split(gd.getNextString(), " -"); // min-max circularity
 		double minc = minAndMax.length>=1?gd.parseDouble(minAndMax[0]):0.0;
 		double maxc = minAndMax.length==2?gd.parseDouble(minAndMax[1]):Double.NaN;
@@ -365,7 +364,9 @@ public class ParticleAnalyzer implements PlugInFilter, Measurements {
 			canceled = true;
 			return false;
 		}
+		gd.setSmartRecording(true);
 		showChoice = gd.getNextChoiceIndex();
+		gd.setSmartRecording(false);
 		staticShowChoice = showChoice;
 		if (gd.getNextBoolean())
 			options |= SHOW_RESULTS; else options &= ~SHOW_RESULTS;

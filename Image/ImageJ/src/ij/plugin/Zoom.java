@@ -1,14 +1,8 @@
 package ij.plugin;
-
-import ij.IJ;
-import ij.ImagePlus;
-import ij.Macro;
-import ij.WindowManager;
-import ij.gui.GenericDialog;
-import ij.gui.ImageCanvas;
-import ij.gui.ImageWindow;
-import ij.gui.Roi;
-
+import ij.*;
+import ij.gui.*;
+import ij.process.*;
+import ij.measure.*;
 import java.awt.*;
 
 /** This plugin implements the commands in the Image/Zoom submenu. */
@@ -108,7 +102,9 @@ public class Zoom implements PlugIn{
 			ic.setSourceRect(new Rectangle(x-width/2,y-height/2,width,height));
 			ic.setMagnification(mag);
 			Insets insets = win.getInsets();
-			win.setSize((int)(width*mag+10), (int)(height*mag+insets.top+10));
+			int margins = IJ.isMacOSX()?10:14;
+			int stackInset = (imp.getNDimensions()-2)*15;
+			win.setSize((int)(width*mag+insets.right+insets.left+margins), (int)(height*mag+insets.top+insets.bottom+margins+stackInset));
 			return;
 		}
 		if (x>=imp.getWidth()) x=imp.getWidth()-1;
@@ -117,9 +113,9 @@ public class Zoom implements PlugIn{
 		win.getCanvas().setMagnification(mag);
 		double w = imp.getWidth()*mag;
 		double h = imp.getHeight()*mag;
-		Dimension screen = IJ.getScreenSize();
-		if (w>screen.width-20) w = screen.width - 20;  // does it fit?
-		if (h>screen.height-50) h = screen.height - 50;
+		Rectangle r = GUI.getMaxWindowBounds();
+		if (w>r.width-20) w = r.width-20;  // does it fit?
+		if (h>r.height-50) h = r.height-50;
 		width = (int)(w/mag);
 		height = (int)(h/mag);
 		x -= width/2;

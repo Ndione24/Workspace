@@ -1,7 +1,5 @@
 package ij.process;
-
 import ij.measure.Calibration;
-
 import java.util.Arrays;
 
 /** 32-bit (float) image statistics, including histogram. */

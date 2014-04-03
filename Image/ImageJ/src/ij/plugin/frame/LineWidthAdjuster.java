@@ -1,18 +1,14 @@
 package ij.plugin.frame;
-
-import ij.IJ;
-import ij.ImagePlus;
-import ij.Prefs;
-import ij.WindowManager;
-import ij.gui.GUI;
-import ij.gui.Line;
-import ij.gui.PolygonRoi;
-import ij.gui.Roi;
-import ij.plugin.PlugIn;
-import ij.util.Tools;
-
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.*;
+import ij.*;
+import ij.plugin.*;
+import ij.process.*;
+import ij.gui.*;
+import ij.measure.*;
+import ij.plugin.frame.Recorder;
+import ij.util.Tools;
 
 /** Adjusts the width of line selections.  */
 public class LineWidthAdjuster extends PlugInFrame implements PlugIn,

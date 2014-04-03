@@ -1,11 +1,8 @@
 package ij.plugin;
-
-import ij.IJ;
-import ij.ImagePlus;
+import ij.*;
 import ij.measure.Measurements;
 import ij.plugin.filter.Analyzer;
-
-import java.io.File;
+import java.io.*;
 
 /** This plugin implements the File/Batch/Measure command, 
 	which measures all the images in a user-specified folder. */

@@ -1,20 +1,13 @@
 package ij.plugin.filter;
-
-import ij.IJ;
-import ij.ImagePlus;
-import ij.Macro;
-import ij.WindowManager;
-import ij.gui.GenericDialog;
-import ij.io.FileOpener;
-import ij.measure.Calibration;
-import ij.process.ImageProcessor;
+import ij.*;
+import ij.process.*;
+import ij.gui.*;
 import ij.util.Tools;
-
+import ij.io.FileOpener;
 import java.awt.*;
-import java.awt.event.TextEvent;
-import java.awt.event.TextListener;
-import java.util.Locale;
-import java.util.Vector;
+import java.awt.event.*;
+import java.util.*;
+import ij.measure.Calibration;
 
 public class ImageProperties implements PlugInFilter, TextListener {
 	ImagePlus imp;
@@ -133,19 +126,22 @@ public class ImageProperties implements PlugInFilter, TextListener {
 			cal.pixelDepth = pixelDepth;
 		}
 
+		gd.setSmartRecording(interval==0);
 		String frameInterval = validateInterval(gd.getNextString());
 		String[] intAndUnit = Tools.split(frameInterval, " -");
 		interval = Tools.parseDouble(intAndUnit[0]);
 		cal.frameInterval = Double.isNaN(interval)?0.0:interval;
 		String timeUnit = intAndUnit.length>=2?intAndUnit[1]:"sec";
-        if (timeUnit.equals("sec")&&cal.frameInterval<=2.0&&cal.frameInterval>=1.0/30.0)
-        	cal.fps = 1.0/cal.frameInterval;
-        if (timeUnit.equals("usec"))
-            timeUnit = IJ.micronSymbol + "sec";
+		if (timeUnit.equals("sec")&&cal.frameInterval<=2.0&&cal.frameInterval>=1.0/30.0)
+			cal.fps = 1.0/cal.frameInterval;
+		if (timeUnit.equals("usec"))
+			timeUnit = IJ.micronSymbol + "sec";
 		cal.setTimeUnit(timeUnit);
 
+		gd.setSmartRecording(cal.xOrigin==0&&cal.yOrigin==0&&cal.zOrigin==0);
         String[] origin = Tools.split(gd.getNextString(), " ,");
-		double x = Tools.parseDouble(origin[0]);
+		gd.setSmartRecording(false);
+		double x = origin.length>=1?Tools.parseDouble(origin[0]):Double.NaN;
 		double y = origin.length>=2?Tools.parseDouble(origin[1]):Double.NaN;
 		double z = origin.length>=3?Tools.parseDouble(origin[2]):Double.NaN;
 		cal.xOrigin= Double.isNaN(x)?0.0:x;
