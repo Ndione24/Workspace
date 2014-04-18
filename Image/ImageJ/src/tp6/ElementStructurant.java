@@ -104,6 +104,12 @@ public class ElementStructurant {
         return es;
     }
 
+    public static ElementStructurant creerRectangleDiag() {
+        ElementStructurant es = ElementStructurant.creerRectangleCentre(3, 3);
+        es.remplirAvec(new int[]{255, 0, 255, 0, 0, 0, 255, 0, 255});
+        return es;
+    }
+
     /**
      * Renvoie la coordonnée horizontale mini
      *

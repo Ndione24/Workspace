@@ -4,9 +4,12 @@ import ij.ImagePlus;
 import ij.gui.NewImage;
 import ij.process.ImageProcessor;
 import tp4.Image;
+import tp5.FiltreGaussien;
+import tp5.FiltreMedian;
 import tp5.Outils;
 import tp6.ElementStructurant;
 import tp6.Morpho;
+import tpnote.Traitement;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,8 +21,14 @@ class AuditeurMorpho implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent evt) {
         // Création des images d'entrée et de sortie
-        ImagePlus imp = Outils.openImage("lenna.png");
+        ImagePlus imp = Outils.openImage("i1.jpg");
         ImagePlus imp2 = NewImage.createByteImage(imp.getTitle(), imp.getWidth(), imp.getHeight(), 1, NewImage.GRAY8);
+
+        new Traitement(imp);
+        imp = Image.createGrayImage(imp);
+        new FiltreMedian(imp.getProcessor(), 3);
+        new FiltreGaussien(imp.getProcessor(), 11);
+
         // On binarise l'image d'entrée
         imp = Image.createOTSUImage(imp);
         // On récupére les processor et on créer l'élément structurant

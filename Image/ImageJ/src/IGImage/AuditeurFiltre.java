@@ -12,7 +12,7 @@ class AuditeurFiltre implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent evt) {
         // TODO Auto-generated method stub
-        ImagePlus imp = Outils.openImage("lenna_noiser.png");
+        ImagePlus imp = Outils.openImage("lenna.png");
         ImageProcessor ip = imp.getProcessor();
         if (evt.getActionCommand().equals("Moyenneur")) {
             new FiltreMoyen(ip);

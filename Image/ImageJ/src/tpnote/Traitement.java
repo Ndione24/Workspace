@@ -2,13 +2,13 @@ package tpnote;
 
 import ij.ImagePlus;
 import ij.process.ImageProcessor;
-import tp5.FiltreGaussien;
+import tp5.FiltreMoyen;
 
 public class Traitement extends Thread {
 
     private ImagePlus imp;
 
-    private Traitement(ImagePlus imp) {
+    public Traitement(ImagePlus imp) {
         this.imp = imp;
     }
 
@@ -22,7 +22,7 @@ public class Traitement extends Thread {
     public void run() {
         imp = tp4.Image.createGrayImage(imp);
         ImageProcessor ip = imp.getProcessor();
-        new FiltreGaussien(ip, 17);
+        new FiltreMoyen(ip, 5);
         imp = tp4.Image.createOTSUImage(imp);
         imp.show();
     }

@@ -1,10 +1,7 @@
 package tp6;
 
-import ij.ImagePlus;
 import ij.gui.NewImage;
 import ij.process.ImageProcessor;
-import tp4.Image;
-import tp5.Outils;
 
 import java.util.Arrays;
 
@@ -267,26 +264,5 @@ public class Morpho {
 
         byte[] pixels = (byte[]) out.getPixels();
         Arrays.fill(pixels, (byte) 255);
-    }
-
-    public static void main(String[] args) {
-        // Création des images d'entrée et de sortie
-        ImagePlus imp = Outils.openImage("lenna.png");
-        ImagePlus imp2 = NewImage.createByteImage(imp.getTitle(), imp.getWidth(), imp.getHeight(), 1, NewImage.GRAY8);
-        // On binarise l'image d'entrée
-        imp = Image.createOTSUImage(imp);
-        // On récupére les processor et on créer l'élément structurant
-        ImageProcessor ip = imp.getProcessor();
-        ImageProcessor ip2 = imp2.getProcessor();
-        ElementStructurant es = ElementStructurant.creerRectangle4connexe();
-        // On applique une morphologie binaire
-//        dilatation(ip, es, ip2);
-//        erosion(ip, es, ip2);
-//        ouverture(ip, es, ip2);
-        fermeture(ip, es, ip2);
-
-        // On visualise la modification
-        imp.show();
-        imp2.show();
     }
 }
