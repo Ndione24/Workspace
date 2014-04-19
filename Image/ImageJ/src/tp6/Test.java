@@ -13,11 +13,21 @@ public class Test {
     }
 
     public static void printMat(int[][] mat) {
+        int println = mat[0].length;
+        int width = 0;
         for (int i = 0; i < mat.length; i++) {
             for (int j = 0; j < mat[0].length; j++) {
-                System.out.print("[" + i + "," + j + "]=" + mat[i][j] + " ");
+//                System.out.print("[" + i + "," + j + "]=" + mat[i][j] + " ");
+                if (mat[i][j] > 0) {
+                    ++width;
+                    System.out.print(mat[i][j] + " ");
+                    if(println == width) {
+                        System.out.println();
+                        width = 0;
+                    }
+                }
             }
-            System.out.println();
+//            System.out.println();
         }
     }
 }

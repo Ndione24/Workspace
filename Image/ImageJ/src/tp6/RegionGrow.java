@@ -6,7 +6,6 @@ import ij.process.ImageProcessor;
 import tp5.Outils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 
 /**
@@ -34,20 +33,66 @@ public class RegionGrow implements Runnable {
     }
 
     public static void main(String[] args) {
-        ImagePlus imp = Outils.openImage("i2Binaire.jpg");
+        ImagePlus imp = Outils.openImage("i1Binaire.jpg");
         RegionGrow rg = new RegionGrow(imp.getProcessor());
         rg.regionGrowing();
+        int[][] labels = rg.getLabels();
+        rg.storeValues(labels);
+        System.out.println("Nombre de dès détecté : " + rg.collection.size());
 
+        int falsePos = 0;
         for (LinkedList<Coords> list : rg.collection) {
+            // On n'affiche pas les faux positifs
             if (list.size() > 20) {
                 rg.showSegment(list);
+            } else {
+                ++falsePos;
             }
+        }
+        if (falsePos > 0) {
+            System.out.println("Nombre de faux positifs : " + falsePos);
+            System.out.println("Nombre de dès réels : " + (rg.collection.size() - falsePos));
         }
 
     }
 
+    public void storeValues(int[][] labels) {
+        int max = numberOfRegions;
+        LinkedList<Coords> coords;
+        while (max > 0) {
+            coords = new LinkedList<Coords>();
+            for (int x = 0; x < labels.length; x++) {
+                for (int y = 0; y < labels[0].length; y++) {
+                    if (max == labels[x][y]) {
+                        coords.add(new Coords(x, y));
+                    }
+                }
+            }
+            collection.add(coords);
+            --max;
+        }
+    }
+
+    public void showLabelsResult(int[][] labels) {
+        ImagePlus imp = NewImage.createByteImage("Segment", width, height, 1, NewImage.GRAY8);
+        ImageProcessor ip = imp.getProcessor();
+
+        for (int x = 0; x < labels.length; x++) {
+            for (int y = 0; y < labels[0].length; y++) {
+                ip.putPixel(x, y, labels[x][y] * 20);
+            }
+        }
+
+        imp.show();
+    }
+
+    public int[][] getLabels() {
+        return labels;
+    }
+
     /**
      * Return the dimension of the segment and his offset
+     *
      * @param list List of coords
      * @return Dimension from origin and x, y offset
      */
@@ -68,15 +113,8 @@ public class RegionGrow implements Runnable {
         dim[1] = ymax - ymin;
         dim[2] = xmin;
         dim[3] = ymin;
-        System.out.println("dim = " + Arrays.toString(dim));
+//        System.out.println("dim = " + Arrays.toString(dim));
         return dim;
-    }
-
-    /**
-     * @return Nombre de régions trouvées pendant la segmentation
-     */
-    public int getNumberOfRegions() {
-        return numberOfRegions;
     }
 
     @Override
@@ -86,6 +124,7 @@ public class RegionGrow implements Runnable {
 
     /**
      * Affiche la liste de coordonnées dans une image
+     *
      * @param list Liste de coordonnées
      */
     public void showSegment(LinkedList<Coords> list) {
@@ -115,19 +154,14 @@ public class RegionGrow implements Runnable {
     public void regionGrowing() {
         // La liste des pixels à traiter
         LinkedList<Coords> listeATraiter = new LinkedList<Coords>();
-        LinkedList<Coords> listASauvegarder = new LinkedList<Coords>();
+//        LinkedList<Coords> listASauvegarder = new LinkedList<Coords>();
         // On parcours tous les pixels de l'images
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 // Si le pixel n'est pas étiqueté et que c'est un pixel blanc
                 if (0 == labels[x][y] && 255 == in.getPixel(x, y)) {
-                    // La liste des pixels à sauvegarder
-                    listASauvegarder = new LinkedList<Coords>();
-//                    listASauvegarder = listeATraiter;
                     // C'est une nouvelle région que l'on ajoute dans la liste à traiter
                     listeATraiter.add(new Coords(x, y));
-//                    listASauvegarder.add(new Coords(x, y));
-                    collection.add(numberOfRegions, listASauvegarder);
                     labels[x][y] = (++numberOfRegions);
                 }
                 // Tant qu'il reste des pixels à traiter dans la liste
@@ -139,7 +173,6 @@ public class RegionGrow implements Runnable {
                     LinkedList<Coords> listVoisins = getNeighbours(currentPoint.x, currentPoint.y);
                     // On ajoute les voisins du pixels courant
                     listeATraiter.addAll(listVoisins);
-                    listASauvegarder.addAll(listeATraiter);
                 }
             }
         }
