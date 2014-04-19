@@ -5,7 +5,6 @@ import ij.gui.NewImage;
 import ij.process.ImageProcessor;
 import tp5.Outils;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.TreeMap;
 
@@ -34,13 +33,16 @@ public class RegionGrow implements Runnable {
     }
 
     public static void main(String[] args) {
-        ImagePlus imp = Outils.openImage("i2Binaire.jpg");
+        ImagePlus imp = Outils.openImage("i1Binaire.jpg");
         RegionGrow rg = new RegionGrow(imp.getProcessor());
         rg.regionGrowing();
-        System.out.println("Nombre de dès détecté : " + rg.collection.size());
+        System.out.println("Nombre de régions détectés : " + rg.collection.size());
         // Pour chaque région trouver les afficher
         for (Integer region : rg.collection.keySet()) {
-            rg.showSegment(rg.collection.get(region));
+            // On ignore les faux positifs
+            if (rg.collection.get(region).size() > 100) {
+                rg.showSegment(rg.collection.get(region));
+            }
         }
     }
 
@@ -56,22 +58,24 @@ public class RegionGrow implements Runnable {
      */
     private int[] getSegmentDimension(LinkedList<Coords> list) {
         int[] dim = new int[4];
-        int xmin = list.get(0).x, xmax = list.get(0).x, ymin = list.get(0).x, ymax = list.get(0).x;
+        int cx = list.getFirst().x;
+        int cy = list.getFirst().y;
+        // Déclaration des paramètres de la recherche
+        int xmin, xmax, ymin, ymax;
+        xmin = xmax = cx;
+        ymin = ymax = cy;
         for (Coords c : list) {
-            if (c.x > xmax)
-                xmax = c.x;
-            else if (c.x < xmin)
-                xmin = c.x;
-            if (c.y > ymax)
-                ymax = c.y;
-            else if (c.y < ymin)
-                ymin = c.y;
+            // Recherche de l'abscisse min et max
+            if (c.x > xmax) xmax = c.x;
+            else if (c.x < xmin) xmin = c.x;
+            // Recherche de l'ordonnée min et max
+            if (c.y > ymax) ymax = c.y;
+            else if (c.y < ymin) ymin = c.y;
         }
         dim[0] = xmax - xmin;
         dim[1] = ymax - ymin;
         dim[2] = xmin;
         dim[3] = ymin;
-        System.out.println("dim = " + Arrays.toString(dim));
         return dim;
     }
 
@@ -135,7 +139,7 @@ public class RegionGrow implements Runnable {
                     // On ajoute les voisins du pixels courant
                     listeATraiter.addAll(listVoisins);
                     // On sauvegarde les coordonnées de la région
-                    collection.get(numberOfRegions).addAll(listeATraiter);
+                    collection.get(numberOfRegions).addAll(listVoisins);
                 }
             }
         }
