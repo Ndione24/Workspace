@@ -4,8 +4,7 @@ import ij.ImagePlus;
 import ij.process.ImageProcessor;
 import tp5.Outils;
 
-import java.awt.*;
-import java.util.Stack;
+import java.util.LinkedList;
 
 /**
  * Created by melkir on 18/04/14.
@@ -13,12 +12,12 @@ import java.util.Stack;
 public class RegionGrow implements Runnable {
     // Image d'entrée
     private final ImageProcessor in;
-    // Le nombre de régions dans l'image
-    private int numberOfRegions;
     // La taille de l'image
     private final int width, height;
     // Matrice des pixels étiquetés
     private final int[][] labels;
+    // Le nombre de régions dans l'image
+    private int numberOfRegions;
 
     public RegionGrow(ImageProcessor in) {
         this.in = in;
@@ -28,6 +27,13 @@ public class RegionGrow implements Runnable {
         this.labels = new int[width][height];
     }
 
+    public static void main(String[] args) {
+        ImagePlus imp = Outils.openImage("i2Binaire.jpg");
+        RegionGrow rg = new RegionGrow(imp.getProcessor());
+        rg.regionGrowing();
+        System.out.println("Nombre de régions : " + rg.getNumberOfRegions());
+    }
+
     /**
      * @return Nombre de régions trouvées pendant la segmentation
      */
@@ -35,32 +41,16 @@ public class RegionGrow implements Runnable {
         return numberOfRegions;
     }
 
-    /**
-     * @return Tableau des pixels étiquetés
-     */
-    public int[][] getLabels() {
-        return labels;
-    }
-
-    public static void main(String[] args) {
-        ImagePlus imp = Outils.openImage("i2Binaire.jpg");
-        RegionGrow rg = new RegionGrow(imp.getProcessor());
-        rg.regionGrowing();
-        System.out.println("Nombre de régions : " + rg.getNumberOfRegions());
-        /*
-        int labels[][] = rg.getLabels();
-        for (int i = 0; i < labels.length; i++) {
-            for (int j = 0; j < labels[i].length; j++) {
-                System.out.print("[" + i + "][" + j + "]=" + labels[i][j]+ " ");
-            }
-            System.out.println();
-        }
-        */
-    }
-
     @Override
     public void run() {
         regionGrowing();
+    }
+
+    public void showSegment(LinkedList<Coords> c) {
+        // Calcul de la taille de l'image
+        int width /* = Xmax - Xmin */;
+        int heing /* = Ymax - Ymin */;
+//        ImagePlus imp = NewImage.createByteImage("Segment", c.size() / 2, c.size() / 2, 1, NewImage.GRAY8);
     }
 
     /**
@@ -74,23 +64,22 @@ public class RegionGrow implements Runnable {
      */
     public void regionGrowing() {
         // La liste des pixels à traiter
-        Stack<Point> listeATraiter = new Stack<Point>();
+        LinkedList<Coords> listeATraiter = new LinkedList<Coords>();
         // On parcours tous les pixels de l'images
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 // Si le pixel n'est pas étiqueté et que c'est un pixel blanc
                 if (0 == labels[x][y] && 255 == in.getPixel(x, y)) {
                     // C'est une nouvelle région que l'on ajoute dans la liste à traiter
-                    listeATraiter.add(new Point(x, y));
-                    System.out.println("On passe à une nouvelle région, il nous faut sauvegarder le résultat dans une nouvelle image");
+                    listeATraiter.add(new Coords(x, y));
                     labels[x][y] = (++numberOfRegions);
                 }
                 // Tant qu'il reste des pixels à traiter dans la liste
-                while (listeATraiter.size() > 0) {
+                while (!listeATraiter.isEmpty()) {
                     // On récupére le premier pixel de la liste
-                    Point currentPoint = listeATraiter.get(0);
+                    Coords currentPoint = listeATraiter.getFirst();
                     // On l'enlève de la liste a traiter
-                    listeATraiter.remove(0);
+                    listeATraiter.removeFirst();
                     // On ajoute les voisins du pixels courant
                     listeATraiter.addAll(getNeighbours(currentPoint.x, currentPoint.y));
                 }
@@ -101,21 +90,23 @@ public class RegionGrow implements Runnable {
     /**
      * Récupére la liste des voisins proche du pixel dans le rayon donnée
      *
-     * @param x     Abscisse du pixel
-     * @param y     Ordonnée du pixel
+     * @param x Abscisse du pixel
+     * @param y Ordonnée du pixel
      * @return Liste des pixels voisins
      */
-    private Stack<Point> getNeighbours(int x, int y) {
+    private LinkedList<Coords> getNeighbours(int x, int y) {
         // La liste des pixels voisin à traiter dans le rayon
-        Stack<Point> listeVoisinATraiter = new Stack<Point>();
+        LinkedList<Coords> listeVoisinATraiter = new LinkedList<Coords>();
         for (int th = -1; th <= 1; th++) {
             for (int tw = -1; tw <= 1; tw++) {
                 int rx = x + tw;
                 int ry = y + th;
-                // Passer les pixels hors de l'image
+                // Ne pas parcourir les pixels hors de l'image
                 if ((rx < 0) || (ry < 0) || (ry >= height) || (rx >= width)) continue;
+                // Si le pixel n'a pas déjà été traité et qu'il est blanc
                 if (0 == labels[rx][ry] && 255 == in.getPixel(rx, ry)) {
-                    listeVoisinATraiter.add(new Point(rx, ry));
+                    // L'ajouter à la liste
+                    listeVoisinATraiter.add(new Coords(rx, ry));
                     labels[rx][ry] = numberOfRegions;
                 }
             }
