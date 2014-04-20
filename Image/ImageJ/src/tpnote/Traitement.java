@@ -3,6 +3,7 @@ package tpnote;
 import ij.ImagePlus;
 import ij.process.ImageProcessor;
 import tp5.FiltreMoyen;
+import tp5.Outils;
 
 public class Traitement extends Thread {
 
@@ -25,5 +26,11 @@ public class Traitement extends Thread {
         new FiltreMoyen(ip, 5);
         imp = tp4.Image.createOTSUImage(imp);
         imp.show();
+    }
+
+    public static void main(String[] args) {
+        ImagePlus imp = Outils.openImage("i1.jpg");
+        Traitement tr = new Traitement(imp);
+        tr.run();
     }
 }
