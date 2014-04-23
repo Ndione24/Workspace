@@ -62,7 +62,7 @@ public class RegionGrow implements Runnable {
     }
 
     public static void main(String[] args) {
-        ImagePlus imp = Outils.openImage("Image_OK_21.jpg");
+        ImagePlus imp = Outils.openImage("Image_OK_3.jpg");
         ImageProcessing imageProcessing = new ImageProcessing(imp);
         imageProcessing.run();
         imp.show();
@@ -228,8 +228,8 @@ public class RegionGrow implements Runnable {
             if (c.y > ymax) ymax = c.y;
             else if (c.y < ymin) ymin = c.y;
         }
-        dim[0] = xmax - xmin;
-        dim[1] = ymax - ymin;
+        dim[0] = xmax - xmin; // Largeur
+        dim[1] = ymax - ymin; // Hauteur
         dim[2] = xmin;
         dim[3] = ymin;
         return dim;
