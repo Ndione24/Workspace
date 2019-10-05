@@ -45,7 +45,9 @@ public class DicoT9 {
 		if (!mapDico.containsKey(key)) {
 			// On créer une ArrayList
 			List list = new ArrayList();
-			// On ajoute cette liste (vide) dans le dico avec la key
+			//on ajoute la chaine à la liste 
+			list.add(chaine);
+			// On ajoute cette liste dans le dico avec la key
 			// correspondante
 			mapDico.put(key, list);
 		}
@@ -59,9 +61,8 @@ public class DicoT9 {
 		if (mapDico.containsKey(chaineCodee))
 			return (ArrayList<String>) mapDico.get(chaineCodee);
 		else {
-			List listNull = new ArrayList();
-			listNull.add("");
-			return (ArrayList<String>) listNull;
+			
+			return null ;
 		}
 	}
 
